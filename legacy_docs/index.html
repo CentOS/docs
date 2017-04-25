@@ -1659,104 +1659,52 @@
                         boot the installation program and perform an entire installation
                         without additional package repositories.</div>
                     </dd>
-                    <dt><span class="term">boot.iso</span></dt>
+                    <dt><span class="term">Minimal install</span></dt>
                     <dd>
-                    <div class="para">A minimal boot image which can be used to boot
-                        the installation program, but requires access to additional package
-                        repositories from which software will be installed. Red&nbsp;Hat
-                        does not provide such a repository; you must create it using the
-                        full installation ISO image.</div>
+                    <div class="para">Minimal installation set, small
+                    enough to fit on a CD-ROM.</div>
+                    </dd>                    
+		    <dt><span class="term">NetInstall</span></dt>
+                    <dd>
+                    <div class="para">Minimal CD image to start
+                    network installations.</div>
                     </dd>
-                    <dt><span class="term">Supplementary DVD</span></dt>
+                    <dt><span class="term">Everything</span></dt>
                     <dd>
-                    <div class="para">An image containing additional packages, such as
-                        the IBM Java Runtime Environment, and additional virtualization
-                        drivers.</div>
+                    <div class="para">The entire set of installable packages.</div>
+                    </dd>
+                    <dt><span class="term">LiveGNOME</span></dt>
+                    <dd>
+                    <div class="para">Bootable image with a working
+                    GNOME environment directly from storage (DVD-ROM,
+                    USB flash or hard drive).</div>
                     </dd>
                 </dl>
             </div>
-            <div xmlns:d="http://docbook.org/ns/docbook" class="note">
-                <div class="admonition_header">
-                    <p><strong>Note</strong></p>
-                </div>
-                <div class="admonition">
-                    <div class="para">Binary DVDs are also available for IBM
-                        System&nbsp;z. They can be used to boot the installation program
-                        using a SCSI DVD drive or as installation sources.</div>
-                </div>
-            </div>
-            <div class="para">The following table indicates the types of boot
-                and installation media available for different architectures and
-                notes the image file that you need to produce the media.</div>
-            <div class="table"><a id="tabl-installation-media" name=
-            "tabl-installation-media">⁠</a>
-                <p class="title"><strong>Table&nbsp;1.1.&nbsp;Boot and Installation
-                    Media</strong></p>
-                <div class="table-contents">
-                    <table xmlns:d="http://docbook.org/ns/docbook" class=
-                    "lt-4-cols lt-7-rows" summary="Boot and Installation Media">
-                        <colgroup>
-                            <col width="20%" class="c1" />
-                            <col width="40%" class="c2" />
-                            <col width="40%" class="c3" /></colgroup>
-                        <thead>
-                            <tr>
-                                <th>Architecture</th>
-                                <th>Minimal boot image</th>
-                                <th>Full installation image</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th colspan="3">Replace <em class="replaceable">variant</em> with
-                                    your chosen variant of CentOS&nbsp;Linux (for
-                                    example, <code class="literal">server</code> or <code class=
-                                    "literal">workstation</code>).</th>
-                            </tr>
-                        </tfoot>
-                        <tbody>
-                            <tr>
-                                <td>AMD64 and Intel&nbsp;64</td>
-                                <td><code class="filename">rhel-<em class=
-                                "replaceable">variant</em>-7.3-x86_64-boot.iso</code></td>
-                                <td><code class="filename">rhel-<em class=
-                                "replaceable">variant</em>-7.3-x86_64-dvd.iso</code></td>
-                            </tr>
-                            <tr>
-                                <td>IBM Power&nbsp;Systems (big endian)</td>
-                                <td><code class="filename">rhel-<em class=
-                                "replaceable">variant</em>-7.3-ppc64-boot.iso</code></td>
-                                <td><code class="filename">rhel-<em class=
-                                "replaceable">variant</em>-7.3-ppc64-dvd.iso</code></td>
-                            </tr>
-                            <tr>
-                                <td>IBM Power&nbsp;Systems (little endian)</td>
-                                <td><code class="filename">rhel-<em class=
-                                "replaceable">variant</em>-7.3-ppc64le-boot.iso</code></td>
-                                <td><code class="filename">rhel-<em class=
-                                "replaceable">variant</em>-7.3-ppc64le-dvd.iso</code></td>
-                            </tr>
-                            <tr>
-                                <td>IBM System&nbsp;z</td>
-                                <td>Not available</td>
-                                <td><code class="filename">rhel-<em class=
-                                "replaceable">variant</em>-7.3-s390x-dvd.iso</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
             <div class="para">A different set of installation images is offered
-                for CentOS&nbsp;Linux Atomic&nbsp;Host:</div>
+                for different hardware architectures:</div>
             <div class="variablelist">
                 <dl class="variablelist">
-                    <dt><span class="term">Red Hat Atomic Cloud Image</span></dt>
+                    <dt><span class="term">aarch64</span></dt>
                     <dd>
-                    <div class="para">This <code class="literal">.qcow2</code> image
-                        can be used to install a CentOS&nbsp;Linux
-                        Atomic&nbsp;Host virtual machine on a compatible Linux host. For
-                        installation instructions, see <a class="xref" href=
-                        "#sect-atomic-virtualization-libvirt">Section&nbsp;25.1, “Linux
+                    <div class="para">ARM 64-bit</div>
+                    </dd>
+                    <dt><span class="term">armhfp</span></dt>
+                    <dd>
+                    <div class="para">ARM 32-bit</div>
+                    </dd>
+                    <dt><span class="term">i386</span></dt>
+                    <dd>
+                    <div class="para">x86 32-bit</div>
+                    </dd>
+                    <dt><span class="term">ppc64le</span></dt>
+                    <dd>
+                    <div class="para">PowerPC 64-bit little-endian</div>
+                    </dd>
+                    <dt><span class="term">ppc64</span></dt>
+                    <dd>
+                    <div class="para">PowerPC 64-bit big-endian</div>
+                    </dd>
                         Hypervisor Installation Using qcow2 Media”</a>.</div>
                     </dd>
                     <dt><span class="term">Red Hat Atomic Image for RHEV</span></dt>
