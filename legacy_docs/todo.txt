@@ -1,0 +1,4 @@
+
+* Figure out ARM download & install differences, then uncomment and
+  fix. (line 1686 ff)
+* Atomic images - download & install details. (line 1714 ff)
