@@ -10,6 +10,8 @@ legacy and updates will likely not happen.
 The asciidoc directory is for the new style documentation, which will be
 published via asciidoc and asciibinder as the documentation is created.
 
+**NOTE: AsciiDoc "new style" is still a conceptual work in progress, the
+directory structure is just a placeholder.**
 
 ## Contributions
 
