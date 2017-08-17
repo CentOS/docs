@@ -2060,7 +2060,7 @@
                         "option">inst.stage2=</code> boot option is used on the
                     installation media and set to a specific label (for example,
                     <code class=
-                    "option">inst.stage2=hd:LABEL=RHEL7\x20Server.x86_64</code>). If
+                    "option">inst.stage2=hd:LABEL=CENTOS7\x20Server.x86_64</code>). If
                 you modify the default label of the file system containing the
                 runtime image, or if using a customized procedure to boot the
                 installation system, you must ensure this option is set to the
@@ -2273,12 +2273,12 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                                     </div>
                                     <div class="para">For example, if the ISO image is located in
                                         <code class=
-                                        "filename">/home/testuser/Downloads/rhel-server-7.3x86_64-boot.iso</code>
+                                        "filename">/home/testuser/Downloads/centos-server-7.3x86_64-boot.iso</code>
                                         and the detected device name is <code class="filename">sdb</code>,
                                         the command will look like the following:</div>
                                     <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">dd if=/home/testuser/Downloads/rhel-server-7.3x86_64-boot.iso of=/dev/sdb bs=512k</code>
+"command">dd if=/home/testuser/Downloads/centos-server-7.3x86_64-boot.iso of=/dev/sdb bs=512k</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for <code class="command">dd</code> to
@@ -2499,11 +2499,11 @@ Unmount of all volumes on disk<em class=
                                 image file you downloaded, and <em class="replaceable">number</em>
                                 with the disk number. For example, if the ISO image is located in
                                 <code class=
-                                "filename">/Users/jdoe/Downloads/rhel-server-7.3x86_64-boot.iso</code>
+                                "filename">/Users/jdoe/Downloads/centos-server-7.3x86_64-boot.iso</code>
                                 and the detected disk number is <code class="filename">2</code>,
                                 the command will look like the following:</div>
                                     <pre class="screen">$ <code class=
-                                    "command">sudo dd if=/Users/jdoe/Downloads/rhel-server-7.3x86_64-boot.iso of=/dev/disk2 bs=1m</code>
+                                    "command">sudo dd if=/Users/jdoe/Downloads/centos-server-7.3x86_64-boot.iso of=/dev/disk2 bs=1m</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for the command to finish. Note that no
@@ -2828,7 +2828,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                         <div class="para">Copy the full Red&nbsp;Hat
                                             Enterprise&nbsp;Linux&nbsp;7 binary DVD ISO image to a suitable
                                             directory on the NFS server. For example, you can create directory
-                                            <code class="filename">/rhel7-install/</code> for this purpose and
+                                            <code class="filename">/centos7-install/</code> for this purpose and
                                             save the ISO image here.</div>
                                     </li>
                                     <li class="step">
@@ -2851,10 +2851,10 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                 "systemitem">exports(5)</code> man page for detailed information
                             about the format of this field.</div>
                                         <div class="para">The following is a basic configuration which
-                                            makes the <code class="filename">/rhel7-install/</code> directory
+                                            makes the <code class="filename">/centos7-install/</code> directory
                                             available as read-only to all clients:</div>
                                         <pre class="screen">
-/rhel7-install *
+/centos7-install *
                                     </pre></li>
                                     <li class="step">
                                         <div class="para">Save the <code class=
@@ -2888,8 +2888,8 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             the directory holding the ISO image. For example, if the server's
                             host name is <code class="literal">myserver.example.com</code> and
                             you have saved the ISO image in <code class=
-                            "filename">/rhel7-install/</code>, specify <code class=
-                            "literal">nfs:myserver.example.com:/rhel7-install/</code> as the
+                            "filename">/centos7-install/</code>, specify <code class=
+                            "literal">nfs:myserver.example.com:/centos7-install/</code> as the
                         installation source.</div>
                         </div>
                         <div class="section">
@@ -2997,7 +2997,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                     "replaceable">/path/to/mount-point/</em> with the path to the
                                 directory in which you want the content of the ISO image to appear.
                                 For example, you can create directory <code class=
-                                "filename">/mnt/rhel7-install/</code> for this purpose and use that
+                                "filename">/mnt/centos7-install/</code> for this purpose and use that
                             as the parameter of the <code class="command">mount</code>
                             command.</div>
                                     </li>
@@ -3006,10 +3006,10 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                             server root:</div>
                                         <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">cp -r /mnt/rhel7-install/ /var/www/html/</code>
+"command">cp -r /mnt/centos7-install/ /var/www/html/</code>
                                         </pre>
                                         <div class="para">This command creates the <code class=
-                                        "filename">/var/www/html/rhel7-install/</code> directory with the
+                                        "filename">/var/www/html/centos7-install/</code> directory with the
                                     content of the image.</div>
                                     </li>
                                     <li class="step">
@@ -3033,8 +3033,8 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             <code class="systemitem">HTTP</code>, the server's host name is
                             <code class="literal">myserver.example.com</code>, and you have
                             copied the files from the image to <code class=
-                            "filename">/var/www/html/rhel7-install/</code>, specify
-                        <code class="literal">http://myserver.example.com/rhel7-install/</code>
+                            "filename">/var/www/html/centos7-install/</code>, specify
+                        <code class="literal">http://myserver.example.com/centos7-install/</code>
                         as the installation source.</div>
                             <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                                 <a id="proc-installation-server-setup-ftp" name=
@@ -3095,7 +3095,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                     "replaceable">/path/to/mount-point</em> with the path to the
                                 directory in which you want the content of the ISO image to appear.
                                 For example, you can create directory <code class=
-                                "filename">/mnt/rhel7-install/</code> for this purpose and use that
+                                "filename">/mnt/centos7-install/</code> for this purpose and use that
                             as the parameter of the <code class="command">mount</code>
                             command.</div>
                                     </li>
@@ -3104,10 +3104,10 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                             server root:</div>
                                         <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">cp -r /mnt/rhel7-install/ /var/ftp/</code>
+"command">cp -r /mnt/centos7-install/ /var/ftp/</code>
                                         </pre>
                                         <div class="para">This command creates the <code class=
-                                        "filename">/var/ftp/rhel7-install/</code> directory with the
+                                        "filename">/var/ftp/centos7-install/</code> directory with the
                                     content of the image.</div>
                                     </li>
                                     <li class="step">
@@ -3137,8 +3137,8 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                 relative to the FTP server root. For example, if the server's host
                                 name is <code class="literal">myserver.example.com</code> and you
                                 have copied the files from the image to <code class=
-                                "filename">/var/ftp/rhel7-install/</code>, specify <code class=
-                                "literal">ftp://myserver.example.com/rhel7-install/</code> as the
+                                "filename">/var/ftp/centos7-install/</code>, specify <code class=
+                                "literal">ftp://myserver.example.com/centos7-install/</code> as the
                             installation source.</div>
                         </div>
                         <div class="section">
@@ -3671,7 +3671,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             Compatibility List</em>, available online at <a href=
                             "https://access.redhat.com/ecosystem/search/#/category/Server">https://access.redhat.com/ecosystem/search/#/category/Server</a>.
                         Also see <a href=
-                        "https://access.redhat.com/site/articles/rhel-limits">Red&nbsp;Hat
+                        "https://access.redhat.com/site/articles/centos-limits">Red&nbsp;Hat
                         Enterprise&nbsp;Linux technology capabilities and limits</a> for
                     general information about system requirements.</div>
                     </div>
@@ -3944,7 +3944,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                     <div class="para">For more information about the minimum
                         requirements and technology limits of Red&nbsp;Hat
                         Enterprise&nbsp;Linux&nbsp;7, see the <a href=
-                        "https://access.redhat.com/articles/rhel-limits"><em class=
+                        "https://access.redhat.com/articles/centos-limits"><em class=
                         "citetitle">CentOS&nbsp;Linux technology
                         capabilities and limits</em></a> article on the Red&nbsp;Hat
                 Customer Portal.</div>
@@ -7970,7 +7970,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                         within. For a list of maximum supported file and file system sizes,
                         see the CentOS Linux technology capabilities and limits page,
                         available on the Customer Portal at <a href=
-                        "https://access.redhat.com/site/articles/rhel-limits">https://access.redhat.com/site/articles/rhel-limits</a>.</div>
+                        "https://access.redhat.com/site/articles/centos-limits">https://access.redhat.com/site/articles/centos-limits</a>.</div>
                     </div>
                     </div>
                     <div xml:lang="en-US" class="section" lang="en-US">
@@ -9698,7 +9698,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             on post-installation procedures, configuration and updates for
                             CentOS&nbsp;Linux Atomic&nbsp;Host, see the
                             <a href=
-                            "https://access.redhat.com/articles/rhel-atomic-getting-started">Getting
+                            "https://access.redhat.com/articles/centos-atomic-getting-started">Getting
                             Started with CentOS&nbsp;Linux
                             Atomic&nbsp;Host</a> document.</div>
                     </div>
@@ -10508,7 +10508,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                         "literal">GRUB_CMDLINE_LINUX</code>. The line should look similar
                                     to the following:</div>
                                     <pre class="screen">
-GRUB_CMDLINE_LINUX="rd.lvm.lv=rhel/root rd.md=0 rd.dm=0 vconsole.keymap=us $([ -x /usr/sbin/rhcrashkernel-param ] &amp;&amp; /usr/sbin/rhcrashkernel-param || :) rd.luks=0 vconsole.font=latarcyrheb-sun16 rd.lvm.lv=vg_rhel/swap rhgb quiet"
+GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.md=0 rd.dm=0 vconsole.keymap=us $([ -x /usr/sbin/rhcrashkernel-param ] &amp;&amp; /usr/sbin/rhcrashkernel-param || :) rd.luks=0 vconsole.font=latarcyrheb-sun16 rd.lvm.lv=vg_centos/swap rhgb quiet"
                                     </pre>
                                     <div class="para">On this line, delete the <code class=
                                     "literal">rhgb</code> option.</div>
@@ -10661,7 +10661,7 @@ GRUB_CMDLINE_LINUX="rd.lvm.lv=rhel/root rd.md=0 rd.dm=0 vconsole.keymap=us $([ -
                         following:</div>
                         <pre class="screen">
 Filesystem                                  Size  Used Avail Use% Mounted on
-/dev/mapper/vg_rhel-root                     20G  6.0G   13G  32% /
+/dev/mapper/vg_centos-root                     20G  6.0G   13G  32% /
 devtmpfs                                    1.8G     0  1.8G   0% /dev
 tmpfs                                       1.8G  2.7M  1.8G   1% /dev/shm
 tmpfs                                       1.8G 1012K  1.8G   1% /run
@@ -10802,7 +10802,7 @@ GRUB_DISTRIBUTOR="$(sed 's, release.*$,,g' /etc/system-release)"
 GRUB_DEFAULT=saved
 GRUB_DISABLE_SUBMENU=true
 GRUB_TERMINAL_OUTPUT="console"
-GRUB_CMDLINE_LINUX="rd.lvm.lv=rhel/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=rhel/swap $([ -x /usr/sbin/rhcrashkernel.param ] &amp;&amp; /usr/sbin/rhcrashkernel-param || :) vconsole.keymap=us rhgb quiet mem=1024M"
+GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=centos/swap $([ -x /usr/sbin/rhcrashkernel.param ] &amp;&amp; /usr/sbin/rhcrashkernel-param || :) vconsole.keymap=us rhgb quiet mem=1024M"
 GRUB_DISABLE_RECOVERY="true"
                         </pre>
                         <div class="para">See the <a href=
@@ -11299,7 +11299,7 @@ GRUB_DISABLE_RECOVERY="true"
                             Compatibility List</em>, available online at <a href=
                             "https://access.redhat.com/ecosystem/search/#/category/Server">https://access.redhat.com/ecosystem/search/#/category/Server</a>.
                         Also see <a href=
-                        "https://access.redhat.com/site/articles/rhel-limits">Red&nbsp;Hat
+                        "https://access.redhat.com/site/articles/centos-limits">Red&nbsp;Hat
                         Enterprise&nbsp;Linux technology capabilities and limits</a> for
                     general information about system requirements.</div>
                     </div>
@@ -11689,7 +11689,7 @@ GRUB_DISABLE_RECOVERY="true"
                     <div class="para">For more information about the minimum
                         requirements and technology limits of Red&nbsp;Hat
                         Enterprise&nbsp;Linux&nbsp;7, see the <a href=
-                        "https://access.redhat.com/articles/rhel-limits"><em class=
+                        "https://access.redhat.com/articles/centos-limits"><em class=
                         "citetitle">CentOS&nbsp;Linux technology
                         capabilities and limits</em></a> article on the Red&nbsp;Hat
                 Customer Portal.</div>
@@ -15405,7 +15405,7 @@ GRUB_DISABLE_RECOVERY="true"
                         within. For a list of maximum supported file and file system sizes,
                         see the CentOS Linux technology capabilities and limits page,
                         available on the Customer Portal at <a href=
-                        "https://access.redhat.com/site/articles/rhel-limits">https://access.redhat.com/site/articles/rhel-limits</a>.</div>
+                        "https://access.redhat.com/site/articles/centos-limits">https://access.redhat.com/site/articles/centos-limits</a>.</div>
                     </div>
                     </div>
                     <div xml:lang="en-US" class="section" lang="en-US">
@@ -17697,7 +17697,7 @@ GRUB_DISABLE_RECOVERY="true"
                                         "literal">GRUB_CMDLINE_LINUX</code>. The line should look similar
                                     to the following:</div>
                                     <pre class="screen">
-GRUB_CMDLINE_LINUX="rd.lvm.lv=rhel/root rd.md=0 rd.dm=0 vconsole.keymap=us $([ -x /usr/sbin/rhcrashkernel-param ] &amp;&amp; /usr/sbin/rhcrashkernel-param || :) rd.luks=0 vconsole.font=latarcyrheb-sun16 rd.lvm.lv=vg_rhel/swap rhgb quiet"
+GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root rd.md=0 rd.dm=0 vconsole.keymap=us $([ -x /usr/sbin/rhcrashkernel-param ] &amp;&amp; /usr/sbin/rhcrashkernel-param || :) rd.luks=0 vconsole.font=latarcyrheb-sun16 rd.lvm.lv=vg_centos/swap rhgb quiet"
                                     </pre>
                                     <div class="para">On this line, delete the <code class=
                                     "literal">rhgb</code> option.</div>
@@ -17850,7 +17850,7 @@ GRUB_CMDLINE_LINUX="rd.lvm.lv=rhel/root rd.md=0 rd.dm=0 vconsole.keymap=us $([ -
                         following:</div>
                         <pre class="screen">
 Filesystem                                  Size  Used Avail Use% Mounted on
-/dev/mapper/vg_rhel-root                     20G  6.0G   13G  32% /
+/dev/mapper/vg_centos-root                     20G  6.0G   13G  32% /
 devtmpfs                                    1.8G     0  1.8G   0% /dev
 tmpfs                                       1.8G  2.7M  1.8G   1% /dev/shm
 tmpfs                                       1.8G 1012K  1.8G   1% /run
@@ -19350,7 +19350,7 @@ Cmd Filename    Filetype        Fm      Format  Lrecl   Records Blocks  Date    
                                                         <div class="para"><span class="guilabel"><strong>File location
                                                                     (optional)</strong></span> - Directory on the FTP server holding
                                                             the CentOS&nbsp;Linux for System&nbsp;z, for
-                                                            example <code class="filename">/rhel/s390x/</code>.</div>
+                                                            example <code class="filename">/centos/s390x/</code>.</div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -22024,7 +22024,7 @@ Cmd Filename    Filetype        Fm      Format  Lrecl   Records Blocks  Date    
                         within. For a list of maximum supported file and file system sizes,
                         see the CentOS Linux technology capabilities and limits page,
                         available on the Customer Portal at <a href=
-                        "https://access.redhat.com/site/articles/rhel-limits">https://access.redhat.com/site/articles/centos-linux-limits</a>.</div>
+                        "https://access.redhat.com/site/articles/centos-limits">https://access.redhat.com/site/articles/centos-linux-limits</a>.</div>
                     </div>
                     </div>
                     <div xml:lang="en-US" class="section" lang="en-US">
@@ -24479,7 +24479,7 @@ Cmd Filename    Filetype        Fm      Format  Lrecl   Records Blocks  Date    
                                 <div class="para">To link a mini disk to which you have access,
                                     issue, for example:</div>
                                 <pre class="screen"><code class=
-                                "command">CP LINK RHEL7X 4B2E 4B2E MR</code>
+                                "command">CP LINK CENTOS7X 4B2E 4B2E MR</code>
 <code class="command">DASD 4B2E LINKED R/W</code></pre>
                                 <div class="para">See <em class="citetitle">z/VM: CP Commands and
                                         Utilities Reference, SC24-6175</em> for details about the
@@ -27611,7 +27611,7 @@ DASD="200-203"
                                     <li class="listitem">
                                         <div class="para">File system label, for example <code class=
                                         "systemitem">LABEL=Flash</code> or <code class=
-                                        "systemitem">LABEL=RHEL7</code></div>
+                                        "systemitem">LABEL=CENTOS7</code></div>
                                     </li>
                                     <li class="listitem">
                                         <div class="para">File system UUID, for example <code class=
@@ -27648,7 +27648,7 @@ DASD="200-203"
                                     "option">inst.stage2=</code> boot option is used on the
                                 installation media and set to a specific label (for example,
                                 <code class=
-                                "option">inst.stage2=hd:LABEL=RHEL7\x20Server.x86_64</code>). If
+                                "option">inst.stage2=hd:LABEL=CENTOS7\x20Server.x86_64</code>). If
                             you modify the default label of the file system containing the
                             runtime image, or if using a customized procedure to boot the
                             installation system, you must ensure this option is set to the
@@ -29456,11 +29456,11 @@ label linux
   menu label ^Install system
   menu default
   kernel vmlinuz
-  append initrd=initrd.img ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/os/
+  append initrd=initrd.img ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/CENTOS-7/7.x/Server/x86_64/os/
 label vesa
   menu label Install system with ^basic video driver
   kernel vmlinuz
-  append initrd=initrd.img ip=dhcp inst.xdriver=vesa nomodeset inst.repo=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/os/
+  append initrd=initrd.img ip=dhcp inst.xdriver=vesa nomodeset inst.repo=http://10.32.5.1/mnt/archive/CENTOS-7/7.x/Server/x86_64/os/
 label rescue
   menu label ^Rescue installed system
   kernel vmlinuz
@@ -29679,8 +29679,8 @@ subnet 10.0.0.0 netmask 255.255.255.0 {
                                     look like:</div>
                                         <pre class="screen">
 set timeout=60
-  menuentry 'RHEL 7' {
-  linuxefi uefi/vmlinuz ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/RHEL-7/7.1/Server/x86_64/os/
+  menuentry 'CENTOS 7' {
+  linuxefi uefi/vmlinuz ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/CENTOS-7/7.1/Server/x86_64/os/
   initrdefi uefi/initrd.img
 }
                                         </pre>
@@ -29822,7 +29822,7 @@ set timeout=5
 echo -e "\nWelcome to the CentOS Linux 7.1 installer!\n\n"
 
 menuentry 'CentOS Linux 7' {
-  linux grub2-ppc64/vmlinuz ro ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/RHEL-7/7.1/Server/ppc64/os/
+  linux grub2-ppc64/vmlinuz ro ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/CENTOS-7/7.1/Server/ppc64/os/
   initrd grub2-ppc64/initrd.img
 }
                                         </pre>
@@ -31092,7 +31092,7 @@ Thu Feb 20 15:23:54 2014
                                                 <code class="literal">append</code> line in the configuration file
                                                 looks similar to the following:</div>
                                                 <pre class="screen">
-append initrd=initrd.img inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kickstarts/ks.cfg
+append initrd=initrd.img inst.ks=http://10.32.5.1/mnt/archive/CENTOS-7/7.x/Server/x86_64/kickstarts/ks.cfg
                                             </pre></li>
                                             <li class="listitem">
                                                 <div class="para">On systems using the <span class=
@@ -31105,7 +31105,7 @@ append initrd=initrd.img inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/
                                         <code class="literal">kernel</code> line in the configuration file
                                         will look similar to the following:</div>
                                                 <pre class="screen">
-kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kickstarts/ks.cfg
+kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/CENTOS-7/7.x/Server/x86_64/kickstarts/ks.cfg
                                             </pre></li>
                                         </ul>
                                     </div>
@@ -31172,7 +31172,7 @@ kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kic
                         Enterprise&nbsp;Linux 6 and 7, use the following command:</div>
                         <pre class="screen">
 <code class="prompt">$</code> <code class=
-"command">ksverdiff -f RHEL6 -t RHEL7</code>
+"command">ksverdiff -f CENTOS6 -t CENTOS7</code>
                         </pre>
                         <div class="para">The <code class="option">-f</code> option
                             specifies the release to start the comparison with, and the
@@ -31885,10 +31885,10 @@ kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kic
 <code class="command">part btrfs.03 --size=6000 --ondisk=sdc</code>
 
 <code class=
-"command">btrfs none --data=0 --metadata=1 --label=rhel7 btrfs.01 btrfs.02 btrfs.03</code>
+"command">btrfs none --data=0 --metadata=1 --label=centos7 btrfs.01 btrfs.02 btrfs.03</code>
 <code class=
-"command">btrfs / --subvol --name=root LABEL=rhel7</code>
-<code class="command">btrfs /home --subvol --name=home rhel7</code>
+"command">btrfs / --subvol --name=root LABEL=centos7</code>
+<code class="command">btrfs /home --subvol --name=home centos7</code>
                                 </pre></div>
                             </div>
                             </dd>
@@ -34571,7 +34571,7 @@ kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kic
                                                 <div class="para">If you have an old (v0.90 metadata) array that
                                                     you cannot assign a name to, you can specify the array by a
                                                     filesystem label or UUID (for example, <code class=
-                                                    "option">--device=rhel7-root --label=rhel7-root</code>).</div>
+                                                    "option">--device=centos7-root --label=centos7-root</code>).</div>
                                             </div>
                                         </div>
                                     </li>
@@ -34729,9 +34729,9 @@ kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kic
 "command">part raid.13 --size=1 --grow --ondisk=sdc</code>
 
 <code class=
-"command">raid / --level=1 --device=rhel7-root --label=rhel7-root raid.01 raid.02 raid.03</code>
+"command">raid / --level=1 --device=centos7-root --label=centos7-root raid.01 raid.02 raid.03</code>
 <code class=
-"command">raid /home --level=5 --device=rhel7-home --label=rhel7-home raid.11 raid.12 raid.13</code>
+"command">raid /home --level=5 --device=centos7-home --label=centos7-home raid.11 raid.12 raid.13</code>
                                 </pre></div>
                             </div>
                             </dd>
@@ -35556,7 +35556,7 @@ kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kic
                                             example:</div>
                                         <pre class="screen">
 <code class=
-"command">volgroup rhel00 --useexisting --noformat</code>
+"command">volgroup centos00 --useexisting --noformat</code>
                                     </pre></li>
                                     <li class="listitem">
                                         <div class="para"><code class="option">--pesize=</code> - Set the
@@ -37179,7 +37179,7 @@ umount /mnt/temp
                         <div xmlns:d="http://docbook.org/ns/docbook" class="itemizedlist">
                             <ul>
                                 <li class="listitem">
-                                    <div class="para"><code class="filename">rhel7-minimal.ks</code>: a
+                                    <div class="para"><code class="filename">centos7-minimal.ks</code>: a
                                         configuration file which provides only a minimal installation (the
                                         <code class="systemitem">@core</code> group) and other essentials
                                         such as the kernel and the <span class=
@@ -37188,7 +37188,7 @@ umount /mnt/temp
                                     graphical interface or additional packages are installed.</div>
                                 </li>
                                 <li class="listitem">
-                                    <div class="para"><code class="filename">rhel7-livemedia.ks</code>:
+                                    <div class="para"><code class="filename">centos7-livemedia.ks</code>:
                                         a more advanced configuration file which creates a live system with
                                         a graphical interface. A user named <code class=
                                         "systemitem">liveuser</code> is created along with <code class=
@@ -37700,7 +37700,7 @@ umount /mnt/temp
 Id    Name                           State
 ----------------------------------------------------
 93    LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 running
--     RHEL7                      shut off
+-     CENTOS7                      shut off
                                     </pre>
                                     <div class="para">Identify the temporary virtual machine. Its name
                                         will always start with <code class="literal">LiveOS</code>,
@@ -37760,7 +37760,7 @@ Domain LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 destroyed
 Id    Name                           State
 ----------------------------------------------------
 93    LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 running
--     RHEL7                      shut off
+-     CENTOS7                      shut off
                                     </pre>
                                     <div class="para">Identify the temporary virtual machine. Its name
                                         will always start with <code class="literal">LiveOS</code>,
@@ -38067,7 +38067,7 @@ diskQBkzRz.img
                             using the following command:</div>
                             <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">gzip -d rhel-atomic-host-7.qcow2.gz</code>
+"command">gzip -d centos-atomic-host-7.qcow2.gz</code>
                             </pre>
                             <div class="para">The resulting uncompressed <code class=
                             "systemitem">qcow2</code> image can be used to create an instance
@@ -38082,10 +38082,10 @@ diskQBkzRz.img
                     "firstterm">snapshot</em> of the unmodified file:</div>
                             <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">qemu-img create -f qcow2 -o backing_file=rhel-atomic-host-standard.qcow2 atomic-beta-instance-0.qcow2</code>
+"command">qemu-img create -f qcow2 -o backing_file=centos-atomic-host-standard.qcow2 atomic-beta-instance-0.qcow2</code>
                             </pre>
                             <div class="para">This command creates a snapshot named
-                                <code class="filename">rhel-atomic-host-standard.qcow2</code>,
+                                <code class="filename">centos-atomic-host-standard.qcow2</code>,
                                 which is the original, unmodified image, and a new file called
                                 <code class="filename">atomic-beta-instance-0.qcow2</code>, which
                                 can be used for the actual virtual machine.</div>
@@ -38177,7 +38177,7 @@ ssh_authorized_keys:
                             </div>
                             <div class="para">For additional information about these files, see
                                 the <a href=
-                                "https://access.redhat.com/articles/rhel-atomic-cloud-init-faq">Frequently
+                                "https://access.redhat.com/articles/centos-atomic-cloud-init-faq">Frequently
                                 Asked Questions about cloud-init</a> article on the Red&nbsp;Hat
                             Customer Portal.</div>
                             <div class="para">Once you have created both of the files described
@@ -38225,7 +38225,7 @@ ssh_authorized_keys:
                                 created earlier:</div>
                             <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">virt-install --import --name Atomic0 --ram 4096 --vcpus 2 --disk path=/path/to/rhel-atomic-host-standard.qcow2,format=qcow2,bus=virtio --disk path=/path/to/atomic0-cidata.iso,device=cdrom --network bridge=virbr0 --graphics vnc</code>
+"command">virt-install --import --name Atomic0 --ram 4096 --vcpus 2 --disk path=/path/to/centos-atomic-host-standard.qcow2,format=qcow2,bus=virtio --disk path=/path/to/atomic0-cidata.iso,device=cdrom --network bridge=virbr0 --graphics vnc</code>
                             </pre>
                             <div class="para">The two <code class="option">--disk-path=</code>
                                 options specify locations of the image files and device types which
@@ -39627,7 +39627,7 @@ ssh_authorized_keys:
                                                 <li class="listitem">
                                                     <div class="para">Browse to the location where you have the OVA
                                                         file, for example, <code class=
-                                                        "filename">rhel-atomic-cloud-7.1-6.x86_64.vsphere.ova</code>,
+                                                        "filename">centos-atomic-cloud-7.1-6.x86_64.vsphere.ova</code>,
                                                     select it, and click <span class=
                                                     "guibutton"><strong>Open</strong></span>.</div>
                                                 </li>
@@ -40567,18 +40567,18 @@ Directory to extract under (this will create a directory google-cloud-sdk) (/hom
                                                 <span class="application"><strong>xz</strong></span>. To decompress
                                                 the image, enter the following command:</div>
                                             <pre class="screen"><code class="prompt">$</code> <code class=
-                                            "command">xz -d rhel-atomic-cloud-7.1-0.x86_64.qcow2.xz</code></pre></li>
+                                            "command">xz -d centos-atomic-cloud-7.1-0.x86_64.qcow2.xz</code></pre></li>
                                             <li class="step">
                                                 <div class="para">The qcow2 image must be converted into a RAW disk
                                                     file in order to used in GCE. This is done with qemu.</div>
                                                 <pre class="screen"><code class="prompt">$</code> <code class=
-                                                "command">qemu-img convert -S 4096 -f qcow2 -O raw rhel-atomic-cloud-7.1-0.x86_64.qcow2 disk.raw</code></pre></li>
+                                                "command">qemu-img convert -S 4096 -f qcow2 -O raw centos-atomic-cloud-7.1-0.x86_64.qcow2 disk.raw</code></pre></li>
                                                 <li class="step">
                                                     <div class="para">The raw disk file needs to be packaged with tar
                                                         prior to being uploaded to GCE. The raw file has to be named
                                                         disk.raw.</div>
                                                     <pre class="screen"><code class="prompt">$</code> <code class=
-                                                    "command">tar -Szcf rhel-atomic-cloud-7.1-0.x86_64.tar.gz disk.raw</code></pre></li>
+                                                    "command">tar -Szcf centos-atomic-cloud-7.1-0.x86_64.tar.gz disk.raw</code></pre></li>
                                                     <li class="step">
                                                         <div class="para">The uploaded raw disk file will be stored in a
                                                             Google Cloud Storage bucket. If you do not already have a bucket
@@ -40590,12 +40590,12 @@ Directory to extract under (this will create a directory google-cloud-sdk) (/hom
                                                             <div class="para">Upload the raw disk file using <span class=
                                                             "application"><strong>gsutil</strong></span>.</div>
                                                             <pre class="screen"><code class="prompt">$</code> <code class=
-                                                            "command">gsutil cp rhel-atomic-cloud-7.1-0.x86_64.tar.gz gs://bucketname</code></pre></li>
+                                                            "command">gsutil cp centos-atomic-cloud-7.1-0.x86_64.tar.gz gs://bucketname</code></pre></li>
                                                             <li class="step">
                                                                 <div class="para">Before you can use the raw disk file, it has to
                                                                     be created as a GCE image.</div>
                                                                 <pre class="screen"><code class="prompt">$</code> <code class=
-                                                                "command">gcloud compute images create GCE_IMAGE_NAME --source-uri gs://bucketname/rhel-atomic-cloud-7.1-0.x86_64.tar.gz</code></pre></li>
+                                                                "command">gcloud compute images create GCE_IMAGE_NAME --source-uri gs://bucketname/centos-atomic-cloud-7.1-0.x86_64.tar.gz</code></pre></li>
                                                                 <li class="step">
                                                                     <div class="para">You can verify the image is uploaded and
                                                                         available by looking for it in the output of <code class=
@@ -41038,7 +41038,7 @@ http-allow             default 0.0.0.0/0     tcp:80</pre>
                                 </div>
                             </div>
                             <div class="para">The following is the known issue with the
-                                rhel-atomic-host-20141111 image specific for the GCE
+                                centos-atomic-host-20141111 image specific for the GCE
                                 environment.</div>
                             <div xmlns:d="http://docbook.org/ns/docbook" class="orderedlist">
                                 <ol>
@@ -41224,35 +41224,35 @@ Agent admitted failure to sign using the key</pre>
                                 Systems Registered with Red&nbsp;Hat Satellite</a></span></dt>
                             </dl>
                             </dd>
-                            <dt><span class="chapter"><a href="#chap-uninstall-rhel">31.
+                            <dt><span class="chapter"><a href="#chap-uninstall-centos">31.
                                     Uninstalling CentOS&nbsp;Linux</a></span></dt>
                             <dd>
                             <dl>
-                                <dt><span class="section"><a href="#sect-uninstall-rhel-x86">31.1.
+                                <dt><span class="section"><a href="#sect-uninstall-centos-x86">31.1.
                                         Removing CentOS&nbsp;Linux from AMD64 and
                                         Intel&nbsp;64 Systems</a></span></dt>
                                 <dd>
                                 <dl>
                                     <dt><span class="section"><a href=
-                                    "#sect-uninstall-rhel-single-x86">31.1.1. Only Red&nbsp;Hat
+                                    "#sect-uninstall-centos-single-x86">31.1.1. Only Red&nbsp;Hat
                                     Enterprise&nbsp;Linux is Installed</a></span></dt>
                                     <dt><span class="section"><a href=
-                                    "#sect-uninstall-rhel-dual-linux-x86">31.1.2. Red&nbsp;Hat
+                                    "#sect-uninstall-centos-dual-linux-x86">31.1.2. Red&nbsp;Hat
                                     Enterprise&nbsp;Linux installed with a Different Linux
                                     Distribution</a></span></dt>
                                     <dt><span class="section"><a href=
-                                    "#sect-uninstall-rhel-dual-windows-x86">31.1.3. Red&nbsp;Hat
+                                    "#sect-uninstall-centos-dual-windows-x86">31.1.3. Red&nbsp;Hat
                                     Enterprise&nbsp;Linux installed with a Microsoft Windows Operating
                                     System</a></span></dt>
                                 </dl>
                                 </dd>
-                                <dt><span class="section"><a href="#sect-uninstall-rhel-s390">31.2.
+                                <dt><span class="section"><a href="#sect-uninstall-centos-s390">31.2.
                                         Removing CentOS&nbsp;Linux from IBM
                                         System&nbsp;z</a></span></dt>
                                 <dd>
                                 <dl>
                                     <dt><span class="section"><a href=
-                                    "#sect-uninstall-rhel-s390-another-os">31.2.1. Running a Different
+                                    "#sect-uninstall-centos-s390-another-os">31.2.1. Running a Different
                                     Operating System on Your z/VM Guest or LPAR</a></span></dt>
                                 </dl>
                                 </dd>
@@ -42722,39 +42722,39 @@ The rescue environment will now attempt to find your Linux installation and moun
                     <div class="titlepage">
                         <div>
                             <div>
-                                <h2 class="title"><a id="chap-uninstall-rhel" name=
-                                "chap-uninstall-rhel">⁠</a>Chapter&nbsp;31.&nbsp;Uninstalling
+                                <h2 class="title"><a id="chap-uninstall-centos" name=
+                                "chap-uninstall-centos">⁠</a>Chapter&nbsp;31.&nbsp;Uninstalling
                             CentOS&nbsp;Linux</h2>
                             </div>
                         </div>
                     </div>
                     <div class="toc">
                         <dl class="toc">
-                            <dt><span class="section"><a href="#sect-uninstall-rhel-x86">31.1.
+                            <dt><span class="section"><a href="#sect-uninstall-centos-x86">31.1.
                                     Removing CentOS&nbsp;Linux from AMD64 and
                                     Intel&nbsp;64 Systems</a></span></dt>
                             <dd>
                             <dl>
                                 <dt><span class="section"><a href=
-                                "#sect-uninstall-rhel-single-x86">31.1.1. Only Red&nbsp;Hat
+                                "#sect-uninstall-centos-single-x86">31.1.1. Only Red&nbsp;Hat
                                 Enterprise&nbsp;Linux is Installed</a></span></dt>
                                 <dt><span class="section"><a href=
-                                "#sect-uninstall-rhel-dual-linux-x86">31.1.2. Red&nbsp;Hat
+                                "#sect-uninstall-centos-dual-linux-x86">31.1.2. Red&nbsp;Hat
                                 Enterprise&nbsp;Linux installed with a Different Linux
                                 Distribution</a></span></dt>
                                 <dt><span class="section"><a href=
-                                "#sect-uninstall-rhel-dual-windows-x86">31.1.3. Red&nbsp;Hat
+                                "#sect-uninstall-centos-dual-windows-x86">31.1.3. Red&nbsp;Hat
                                 Enterprise&nbsp;Linux installed with a Microsoft Windows Operating
                                 System</a></span></dt>
                             </dl>
                             </dd>
-                            <dt><span class="section"><a href="#sect-uninstall-rhel-s390">31.2.
+                            <dt><span class="section"><a href="#sect-uninstall-centos-s390">31.2.
                                     Removing CentOS&nbsp;Linux from IBM
                                     System&nbsp;z</a></span></dt>
                             <dd>
                             <dl>
                                 <dt><span class="section"><a href=
-                                "#sect-uninstall-rhel-s390-another-os">31.2.1. Running a Different
+                                "#sect-uninstall-centos-s390-another-os">31.2.1. Running a Different
                                 Operating System on Your z/VM Guest or LPAR</a></span></dt>
                             </dl>
                             </dd>
@@ -42764,8 +42764,8 @@ The rescue environment will now attempt to find your Linux installation and moun
                         <div class="titlepage">
                             <div>
                                 <div>
-                                    <h2 class="title"><a id="sect-uninstall-rhel-x86" name=
-                                    "sect-uninstall-rhel-x86">⁠</a>31.1.&nbsp;Removing Red&nbsp;Hat
+                                    <h2 class="title"><a id="sect-uninstall-centos-x86" name=
+                                    "sect-uninstall-centos-x86">⁠</a>31.1.&nbsp;Removing Red&nbsp;Hat
                                 Enterprise&nbsp;Linux from AMD64 and Intel&nbsp;64 Systems</h2>
                                 </div>
                             </div>
@@ -42855,14 +42855,14 @@ The rescue environment will now attempt to find your Linux installation and moun
                             <li class="listitem">
                                 <div class="para">only CentOS&nbsp;Linux</div>
                                 <div class="para">See <a class="xref" href=
-                                "#sect-uninstall-rhel-single-x86">Section&nbsp;31.1.1, “Only
+                                "#sect-uninstall-centos-single-x86">Section&nbsp;31.1.1, “Only
                                 CentOS&nbsp;Linux is Installed”</a>.</div>
                             </li>
                             <li class="listitem">
                                 <div class="para">CentOS&nbsp;Linux and different
                                     Linux Distribution</div>
                                 <div class="para">See <a class="xref" href=
-                                "#sect-uninstall-rhel-dual-linux-x86">Section&nbsp;31.1.2,
+                                "#sect-uninstall-centos-dual-linux-x86">Section&nbsp;31.1.2,
                                 “CentOS&nbsp;Linux installed with a Different
                                 Linux Distribution”</a>.</div>
                             </li>
@@ -42871,7 +42871,7 @@ The rescue environment will now attempt to find your Linux installation and moun
                                     2000, Windows Server 2000, Windows XP, Windows Vista, Windows
                                     Server 2003 and Windows Server 2008</div>
                                 <div class="para">See <a class="xref" href=
-                                "#sect-uninstall-rhel-dual-windows-x86">Section&nbsp;31.1.3,
+                                "#sect-uninstall-centos-dual-windows-x86">Section&nbsp;31.1.3,
                                 “CentOS&nbsp;Linux installed with a Microsoft
                                 Windows Operating System”</a>.</div>
                             </li>
@@ -42893,8 +42893,8 @@ The rescue environment will now attempt to find your Linux installation and moun
                         <div class="titlepage">
                             <div>
                                 <div>
-                                    <h3 class="title"><a id="sect-uninstall-rhel-single-x86" name=
-                                    "sect-uninstall-rhel-single-x86">⁠</a>31.1.1.&nbsp;Only
+                                    <h3 class="title"><a id="sect-uninstall-centos-single-x86" name=
+                                    "sect-uninstall-centos-single-x86">⁠</a>31.1.1.&nbsp;Only
                                 CentOS&nbsp;Linux is Installed</h3>
                                 </div>
                             </div>
@@ -42962,8 +42962,8 @@ The rescue environment will now attempt to find your Linux installation and moun
                         <div class="titlepage">
                             <div>
                                 <div>
-                                    <h3 class="title"><a id="sect-uninstall-rhel-dual-linux-x86" name=
-                                    "sect-uninstall-rhel-dual-linux-x86">⁠</a>31.1.2.&nbsp;Red&nbsp;Hat
+                                    <h3 class="title"><a id="sect-uninstall-centos-dual-linux-x86" name=
+                                    "sect-uninstall-centos-dual-linux-x86">⁠</a>31.1.2.&nbsp;Red&nbsp;Hat
                                 Enterprise&nbsp;Linux installed with a Different Linux
                                 Distribution</h3>
                                 </div>
@@ -43038,7 +43038,7 @@ if [x$feature_platform_search_hint = xy ]; then
 else
   search --no-floppy --fs-uuid --set=root 0c70bc74-7675-4989-9dc8-bbcf5418ddf1
 fi
-linux16 /vmlinuz-3.10.0-57.el7.x86_64 root=/dev/mapper/rhel-root ro rd.lvm.lv=rhel/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=rhel/swap crashkernel=auto vconsole.keymap=us rhgb quiet LANG=en_US.UTF-8
+linux16 /vmlinuz-3.10.0-57.el7.x86_64 root=/dev/mapper/centos-root ro rd.lvm.lv=centos/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=centos/swap crashkernel=auto vconsole.keymap=us rhgb quiet LANG=en_US.UTF-8
 initrd16 /initramfs-3.10.0-57.el7.x86_64.img
 }
                                                 </pre></div>
@@ -43104,8 +43104,8 @@ initrd16 /initramfs-3.10.0-57.el7.x86_64.img
                         <div class="titlepage">
                             <div>
                                 <div>
-                                    <h3 class="title"><a id="sect-uninstall-rhel-dual-windows-x86"
-                                                         name="sect-uninstall-rhel-dual-windows-x86">⁠</a>31.1.3.&nbsp;Red&nbsp;Hat
+                                    <h3 class="title"><a id="sect-uninstall-centos-dual-windows-x86"
+                                                         name="sect-uninstall-centos-dual-windows-x86">⁠</a>31.1.3.&nbsp;Red&nbsp;Hat
                                                      Enterprise&nbsp;Linux installed with a Microsoft Windows Operating
                                                      System</h3>
                                 </div>
@@ -43325,8 +43325,8 @@ initrd16 /initramfs-3.10.0-57.el7.x86_64.img
                         <div class="titlepage">
                             <div>
                                 <div>
-                                    <h2 class="title"><a id="sect-uninstall-rhel-s390" name=
-                                    "sect-uninstall-rhel-s390">⁠</a>31.2.&nbsp;Removing Red&nbsp;Hat
+                                    <h2 class="title"><a id="sect-uninstall-centos-s390" name=
+                                    "sect-uninstall-centos-s390">⁠</a>31.2.&nbsp;Removing Red&nbsp;Hat
                                 Enterprise&nbsp;Linux from IBM System&nbsp;z</h2>
                                 </div>
                             </div>
@@ -43360,8 +43360,8 @@ initrd16 /initramfs-3.10.0-57.el7.x86_64.img
                         <div class="titlepage">
                             <div>
                                 <div>
-                                    <h3 class="title"><a id="sect-uninstall-rhel-s390-another-os" name=
-                                    "sect-uninstall-rhel-s390-another-os">⁠</a>31.2.1.&nbsp;Running a
+                                    <h3 class="title"><a id="sect-uninstall-centos-s390-another-os" name=
+                                    "sect-uninstall-centos-s390-another-os">⁠</a>31.2.1.&nbsp;Running a
                                 Different Operating System on Your z/VM Guest or LPAR</h3>
                                 </div>
                             </div>
@@ -46547,10 +46547,10 @@ initrd16 /initramfs-3.10.0-57.el7.x86_64.img
                                 <dd>
                                 <dl>
                                     <dt>from IBM System z, <a class="indexterm" href=
-                                    "#sect-uninstall-rhel-s390">Removing Red&nbsp;Hat
+                                    "#sect-uninstall-centos-s390">Removing Red&nbsp;Hat
                                     Enterprise&nbsp;Linux from IBM System&nbsp;z</a></dt>
                                     <dt>from x86_64-based systems, <a class="indexterm" href=
-                                    "#sect-uninstall-rhel-x86">Removing Red&nbsp;Hat
+                                    "#sect-uninstall-centos-x86">Removing Red&nbsp;Hat
                                     Enterprise&nbsp;Linux from AMD64 and Intel&nbsp;64 Systems</a></dt>
                                 </dl>
                                 </dd>
@@ -47046,10 +47046,10 @@ initrd16 /initramfs-3.10.0-57.el7.x86_64.img
                             <dd>
                             <dl>
                                 <dt>from IBM System z, <a class="indexterm" href=
-                                "#sect-uninstall-rhel-s390">Removing Red&nbsp;Hat
+                                "#sect-uninstall-centos-s390">Removing Red&nbsp;Hat
                                 Enterprise&nbsp;Linux from IBM System&nbsp;z</a></dt>
                                 <dt>from x86_64-based systems, <a class="indexterm" href=
-                                "#sect-uninstall-rhel-x86">Removing Red&nbsp;Hat
+                                "#sect-uninstall-centos-x86">Removing Red&nbsp;Hat
                                 Enterprise&nbsp;Linux from AMD64 and Intel&nbsp;64 Systems</a></dt>
                             </dl>
                             </dd>
