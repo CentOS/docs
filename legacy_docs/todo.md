@@ -13,8 +13,6 @@ Open tasks
   - AWS
   - GCE
 * Confirm various how-to information (lots!)
-* Fix logo problem in upper-left corner of document
-  - update image? or is this a CSS problem?
 * Atomic Host information
   - What is accurate?
   - What needs removing?
