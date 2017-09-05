@@ -2541,19 +2541,21 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                     </div>
                     <div class="para">As explained in <a class="xref" href=
                     "#chap-download-centos-linux">Chapter&nbsp;1,
-                    <em>Downloading CentOS&nbsp;Linux</em></a>, two
+                    <em>Downloading CentOS&nbsp;Linux</em></a>, four
                 basic types of media are available for CentOS Linux:
-                a minimal boot image and a full installation
-                image (also known as a binary DVD). If you downloaded the binary
-                DVD and created a boot DVD-ROM or USB drive from it, you can
-                proceed with the installation immediately, as this image contains
+                a minimal boot image, a netinstall image, a full installation
+                image (also known as a binary DVD) and a Everything image. If you downloaded the binary
+                DVD, minimal boot image or Everything image and created a boot DVD-ROM or USB drive from it, you can proceed with the installation immediately, as this image contains
                 everything you need to install the system.</div>
-                    <div class="para">However, if you use the minimal boot image, you
+                    <div class="para">However, if you use the netinstall image, you
                         must also configure an additional source of the installation. This
-                        is because the minimal boot image only contains the installation
+                        is because the netinstall image only contains the installation
                         program itself and tools needed to boot your system and start the
                         installation; it does not include the software packages to be
                         installed on your system.</div>
+		    <div class="para">Please be advised that the minimal image is just that. It is
+			intended to install a very basic CentOS-7 system with the minimum packages needed.
+			Additional packages have to be installed using yum.</div>
                     <div class="para">The full installation DVD ISO image can be used
                         as the source for the installation. If your system will require
                         additional software not provided by CentOS Project, you should
@@ -2606,7 +2608,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             </li>
                         </ul>
                     </div>
-                    <div class="para">When booting the installation from minimal boot
+                    <div class="para">When booting the installation from the netinstall 
                         media, you must always configure an additional installation source.
                         When booting the installation from the full binary DVD, it is also
                         possible to configure another installation source, but it is not
@@ -2839,7 +2841,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                     to the directory holding the ISO image. Instead of <em class=
                                     "replaceable">clients</em>, use the host name or IP address of the
                                 computer which is to be installed from this NFS server, the
-                                subnetwork from which all computers are to have access the ISO
+                                subnetwork from which all computers are to have access to the ISO
                                 image, or the asterisk sign (<code class="literal">*</code>) if you
                                 want to allow any computer with network access to the NFS server to
                                 use the ISO image. See the <code class=
