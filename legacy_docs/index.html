@@ -2273,12 +2273,12 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                                     </div>
                                     <div class="para">For example, if the ISO image is located in
                                         <code class=
-                                        "filename">/home/testuser/Downloads/centos-server-7.3x86_64-boot.iso</code>
+                                        "filename">/home/testuser/Downloads/CentOS-7-x86_64-DVD-1611.iso</code>
                                         and the detected device name is <code class="filename">sdb</code>,
                                         the command will look like the following:</div>
                                     <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">dd if=/home/testuser/Downloads/centos-server-7.3x86_64-boot.iso of=/dev/sdb bs=512k</code>
+"command">dd if=/home/testuser/Downloads/CentOS-7-x86_64-DVD-1611.iso of=/dev/sdb bs=512k</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for <code class="command">dd</code> to
@@ -2433,9 +2433,7 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                             <ol class="1">
                                 <li class="step">
                                     <div class="para">Connect a USB flash drive to the system and
-                                        identify the device path with the <code class="command">diskutil
-                                            list</code> command. The device path has the format of <code class=
-                                            "filename">/dev/disk<em class="replaceable">number</em></code>,
+                                        identify the device path with the <code class="command">diskutil list</code> command. The device path has the format of <code class="filename">/dev/disk<em class="replaceable">number</em></code>,
                                         where <em class="replaceable">number</em> is the number of the
                                         disk. The disks are numbered starting at zero (0). Disk 0 is likely
                                         to be the OS X recovery disk, and Disk 1 is likely to be your main
@@ -2472,9 +2470,7 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                                 "guilabel"><strong>Get Info</strong></span>.</div>
                                 </li>
                                 <li class="step">
-                                    <div class="para">Use the <code class="command">diskutil
-                                            unmountDisk</code> command to unmount the flash drive's filesystem
-                                        volumes:</div>
+                                    <div class="para">Use the <code class="command">diskutil unmountDisk</code> command to unmount the flash drive's filesystem volumes:</div>
                                     <pre class="screen">$ <code class=
                                     "command">diskutil unmountDisk /dev/disk<em class=
                                     "replaceable">number</em></code>
@@ -2483,8 +2479,7 @@ Unmount of all volumes on disk<em class=
                                     <div class="para">When you do this, the icon for the flash drive
                                         disappears from your desktop. If it does not, you might have
                                         identified the wrong disk. If you attempt to unmount the system
-                                        disk accidentally, you get a <code class="literal">failed to
-                                            unmount</code> error.</div>
+                                        disk accidentally, you get a <code class="literal">failed to unmount</code> error.</div>
                                 </li>
                                 <li class="step">
                                     <div class="para">Use the <code class="command">dd</code> command
@@ -2499,11 +2494,11 @@ Unmount of all volumes on disk<em class=
                                 image file you downloaded, and <em class="replaceable">number</em>
                                 with the disk number. For example, if the ISO image is located in
                                 <code class=
-                                "filename">/Users/jdoe/Downloads/centos-server-7.3x86_64-boot.iso</code>
+                                "filename">/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1611.iso</code>
                                 and the detected disk number is <code class="filename">2</code>,
                                 the command will look like the following:</div>
                                     <pre class="screen">$ <code class=
-                                    "command">sudo dd if=/Users/jdoe/Downloads/centos-server-7.3x86_64-boot.iso of=/dev/disk2 bs=1m</code>
+                                    "command">sudo dd if=/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1611.iso of=/dev/disk2 bs=1m</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for the command to finish. Note that no
@@ -47204,3 +47199,4 @@ initrd16 /initramfs-3.10.0-57.el7.x86_64.img
         </div>
     </body>
 </html>
+
