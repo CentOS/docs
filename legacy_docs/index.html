@@ -2314,10 +2314,26 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                         <div class="para">The procedure of creating bootable USB media on
                             Windows depends on which tool you use. There are many different
                             utilities which allow you to write an ISO image to a USB drive.
-                            The CentOS Project recommends using the <span class=
-                            "application"><strong>Fedora LiveUSB Creator</strong></span>,
+                            The CentOS Project suggests using the <span class=
+                            "application"><strong>Rufus USB Creator</strong></span>,
                         available for download at <a href=
-                        "https://fedorahosted.org/liveusb-creator/">https://fedorahosted.org/liveusb-creator/</a>.</div>
+                        "https://rufus.akeo.ie/">https://rufus.akeo.ie/</a>.</div>
+						<div class="para">The exact procedure for creating a bootable USB media with this tool
+							are beyond the scope of this document. A guide to using Rufus can be 
+							found at <a href=
+							"http://www.techrepublic.com/article/pro-tip-use-rufus-to-create-a-bootable-usb-drive-to-install-almost-any-os/">
+							http://www.techrepublic.com/article/pro-tip-use-rufus-to-create-a-bootable-usb-drive-to-install-almost-any-os/</a>.
+                        </div>
+                        <div class="figure"><a id="fedora-liveusb-creator" name=
+                        "fedora-liveusb-creator">⁠</a>
+						    <div class="figure-contents">
+                                <div class="mediaobject"><img src=
+                                "images/media/rufus-usb-creator.png" alt=
+                                "Rufus USB Creator" /></div>
+                            </div>
+                            <p class="title"><strong>Figure&nbsp;2.1.&nbsp;Rufus USB
+                            Creator</strong></p>
+                        </div>
                         <div xmlns:d="http://docbook.org/ns/docbook" class="important">
                             <div class="admonition_header">
                                 <p><strong>Important</strong></p>
@@ -2328,71 +2344,7 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                                     you will not be able to boot from the device.</div>
                             </div>
                         </div>
-                        <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
-                            <a id="proc-making-usb-media-windows" name=
-                            "proc-making-usb-media-windows">⁠</a>
-                            <p class="title"><strong>Procedure&nbsp;2.2.&nbsp;Making USB Media
-                                on Windows</strong></p>
-                            <ol class="1">
-                                <li class="step">
-                                    <div class="para">Download and install <span class=
-                                    "application"><strong>Fedora LiveUSB Creator</strong></span>.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Download the CentOS&nbsp;Linux
-                                        ISO image you want to use to create the media. (See <a class="xref"
-                                                                                               href="#chap-download-centos-linux">Chapter&nbsp;1,
-                                                                                               <em>Downloading CentOS&nbsp;Linux</em></a> for
-                                                                                           instructions on obtaining ISO images.)</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Plug in the USB drive you will be using to create
-                                        bootable media.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Open <span class="application"><strong>Fedora
-                                                LiveUSB Creator</strong></span>.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">In the main window, click the <span class=
-                                    "guilabel"><strong>Browse</strong></span> button and select the
-                                CentOS&nbsp;Linux ISO image you downloaded.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">From the <span class="guilabel"><strong>Target
-                                                Device</strong></span> drop-down menu, select the drive you want to
-                                        use. If the drive does not appear in the list, click the refresh
-                                        button on the right side of the menu and try again.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Click <span class="guilabel"><strong>Create Live
-                                                USB</strong></span>. The boot media creation process will begin. Do
-                                        not unplug the drive until the <code class=
-                                        "computeroutput">Complete!</code> message appears in the message
-                                    box at the bottom. The process usually takes up to 15 minutes,
-                                    depending on the drive's write speed, version of the USB
-                                    specification and the size of the ISO image you used.</div>
-                                    <div class="figure"><a id="fedora-liveusb-creator" name=
-                                    "fedora-liveusb-creator">⁠</a>
-                                        <div class="figure-contents">
-                                            <div class="mediaobject"><img src=
-                                            "images/media/fedora-live-usb-creator.png" alt=
-                                            "Fedora LiveUSB Creator" /></div>
-                                        </div>
-                                        <p class="title"><strong>Figure&nbsp;2.1.&nbsp;Fedora LiveUSB
-                                            Creator</strong></p>
-                                    </div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">When the creation process finishes and the
-                                        <code class="computeroutput">Complete!</code> message appears,
-                                        unmount the USB drive using the <span class=
-                                        "guilabel"><strong>Safely remove hardware</strong></span> icon in
-                                    the system's notification area.</div>
-                                </li>
-                            </ol>
-                        </div>
-                        <div class="para">The USB drive is now ready to be used as a boot
+                        <div class="para">After you completed the creation process, the USB drive is now ready to be used as a boot
                             device. You can continue with <a class="xref" href=
                             "#chap-booting-installer-x86">Chapter&nbsp;5, <em>Booting the
                                 Installation on AMD64 and Intel&nbsp;64 Systems</em></a> on AMD64
@@ -2428,7 +2380,7 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                         <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                             <a id="proc-making-usb-media-macosx" name=
                             "proc-making-usb-media-macosx">⁠</a>
-                            <p class="title"><strong>Procedure&nbsp;2.3.&nbsp;Making USB Media
+                            <p class="title"><strong>Procedure&nbsp;2.2.&nbsp;Making USB Media
                                 on Mac OS X</strong></p>
                             <ol class="1">
                                 <li class="step">
@@ -2810,7 +2762,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                                 <a id="proc-installation-server-setup-nfs" name=
                                 "proc-installation-server-setup-nfs">⁠</a>
-                                <p class="title"><strong>Procedure&nbsp;2.4.&nbsp;Preparing for
+                                <p class="title"><strong>Procedure&nbsp;2.3.&nbsp;Preparing for
                                     Installation Using NFS</strong></p>
                                 <ol class="1">
                                     <li class="step">
@@ -2924,7 +2876,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                                 <a id="proc-installation-server-setup-http" name=
                                 "proc-installation-server-setup-http">⁠</a>
-                                <p class="title"><strong>Procedure&nbsp;2.5.&nbsp;Preparing
+                                <p class="title"><strong>Procedure&nbsp;2.4.&nbsp;Preparing
                                     Installation Using HTTP or HTTPS</strong></p>
                                 <ol class="1">
                                     <li class="step">
@@ -3036,7 +2988,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                                 <a id="proc-installation-server-setup-ftp" name=
                                 "proc-installation-server-setup-ftp">⁠</a>
-                                <p class="title"><strong>Procedure&nbsp;2.6.&nbsp;Preparing for
+                                <p class="title"><strong>Procedure&nbsp;2.5.&nbsp;Preparing for
                                     Installation Using FTP</strong></p>
                                 <ol class="1">
                                     <li class="step">
