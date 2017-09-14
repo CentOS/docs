@@ -2273,12 +2273,12 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                                     </div>
                                     <div class="para">For example, if the ISO image is located in
                                         <code class=
-                                        "filename">/home/testuser/Downloads/CentOS-7-x86_64-DVD-1611.iso</code>
+                                        "filename">/home/testuser/Downloads/CentOS-7-x86_64-DVD-1708.iso</code>
                                         and the detected device name is <code class="filename">sdb</code>,
                                         the command will look like the following:</div>
                                     <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">dd if=/home/testuser/Downloads/CentOS-7-x86_64-DVD-1611.iso of=/dev/sdb bs=512k</code>
+"command">dd if=/home/testuser/Downloads/CentOS-7-x86_64-DVD-1708.iso of=/dev/sdb bs=512k</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for <code class="command">dd</code> to
@@ -2446,11 +2446,11 @@ Unmount of all volumes on disk<em class=
                                 image file you downloaded, and <em class="replaceable">number</em>
                                 with the disk number. For example, if the ISO image is located in
                                 <code class=
-                                "filename">/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1611.iso</code>
+                                "filename">/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1708.iso</code>
                                 and the detected disk number is <code class="filename">2</code>,
                                 the command will look like the following:</div>
                                     <pre class="screen">$ <code class=
-                                    "command">sudo dd if=/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1611.iso of=/dev/disk2 bs=1m</code>
+                                    "command">sudo dd if=/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1708.iso of=/dev/disk2 bs=1m</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for the command to finish. Note that no
@@ -3687,7 +3687,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                         "idm140010487292496"></a><a id="idm140010487291056" class=
                         "indexterm" name="idm140010487291056"></a>
                     <div class="para">The installation program automatically detects
-                        and installs your computer's hardware and you do not usually need
+                        your computer's hardware and installs accordingly. You do not usually need
                         to supply the installation program with any specific details about
                         your system. However, when performing certain types of
                         installation, knowing specific details about your hardware may be
@@ -4066,8 +4066,8 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                 <dt><span class="term">Full installation DVD or USB
                                     drive</span></dt>
                                 <dd>
-                                <div class="para">You can create bootable media from the full
-                                    installation DVD ISO image. In this case, a single DVD or USB drive
+                                <div class="para">You can create bootable media from the 
+									Binary or Everything DVD ISO image. In this case, a single DVD or USB drive
                                     can be used to complete the entire installation - it will serve
                                     both as a boot device and as an installation source for installing
                                     software packages. See <a class="xref" href=
@@ -7917,9 +7917,9 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                     <div class="para">Each file system has different size limits for
                         the file system itself as well as individual files contained
                         within. For a list of maximum supported file and file system sizes,
-                        see the CentOS Linux technology capabilities and limits page,
+                        see the CentOS Linux Product Specifications page,
                         available on the Customer Portal at <a href=
-                        "https://access.redhat.com/site/articles/centos-limits">https://access.redhat.com/site/articles/centos-limits</a>.</div>
+                        "https://wiki.centos.org/About/Product">https://wiki.centos.org/About/Product</a>.</div>
                     </div>
                     </div>
                     <div xml:lang="en-US" class="section" lang="en-US">
