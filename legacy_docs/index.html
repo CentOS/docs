@@ -2273,12 +2273,12 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                                     </div>
                                     <div class="para">For example, if the ISO image is located in
                                         <code class=
-                                        "filename">/home/testuser/Downloads/CentOS-7-x86_64-DVD-1611.iso</code>
+                                        "filename">/home/testuser/Downloads/CentOS-7-x86_64-DVD-1708.iso</code>
                                         and the detected device name is <code class="filename">sdb</code>,
                                         the command will look like the following:</div>
                                     <pre class="screen">
 <code class="prompt">#</code> <code class=
-"command">dd if=/home/testuser/Downloads/CentOS-7-x86_64-DVD-1611.iso of=/dev/sdb bs=512k</code>
+"command">dd if=/home/testuser/Downloads/CentOS-7-x86_64-DVD-1708.iso of=/dev/sdb bs=512k</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for <code class="command">dd</code> to
@@ -2314,10 +2314,26 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                         <div class="para">The procedure of creating bootable USB media on
                             Windows depends on which tool you use. There are many different
                             utilities which allow you to write an ISO image to a USB drive.
-                            The CentOS Project recommends using the <span class=
-                            "application"><strong>Fedora LiveUSB Creator</strong></span>,
+                            The CentOS Project suggests using the <span class=
+                            "application"><strong>Rufus USB Creator</strong></span>,
                         available for download at <a href=
-                        "https://fedorahosted.org/liveusb-creator/">https://fedorahosted.org/liveusb-creator/</a>.</div>
+                        "https://rufus.akeo.ie/">https://rufus.akeo.ie/</a>.</div>
+						<div class="para">The exact procedure for creating a bootable USB media with this tool
+							are beyond the scope of this document. A guide to using Rufus can be 
+							found at <a href=
+							"http://www.techrepublic.com/article/pro-tip-use-rufus-to-create-a-bootable-usb-drive-to-install-almost-any-os/">
+							http://www.techrepublic.com/article/pro-tip-use-rufus-to-create-a-bootable-usb-drive-to-install-almost-any-os/</a>.
+                        </div>
+                        <div class="figure"><a id="fedora-liveusb-creator" name=
+                        "fedora-liveusb-creator">⁠</a>
+						    <div class="figure-contents">
+                                <div class="mediaobject"><img src=
+                                "images/media/rufus-usb-creator.png" alt=
+                                "Rufus USB Creator" /></div>
+                            </div>
+                            <p class="title"><strong>Figure&nbsp;2.1.&nbsp;Rufus USB
+                            Creator</strong></p>
+                        </div>
                         <div xmlns:d="http://docbook.org/ns/docbook" class="important">
                             <div class="admonition_header">
                                 <p><strong>Important</strong></p>
@@ -2328,71 +2344,7 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                                     you will not be able to boot from the device.</div>
                             </div>
                         </div>
-                        <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
-                            <a id="proc-making-usb-media-windows" name=
-                            "proc-making-usb-media-windows">⁠</a>
-                            <p class="title"><strong>Procedure&nbsp;2.2.&nbsp;Making USB Media
-                                on Windows</strong></p>
-                            <ol class="1">
-                                <li class="step">
-                                    <div class="para">Download and install <span class=
-                                    "application"><strong>Fedora LiveUSB Creator</strong></span>.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Download the CentOS&nbsp;Linux
-                                        ISO image you want to use to create the media. (See <a class="xref"
-                                                                                               href="#chap-download-centos-linux">Chapter&nbsp;1,
-                                                                                               <em>Downloading CentOS&nbsp;Linux</em></a> for
-                                                                                           instructions on obtaining ISO images.)</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Plug in the USB drive you will be using to create
-                                        bootable media.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Open <span class="application"><strong>Fedora
-                                                LiveUSB Creator</strong></span>.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">In the main window, click the <span class=
-                                    "guilabel"><strong>Browse</strong></span> button and select the
-                                CentOS&nbsp;Linux ISO image you downloaded.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">From the <span class="guilabel"><strong>Target
-                                                Device</strong></span> drop-down menu, select the drive you want to
-                                        use. If the drive does not appear in the list, click the refresh
-                                        button on the right side of the menu and try again.</div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">Click <span class="guilabel"><strong>Create Live
-                                                USB</strong></span>. The boot media creation process will begin. Do
-                                        not unplug the drive until the <code class=
-                                        "computeroutput">Complete!</code> message appears in the message
-                                    box at the bottom. The process usually takes up to 15 minutes,
-                                    depending on the drive's write speed, version of the USB
-                                    specification and the size of the ISO image you used.</div>
-                                    <div class="figure"><a id="fedora-liveusb-creator" name=
-                                    "fedora-liveusb-creator">⁠</a>
-                                        <div class="figure-contents">
-                                            <div class="mediaobject"><img src=
-                                            "images/media/fedora-live-usb-creator.png" alt=
-                                            "Fedora LiveUSB Creator" /></div>
-                                        </div>
-                                        <p class="title"><strong>Figure&nbsp;2.1.&nbsp;Fedora LiveUSB
-                                            Creator</strong></p>
-                                    </div>
-                                </li>
-                                <li class="step">
-                                    <div class="para">When the creation process finishes and the
-                                        <code class="computeroutput">Complete!</code> message appears,
-                                        unmount the USB drive using the <span class=
-                                        "guilabel"><strong>Safely remove hardware</strong></span> icon in
-                                    the system's notification area.</div>
-                                </li>
-                            </ol>
-                        </div>
-                        <div class="para">The USB drive is now ready to be used as a boot
+                        <div class="para">After you completed the creation process, the USB drive is now ready to be used as a boot
                             device. You can continue with <a class="xref" href=
                             "#chap-booting-installer-x86">Chapter&nbsp;5, <em>Booting the
                                 Installation on AMD64 and Intel&nbsp;64 Systems</em></a> on AMD64
@@ -2428,7 +2380,7 @@ TARGET   SOURCE   FSTYPE  OPTIONS
                         <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                             <a id="proc-making-usb-media-macosx" name=
                             "proc-making-usb-media-macosx">⁠</a>
-                            <p class="title"><strong>Procedure&nbsp;2.3.&nbsp;Making USB Media
+                            <p class="title"><strong>Procedure&nbsp;2.2.&nbsp;Making USB Media
                                 on Mac OS X</strong></p>
                             <ol class="1">
                                 <li class="step">
@@ -2494,11 +2446,11 @@ Unmount of all volumes on disk<em class=
                                 image file you downloaded, and <em class="replaceable">number</em>
                                 with the disk number. For example, if the ISO image is located in
                                 <code class=
-                                "filename">/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1611.iso</code>
+                                "filename">/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1708.iso</code>
                                 and the detected disk number is <code class="filename">2</code>,
                                 the command will look like the following:</div>
                                     <pre class="screen">$ <code class=
-                                    "command">sudo dd if=/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1611.iso of=/dev/disk2 bs=1m</code>
+                                    "command">sudo dd if=/Users/jdoe/Downloads/CentOS-7-x86_64-DVD-1708.iso of=/dev/disk2 bs=1m</code>
                                 </pre></li>
                                 <li class="step">
                                     <div class="para">Wait for the command to finish. Note that no
@@ -2810,7 +2762,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                                 <a id="proc-installation-server-setup-nfs" name=
                                 "proc-installation-server-setup-nfs">⁠</a>
-                                <p class="title"><strong>Procedure&nbsp;2.4.&nbsp;Preparing for
+                                <p class="title"><strong>Procedure&nbsp;2.3.&nbsp;Preparing for
                                     Installation Using NFS</strong></p>
                                 <ol class="1">
                                     <li class="step">
@@ -2924,7 +2876,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                                 <a id="proc-installation-server-setup-http" name=
                                 "proc-installation-server-setup-http">⁠</a>
-                                <p class="title"><strong>Procedure&nbsp;2.5.&nbsp;Preparing
+                                <p class="title"><strong>Procedure&nbsp;2.4.&nbsp;Preparing
                                     Installation Using HTTP or HTTPS</strong></p>
                                 <ol class="1">
                                     <li class="step">
@@ -3036,7 +2988,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             <div xmlns:d="http://docbook.org/ns/docbook" class="procedure">
                                 <a id="proc-installation-server-setup-ftp" name=
                                 "proc-installation-server-setup-ftp">⁠</a>
-                                <p class="title"><strong>Procedure&nbsp;2.6.&nbsp;Preparing for
+                                <p class="title"><strong>Procedure&nbsp;2.5.&nbsp;Preparing for
                                     Installation Using FTP</strong></p>
                                 <ol class="1">
                                     <li class="step">
@@ -3735,7 +3687,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                         "idm140010487292496"></a><a id="idm140010487291056" class=
                         "indexterm" name="idm140010487291056"></a>
                     <div class="para">The installation program automatically detects
-                        and installs your computer's hardware and you do not usually need
+                        your computer's hardware and installs accordingly. You do not usually need
                         to supply the installation program with any specific details about
                         your system. However, when performing certain types of
                         installation, knowing specific details about your hardware may be
@@ -4114,8 +4066,8 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                 <dt><span class="term">Full installation DVD or USB
                                     drive</span></dt>
                                 <dd>
-                                <div class="para">You can create bootable media from the full
-                                    installation DVD ISO image. In this case, a single DVD or USB drive
+                                <div class="para">You can create bootable media from the 
+									Binary or Everything DVD ISO image. In this case, a single DVD or USB drive
                                     can be used to complete the entire installation - it will serve
                                     both as a boot device and as an installation source for installing
                                     software packages. See <a class="xref" href=
@@ -4787,7 +4739,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td align="left">Full installation media (DVD or USB)</td>
+                                    <td align="left">Full installation media (Binary oder Everything, DVD or USB)</td>
                                     <td align="left">The boot media itself</td>
                                 </tr>
                                 <tr>
@@ -5071,14 +5023,14 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                         <div class="variablelist">
                             <dl class="variablelist">
                                 <dt><span class="term">Install CentOS
-                                    Linux&nbsp;7.0</span></dt>
+                                    Linux&nbsp;7</span></dt>
                                 <dd>
                                 <div class="para">Choose this option to install CentOS
                                     Linux onto your computer system using the graphical
                                     installation program.</div>
                                 </dd>
                                 <dt><span class="term">Test this media &amp; install CentOS
-                                    Linux&nbsp;7.0</span></dt>
+                                    Linux&nbsp;7</span></dt>
                                 <dd>
                                 <div class="para">This option is the default. Prior to starting the
                                     installation program, a utility is launched to check the integrity
@@ -5107,7 +5059,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                         <div class="variablelist">
                             <dl class="variablelist">
                                 <dt><span class="term">Install CentOS
-                                    Linux&nbsp;7.0 in basic graphics mode</span></dt>
+                                    Linux&nbsp;7 in basic graphics mode</span></dt>
                                 <dd>
                                 <div class="para">This option allows you to install CentOS
                                     Linux in graphical mode even if the installation
@@ -5667,7 +5619,8 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                         <div class="para">The sections below discuss each screen available
                             in the installation process. Note that due to the installer's
                             parallel nature, most of the screens do not have to be completed in
-                            the order in which they are described here.</div>
+                            the order in which they are described here. Depending on your available screen resolution,
+							you might need to scroll down to reach some sections.</div>
                         <div class="para">Each screen in the graphical interface contains a
                             <span class="guilabel"><strong>Help</strong></span> button. This
                             button opens the <span class=
@@ -5955,7 +5908,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                         "guilabel"><strong>OFF</strong></span> position. The system clock
                     should use your time zone selection to display the correct date and
                     time at the bottom of the screen. If they are still incorrect,
-                    adjust them manually.</div>
+                    adjust them manually. If your network connection is not enabled, you can't activate NTP in this screen.</div>
                     <div class="para">Note that NTP servers might be unavailable at the
                         time of installation. In such a case, enabling them will not set
                         the time automatically. When the servers become available, the date
@@ -6285,8 +6238,7 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                     <span class="guibutton"><strong>Verify</strong></span> button to
                                     ensure that the media is suitable for installation. This integrity
                                     test is the same as the one performed if you selected <code class=
-                                    "literal">Test this media &amp; Install CentOS
-                                    Linux 7.0</code> in the boot menu, or if you used
+                                    "literal">Test this media &amp; Install CentOS Linux 7</code> in the boot menu, or if you used
                                 the <code class="option">rd.live.check</code> boot option.</div>
                                 </dd>
                                 <dt><span class="term">ISO file</span></dt>
@@ -6325,7 +6277,9 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                 </div>
                                 <div class="para">Using your selection as the start of the location
                                     URL, type the rest into the address box. If you choose NFS, another
-                                    box will appear for you to specify any NFS mount options.</div>
+                                    box will appear for you to specify any NFS mount options. An installation 
+									from a network requires a working network connection (as the screenshot above
+									shows at the bottom.</div>
                                 <div xmlns:d="http://docbook.org/ns/docbook" class="important">
                                     <div class="admonition_header">
                                         <p><strong>Important</strong></p>
@@ -7965,9 +7919,9 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                     <div class="para">Each file system has different size limits for
                         the file system itself as well as individual files contained
                         within. For a list of maximum supported file and file system sizes,
-                        see the CentOS Linux technology capabilities and limits page,
+                        see the CentOS Linux Product Specifications page,
                         available on the Customer Portal at <a href=
-                        "https://access.redhat.com/site/articles/centos-limits">https://access.redhat.com/site/articles/centos-limits</a>.</div>
+                        "https://wiki.centos.org/About/Product">https://wiki.centos.org/About/Product</a>.</div>
                     </div>
                     </div>
                     <div xml:lang="en-US" class="section" lang="en-US">
