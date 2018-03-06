@@ -1433,7 +1433,7 @@
                         </dd>
                         <dt><span class="chapter"><a href=
                         "#chap-upgrading-your-current-system">26. Upgrading Your Current
-                        System</a></span></dt>
+                        System Does Not Work in CentOS Linux 7</a></span></dt>
                     </dl>
                     </dd>
                     <dt><span class="part"><a href="#part-after-installation">V. After
@@ -3540,10 +3540,10 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                 </div>
                             </div>
                         </div>
-                        <div class="para">There are two procedures available for upgrading
+                        <div class="para">While there are two procedures available for upgrading
                             your current system to the next major version of CentOS
-                            Linux. To decide which procedure is the right one
-                            for your system, read the following descriptions:</div>
+                            Linux, there is only one method that
+                            actually works:</div>
                         <div class="variablelist">
                             <dl class="variablelist">
                                 <dt><span class="term">Clean Install</span></dt>
@@ -3565,22 +3565,12 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                 <dt><span class="term">In-Place Upgrade</span></dt>
                                 <dd>
                                 <div class="para">An in-place upgrade is a way of upgrading your
-                                    system without removing the older version first. The procedure
-                                    requires installing the migration utilities available for your
-                                    system and running them as any other software. In CentOS
-                                    Linux, the <span class=
-                                    "application"><strong>Preupgrade Assistant</strong></span> assesses
-                                your current system and identifies potential problems you might
-                                encounter during or after the upgrade. It also performs minor fixes
-                                and modifications to the system. The <span class=
-                                "application"><strong>CentOS Upgrade Tool</strong></span> utility
-                            downloads the packages and performs the actual upgrade. An in-place
-                            upgrade requires a lot of troubleshooting and planning and should
-                            only be done if there is no other choice. For more information on
-                            the <span class="application"><strong>Preupgrade
-                                    Assistant</strong></span>, see <a class="xref" href=
-                                    "#chap-upgrading-your-current-system">Chapter&nbsp;26,
-                                    <em>Upgrading Your Current System</em></a>.</div>
+                                    system without removing the older version first. Unfortunately, the
+                                    tools for this in-place upgrade do not work with CentOS
+                                    Linux &mdash; the <span class=
+                                    "application"><strong>Preupgrade Assistant</strong></span> tool and 
+                                    the <span class="application"><strong>CentOS Upgrade Tool</strong></span>
+                                    utility are not a reliable way to upgrade an installation.</div>
                                 <div xmlns:d="http://docbook.org/ns/docbook" class="warning">
                                     <div class="admonition_header">
                                         <p><strong>Warning</strong></p>
@@ -3592,6 +3582,17 @@ load: 1.02  cmd: dd 3668 uninterruptible 0.00u 1.91s
                                     </div>
                                 </div>
                                 </dd>
+                                <div xmlns:d="http://docbook.org/ns/docbook" class="warning">
+                                    <div class="admonition_header">
+                                        <p><strong>Warning</strong></p>
+                                    </div>
+                                    <div class="admonition">
+                                        <div class="para">The <span class=
+                                    "application"><strong>Preupgrade Assistant</strong></span> and 
+                                    <span class="application"><strong>CentOS Upgrade Tool</strong></span>
+                                    utilities are known to not work on CentOS Linux 7.</div>
+                                    </div>
+                                </div>
                             </dl>
                         </div>
                     </div>
@@ -41023,7 +41024,7 @@ Agent admitted failure to sign using the key</pre>
                             <div>
                                 <h2 class="title"><a id="chap-upgrading-your-current-system" name=
                                 "chap-upgrading-your-current-system">⁠</a>Chapter&nbsp;26.&nbsp;Upgrading
-                            Your Current System</h2>
+                            Your Current System Does Not Work in CentOS Linux 7</h2>
                             </div>
                         </div>
                     </div>
@@ -41032,50 +41033,21 @@ Agent admitted failure to sign using the key</pre>
                     "indexterm" name="idm140010464302768"></a><a id=
                     "idm140010470051728" class="indexterm" name=
                     "idm140010470051728"></a>
-                <div class="para">The procedure for performing an in-place upgrade
-                    on your current system is handled by the following utilities:</div>
-                <div xmlns:d="http://docbook.org/ns/docbook" class="itemizedlist">
-                    <ul>
-                        <li class="listitem">
-                            <div class="para">The <span class="application"><strong>Preupgrade
-                                        Assistant</strong></span>, which is a diagnostics utility that
-                                assesses your current system and identifies potential problems you
-                                might encounter during or after the upgrade.</div>
-                        </li>
-                        <li class="listitem">
-                            <div class="para">The <span class=
-                            "application"><strong>CentOS Upgrade Tool</strong></span>
-                                utility, which is used to upgrade a system from CentOS
-                                Linux version 6 to version 7.</div>
-                        </li>
-                    </ul>
-                </div>
-                <div xmlns:d="http://docbook.org/ns/docbook" class="note">
-                    <div class="admonition_header">
-                        <p><strong>Note</strong></p>
-                    </div>
-                    <div class="admonition">
-                        <div class="para">In-place upgrades are currently only supported on
-                            AMD64 and Intel&nbsp;64 (<code class="systemitem">x86_64</code>)
-                            systems and on IBM System&nbsp;z (<code class=
-                            "systemitem">s390x</code>). Additionally, only the <code class=
-                            "literal">Server</code> variant can be upgraded with <span class=
-                            "application"><strong>CentOS Upgrade
-                                Tool</strong></span>.</div>
-                    </div>
-                </div>
-                <div class="para">Full documentation covering the process of
-                    upgrading from an earlier release of CentOS
-                    Linux to CentOS&nbsp;Linux&nbsp;7
-                    can is available in the <a href=
-                    "https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Migration_Planning_Guide/chap-Red_Hat_Enterprise_Linux-Migration_Planning_Guide-Upgrading.html">
-                        <em class="citetitle">Red Hat Enterprise&nbsp;Linux&nbsp;7
-                            Migration Planning Guide</em></a>.</div>
-                <div class="para">You can also use the <a href=
-                "https://access.redhat.com/labs/rhelupgradehelper/">CentOS
-                Linux Upgrade Helper</a> to guide you through
-            migration from CentOS&nbsp;Linux&nbsp;6 to
-            7.</div>
+                                <div xmlns:d="http://docbook.org/ns/docbook" class="warning">
+                                    <div class="admonition_header">
+                                        <p><strong>Warning</strong></p>
+                                    </div>
+                                    <div class="admonition">
+                                        <div class="para">The <span class=
+                                    "application"><strong>Preupgrade Assistant</strong></span> and 
+                                    <span class="application"><strong>CentOS Upgrade Tool</strong></span>
+                                    utilities are known to not work on CentOS Linux 7.</div>
+                                    </div>
+                                </div>
+                <div class="para">Unfortunately the utilities for performing an in-place upgrade
+                    to CentOS Linux 7 on your current system do not work.</div>
+                <div class="para">The only method that the CentOS Project has tested and recommends
+                    is to do a full install.  
                 </div>
             </div>
             <div class="part">
