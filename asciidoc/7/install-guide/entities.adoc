@@ -1,3 +1,4 @@
+:toc: left
 
 :BOOKID: doc-Installation_Guide
 
