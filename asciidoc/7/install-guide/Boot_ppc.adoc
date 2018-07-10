@@ -14,7 +14,7 @@ On a text console, press kbd:[1] when the self test is displaying the banner alo
 [[figu-booting-sms-console]]
 .The SMS Console
 
-image::./images/pseries/sms-console.png[SMS console screen]
+image::images/pseries/sms-console.png[SMS console screen]
 
 Once in the SMS menu, select the option for `Select Boot Options`. In that menu, specify `Select Install or Boot a Device`. There, select `CD/DVD`, and then the bus type (in most cases SCSI). If you are uncertain, you can select to view all devices. This scans all available buses for boot devices, including network adapters and hard drives.
 

@@ -159,7 +159,7 @@ Transferring the ISO image file to the USB drive using Windows Explorer or a sim
 [[fedora-liveusb-creator]]
 .Fedora Media Writer
 +
-image::images/media/fedora-live-usb-creator.png[Fedora Media Writer main window, showing the "Complete!" message]
+image::images/media/fedora-live-usb-creator.png[Fedora Media Writer main window, showing the Complete! message]
 
 . When the creation process finishes and the `Complete!` message appears, unmount the USB drive using the `Safely remove hardware` icon in the system's notification area.
 

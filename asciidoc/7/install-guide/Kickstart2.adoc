@@ -2345,7 +2345,7 @@ Create the partition first, then create the logical volume group, and then creat
 ....
 
 [command]`part pv.01 --size 10000`
-[command]`volgroup volgrp pv.01` 
+[command]`volgroup volgrp pv.01`
 [command]`logvol / --vgname=volgrp --size=2000 --name=root`
 
 ....
@@ -2648,9 +2648,8 @@ The following is an example [command]`%pre` section:
 .Sample %pre Script
 ====
 
-[literal,subs="+quotes,verbatim"]
+[literal,subs="verbatim"]
 ....
-
 %pre
 #!/bin/sh
 hds=""
@@ -2685,7 +2684,6 @@ echo "part / --fstype xfs --size 2048" >> /tmp/part-include
 echo "part /home --fstype xfs --size 2048 --grow" >> /tmp/part-include
 fi
 %end
-
 ....
 
 This script determines the number of hard drives in the system and writes a text file with a different partitioning scheme depending on whether it has one or two drives. Instead of having a set of partitioning commands in the Kickstart file, include the following line:

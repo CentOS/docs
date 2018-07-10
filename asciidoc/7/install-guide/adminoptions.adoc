@@ -663,7 +663,7 @@ which ensure that the gateway is accessible before proceeding. For more informat
 [option]`linksleep=`::
 +
 Used to configure how long anaconda should wait for a link on a device before activating it.
-This functionality is now available in the [application]*dracut* modules where specific [option]`rd.net.timeout.*` options can be configured to handle issues caused by slow network device initialization.
+This functionality is now available in the [application]*dracut* modules where specific [option]`rd.net.timeout.\*` options can be configured to handle issues caused by slow network device initialization.
 For more information about [application]*dracut*, see the `dracut.cmdline(7)` man page.
 
 [[list-boot-options-removed]]
