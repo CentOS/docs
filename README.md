@@ -13,6 +13,11 @@ published via asciidoc and asciibinder as the documentation is created.
 **NOTE: AsciiDoc "new style" is still a conceptual work in progress, the
 directory structure is just a placeholder.**
 
+Currently you can use asciidoctor (packaged as rubygem-asciidoctor) to preview
+the asciidoc content. To do so, first run **asciidoctor master.adoc** in the
+`asciidoc/7/install-guide/` directory, and then use your browser to open
+`master.html` which will appear in the same directory.
+
 ## Contributions
 
 ### Design and cleanup proposals
