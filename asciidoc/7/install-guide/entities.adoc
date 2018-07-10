@@ -5,10 +5,8 @@
 
 :PREVVER: 6
 
-:PRODUCT: Red Hat Enterprise Linux
+:PRODUCT: CentOS
 
 :PRODVER: 7.5
 
 :YEAR: 2018
-
-:nbsp:  
