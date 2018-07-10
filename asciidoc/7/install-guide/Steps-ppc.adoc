@@ -1,0 +1,232 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-installation-planning-ppc]]
+== Planning for Installation on IBM Power{nbsp}Systems
+
+This chapter outlines the decisions and preparations you will need to make when deciding how to proceed with the installation.
+
+[[sect-installation-planning-upgrade-or-install-ppc]]
+=== Upgrade or Install?
+
+While automated in-place upgrades are now supported, the support is currently limited to AMD64 and Intel{nbsp}64 systems. If you have an existing installation of a previous release of {PRODUCT} on an IBM Power{nbsp}Systems server, you must perform a clean install to migrate to {PRODUCT}{nbsp}7. A clean install is performed by backing up all data from the system, formatting disk partitions, performing an installation of {PRODUCT} from installation media, and then restoring any user data.
+
+[[sect-installation-planning-hardware-compatibility-ppc]]
+=== Is Your Hardware Compatible?
+
+{PRODUCT}{nbsp}7 (big endian) is compatible with IBM Power{nbsp}Systems servers which use the POWER7, POWER8, and POWER9 processor series. POWER6 processors and older are no longer supported.
+
+{PRODUCT} also offers a little endian variant for IBM Power{nbsp}Systems. This variant is currently compatible with POWER8 and POWER9 processors, and is supported as a KVM guest on Red{nbsp}Hat Enterprise{nbsp}Virtualization for Power, on PowerVM, and PowerNV (bare metal).
+
+The most recent list of supported hardware can be found in the [citetitle]_Red{nbsp}Hat Hardware Compatibility List_, available online at link:++https://access.redhat.com/ecosystem/search/#/category/Server++[]. Also see link:++https://access.redhat.com/site/articles/rhel-limits++[{PRODUCT} technology capabilities and limits] for general information about system requirements.
+
+[[sect-installation-planning-ibm-tools-ppc]]
+=== IBM Installation Tools
+
+[application]*IBM Installation Toolkit* is an optional utility that speeds up the installation of Linux on IBM Power{nbsp}Systems and is especially helpful for those unfamiliar with Linux. You can use the [application]*IBM Installation Toolkit* to:
+footnote:[Parts of this section were previously published at IBM's _Linux information for IBM systems_ resource at link:++http://publib.boulder.ibm.com/infocenter/lnxinfo/v3r0m0/index.jsp?topic=%2Fliaay%2Ftools_overview.htm++[http://publib.boulder.ibm.com/infocenter/lnxinfo/v3r0m0/index.jsp?topic=%2Fliaay%2Ftools_overview.htm]]
+
+* Install and configure Linux on a non-virtualized IBM Power{nbsp}Systems server.
+
+* Install and configure Linux on servers with previously-configured logical partitions (LPARs, also known as virtualized servers).
+
+* Install IBM service and productivity tools on a new or previously installed Linux system. The IBM service and productivity tools include dynamic logical partition (DLPAR) utilities.
+
+* Upgrade system firmware level on IBM Power{nbsp}Systems servers.
+
+* Perform diagnostics or maintenance operations on previously installed systems.
+
+* Migrate a LAMP server (software stack) and application data from a System x to a System p system. A LAMP server is a bundle of open source software. LAMP is an acronym for Linux, [application]*Apache HTTP Server*, [application]*MySQL* relational database, and the PHP (or sometimes Perl, or Python) language.
+
+Documentation for the [application]*IBM Installation Toolkit* for PowerLinux is available in the Linux Information Center at link:++http://publib.boulder.ibm.com/infocenter/lnxinfo/v3r0m0/topic/liaan/powerpack.htm++[http://publib.boulder.ibm.com/infocenter/lnxinfo/v3r0m0/topic/liaan/powerpack.htm]
+
+PowerLinux service and productivity tools is an optional set of tools that include hardware service diagnostic aids, productivity tools, and installation aids for Linux operating systems on IBM servers based on POWER7, POWER6, POWER5, and POWER4 technology.
+
+Documentation for the service and productivity tools is available in the Linux Information Center at link:++http://publib.boulder.ibm.com/infocenter/lnxinfo/v3r0m0/topic/liaau/liaauraskickoff.htm++[http://publib.boulder.ibm.com/infocenter/lnxinfo/v3r0m0/topic/liaau/liaauraskickoff.htm]
+
+[[sect-installation-planning-hardware-preparation-ppc]]
+=== Preparation for IBM Power{nbsp}Systems Servers
+
+[IMPORTANT]
+====
+
+Ensure that the real-base boot parameter is set to `c00000`, otherwise you might see errors such as:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+`DEFAULT CATCH!, exception-handler=fff00300`
+....
+
+====
+
+IBM Power{nbsp}Systems servers offer many options for partitioning, virtual or native devices, and consoles.
+
+If you are using a non-partitioned system, you do not need any pre-installation setup. For systems using the HVSI serial console, hook up your console to the T2 serial port.
+
+If using a partitioned system the steps to create the partition and start the installation are largely the same. You should create the partition at the HMC and assign some CPU and memory resources, as well as SCSI and Ethernet resources, which can be either virtual or native. The HMC create partition wizard steps you through the creation.
+
+For more information on creating the partition, see the [citetitle]_Partitioning for Linux with an HMC_ PDF in the IBM Systems Hardware Information Center at: link:++http://publib.boulder.ibm.com/infocenter/powersys/v3r1m5/topic/iphbi_p5/iphbibook.pdf++[http://publib.boulder.ibm.com/infocenter/powersys/v3r1m5/topic/iphbi_p5/iphbibook.pdf]
+
+If you are using virtual SCSI resources, rather than native SCSI, you must configure a 'link' to the virtual SCSI serving partition, and then configure the virtual SCSI serving partition itself. You create a 'link' between the virtual SCSI client and server slots using the HMC. You can configure a virtual SCSI server on either Virtual I/O Server (VIOS) or IBM{nbsp}i, depending on which model and options you have.
+
+If you are installing using Intel iSCSI Remote Boot, all attached iSCSI storage devices must be disabled. Otherwise, the installation will succeed but the installed system will not boot.
+
+For more information on using virtual devices, see the IBM Redbooks publication _Virtualizing an Infrastructure with System p and Linux_ at: link:++http://publib-b.boulder.ibm.com/abstracts/sg247499.html++[http://publib-b.boulder.ibm.com/abstracts/sg247499.html]
+
+Once you have your system configured, you need to Activate from the HMC or power it on. Depending on the type of installation, you need to configure SMS to correctly boot the system into the installation program.
+
+[[sect-installation-planning-supported-hardware-ppc]]
+=== Supported Installation Targets
+
+An installation target is a storage device that will store {PRODUCT} and boot the system. {PRODUCT} supports the following installation targets for AMD64 and Intel{nbsp}64 systems:
+
+* Storage connected by a standard internal interface, such as SCSI, SATA, or SAS
+
+* Fibre Channel Host Bus Adapters and multipath devices. Some can require vendor-provided drivers.
+
+* Virtualized installation on IBM Power{nbsp}Systems servers is also supported when using Virtual SCSI (vSCSI) adapters in virtual client LPARs
+
+Red{nbsp}Hat does not support installation to USB drives or SD memory cards. For information about the support for third-party virtualization technologies, see the [citetitle]_Red{nbsp}Hat Hardware Compatibility List_, available online at link:++https://hardware.redhat.com++[].
+
+[IMPORTANT]
+====
+
+On IBM Power{nbsp}Systems servers, the eHEA module fails to initialize if 16GB _huge pages_ are assigned to a system or partition and the kernel command line does not contain the huge page parameters. Therefore, when you perform a network installation through an IBM eHEA ethernet adapter, you cannot assign huge pages to the system or partition during the installation. Use _large pages_ instead.
+
+====
+
+[[sect-installation-planning-system-specifications-ppc]]
+=== System Specifications List
+
+The installation program automatically detects and installs your computer's hardware and you do not usually need to supply the installation program with any specific details about your system. However, when performing certain types of installation, it is important to know specific details about your hardware. For this reason, it is recommended that you record the following system specifications for reference during the installation, depending on your installation type.
+
+* If you plan to use a customized partition layout, record:
++
+** The model numbers, sizes, types, and interfaces of the hard drives attached to the system. For example, Seagate ST3320613AS 320 GB on SATA0, Western Digital WD7500AAKS 750 GB on SATA1. This will allow you to identify specific hard drives during the partitioning process.
+
+* If you are installing {PRODUCT} as an additional operating system on an existing system, record:
++
+** Information about the partitions used on the system. This information can include file system types, device node names, file system labels, and sizes. This will allow you to identify specific partitions during the partitioning process. Remember that different operating systems identify partitions and drives differently, therefore even if the other operating system is a Unix operating system, the device names can be reported by {PRODUCT} differently. This information can usually be found by executing the equivalent of the [command]`mount` command and [command]`blkid` command and in the `/etc/fstab` file.
++
+If you have other operating systems already installed, the {PRODUCT}{nbsp}7 installation program attempts to automatically detect and configure to boot them. You can manually configure any additional operating systems if they are not detected properly. For more information, see <<sect-bootloader-ppc>>.
+
+* If you plan to install from an image on a local hard drive:
++
+** The hard drive and directory that holds the image.
+
+* If you plan to install from a network location:
++
+** The make and model numbers of the network adapters on your system. For example, Netgear GA311. This will allow you to identify adapters when manually configuring the network.
++
+** IP, DHCP, and BOOTP addresses
++
+** Netmask
++
+** Gateway IP address
++
+** One or more name server IP addresses (DNS)
++
+** The location of the installation source on an FTP server, HTTP (web) server, HTTPS (web) server, or NFS server.
++
+If any of these networking requirements or terms are unfamiliar to you, contact your network administrator for assistance.
+
+* If you plan to install on an iSCSI target:
++
+** The location of the iSCSI target. Depending on your network, you might also need a CHAP user name and password, and perhaps a reverse CHAP user name and password.
+
+* If your computer is part of a domain:
++
+** You should verify that the domain name will be supplied by the DHCP server. If not, you will need to input the domain name manually during installation.
+
+[[sect-installation-planning-disk-space-memory-ppc]]
+=== Disk Space and Memory Requirements
+
+{PRODUCT}, like most current operating systems, uses _disk partitions_. When you install {PRODUCT}, you have to work with disk partitions. For more information about disk partitions, see <<appe-disk-partitions-overview>>.
+
+The disk space used by {PRODUCT} must be separate from the disk space used by other operating systems you might have installed on your system.
+
+[NOTE]
+====
+
+For IBM Power{nbsp}Systems servers, at least three partitions (`/`, `swap` and a `PReP` boot partition) must be dedicated to {PRODUCT}.
+
+====
+
+To install {PRODUCT} you must have a minimum of 10 GB of space in either unpartitioned disk space or in partitions which can be deleted. For more information on partition and disk space recommendations, see the recommended partitioning sizes discussed in <<sect-recommended-partitioning-scheme-ppc>>.
+
+{PRODUCT} requires minimum the following amount of RAM:
+
+[options="header"]
+|===
+|Installation type|Minimum required RAM
+|Local media installation (USB, DVD)|1,280 MiB
+|NFS network installation|1,280 MiB
+|HTTP, HTTPS, or FTP network installation|1,664 MiB
+|===
+
+Installing {PRODUCT} using a Kickstart file has the same minimum RAM requirements as a manual installation. However, if you use a Kickstart file that runs commands which require additional memory or write data to the RAM disk, additional RAM might be necessary.
+
+For more information about the minimum requirements and technology limits of Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7, see the [citetitle]_link:++https://access.redhat.com/articles/rhel-limits++[Red{nbsp}Hat Enterprise{nbsp}Linux technology capabilities and limits]_ article on the Red{nbsp}Hat Customer Portal.
+
+[[sect-installation-planning-partitioning-raid-ppc]]
+=== RAID and Other Disk Devices
+
+Some storage technology requires special consideration when using {PRODUCT}. Generally, it is important to understand how these technologies are configured, visible to {PRODUCT}, and how support for them might have changed between major versions.
+
+[[sect-installation-planning-hardware-raid-ppc]]
+==== Hardware RAID
+
+RAID (Redundant Array of Independent Disks) allows a group, or array, of drives to act as a single device. Configure any RAID functions provided by the mainboard of your computer, or attached controller cards, before you begin the installation process. Each active RAID array appears as one drive within {PRODUCT}.
+
+[[sect-installation-planning-software-raid-ppc]]
+==== Software RAID
+
+On systems with more than one hard drive, you can use the {PRODUCT} installation program to operate several of the drives as a Linux software RAID array. With a software RAID array, RAID functions are controlled by the operating system rather than dedicated hardware. These functions are explained in detail in <<sect-custom-partitioning-ppc>>.
+
+[NOTE]
+====
+
+When a pre-existing RAID array's member devices are all unpartitioned disks/drives, the installer will treat the array itself as a disk and will not provide a way to remove the array.
+
+====
+
+[[sect-installation-planning-usb-disks-ppc]]
+==== USB Disks
+
+You can connect and configure external USB storage after installation. Most such devices are recognized by the kernel and available for use at that time.
+
+Some USB drives might not be recognized by the installation program. If configuration of these disks at installation time is not vital, disconnect them to avoid potential problems.
+
+[[sect-installation-planning-boot-method-ppc]]
+=== Choose an Installation Boot Method
+
+You can use several methods to boot the {PRODUCT}{nbsp}7 installation program. The method you choose depends upon your installation media.
+
+[NOTE]
+====
+
+Installation media must remain mounted throughout installation, including during execution of the [command]`%post` section of a kickstart file.
+
+====
+
+Full installation DVD or USB drive::
++
+You can create bootable media from the full installation DVD ISO image. In this case, a single DVD or USB drive can be used to complete the entire installation - it will serve both as a boot device and as an installation source for installing software packages. See <<chap-making-media>> for instructions on how to make a full installation DVD or USB drive.
+
+Minimal boot CD, DVD or USB Flash Drive::
++
+A minimal boot CD, DVD or USB flash drive is created using a small ISO image, which only contains data necessary to boot the system and start the installation. If you use this boot media, you will need an additional installation source from which packages will be installed. See <<chap-making-media>> for instructions on making boot CDs, DVDs and USB flash drives.
+
+PXE Server::
++
+A _preboot execution environment_ (PXE) server allows the installation program to boot over the network. After you boot the system, you complete the installation from a different installation source, such as a local hard drive or a location on a network. For more information on PXE servers, see <<chap-installation-server-setup>>.
+
+[[sect-installation-planning-kickstart-ppc]]
+=== Automating the Installation with Kickstart
+
+{PRODUCT}{nbsp}7 offers a way to partially or fully automate the installation process using a _Kickstart file_. Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone do you want the system to use, how should the drives be partitioned or which packages should be installed. Providing a prepared Kickstart file at the beginning of the installation therefore allows you to perform the entire installation (or parts of it) automatically, without need for any intervention from the user. This is especially useful when deploying {PRODUCT} on a large number of systems at once.
+
+In addition to allowing you to automate the installation, Kickstart files also provide more options regarding software selection. When installing {PRODUCT} manually using the graphical installation interface, your software selection is limited to pre-defined environments and add-ons. A Kickstart file allows you to install or remove individual packages as well.
+
+For instructions about creating a Kickstart file and using it to automate the installation, see <<chap-kickstart-installations>>.

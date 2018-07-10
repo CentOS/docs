@@ -1,0 +1,54 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[sect-package-selection-s390]]
+=== Software Selection
+
+To specify which packages will be installed, select `Software Selection` at the `Installation Summary` screen. The package groups are organized into _Base Environments_. These environments are pre-defined sets of packages with a specific purpose; for example, the `Virtualization Host` environment contains a set of software packages needed for running virtual machines on the system. Only one software environment can be selected at installation time.
+
+For each environment, there are additional packages available in the form of _Add-ons_. Add-ons are presented in the right part of the screen and the list of them is refreshed when a new environment is selected. You can select multiple add-ons for your installation environment.
+
+A horizontal line separates the list of add-ons into two areas:
+
+* Add-ons listed _above_ the horizontal line are specific to the environment you selected. If you select any add-ons in this part of the list and then select a different environment, your selection will be lost.
+
+* Add-ons listed _below_ the horizontal line are available for all environments. Selecting a different environment will not impact the selections made in this part of the list.
+
+.Example of a Software Selection for a Server Installation
+
+image::images/pkgselection/pkg-group.png[Example of a Software Selection for a Server Installation]
+
+The availability of base environments and add-ons depends on the variant of the installation ISO image which you are using as the installation source. For example, the `server` variant provides environments designed for servers, while the `workstation` variant has several choices for deployment as a developer workstation, and so on.
+
+The installation program does not show which packages are contained in the available environments. To see which packages are contained in a specific environment or add-on, see the `repodata/*-comps-_variant_._architecture_.xml` file on the {PRODUCT} Installation DVD which you are using as the installation source. This file contains a structure describing available environments (marked by the `<environment>` tag) and add-ons (the `<group>` tag).
+
+[IMPORTANT]
+====
+
+The pre-defined environments and add-ons allow you to customize your system, but in a manual installation, there is no way to select individual packages to install. If you are not sure what package should be installed, Red{nbsp}Hat recommends you to select the `Minimal Install` environment. `Minimal install` only installs a basic version of {PRODUCT} with only a minimal amount of additional software. This will substantially reduce the chance of the system being affected by a vulnerability. After the system finishes installing and you log in for the first time, you can use the [application]*Yum* package manager to install any additional software you need. For more details on `Minimal install`, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Installing_the_Minimum_Amount_of_Packages_Required.html++[Installing the Minimum Amount of Packages Required] section of the Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide.
+
+====
+
+Alternatively, automating the installation with a Kickstart file allows for a much higher degree of control over installed packages. You can specify environments, groups and individual packages in the [command]`%packages` section of the Kickstart file. See <<sect-kickstart-packages>> for instructions on selecting packages to install in a Kickstart file, and <<chap-kickstart-installations>> for general information about automating the installation with Kickstart.
+
+Once you have selected an environment and add-ons to be installed, click btn:[Done] to return to the `Installation Summary` screen.
+
+[[sect-mandatory-services-s390]]
+==== Core Network Services
+
+All {PRODUCT} installations include the following network services:
+
+* centralized logging through the `rsyslog` service
+
+* email through SMTP (Simple Mail Transfer Protocol)
+
+* network file sharing through NFS (Network File System)
+
+* remote access through SSH (Secure SHell)
+
+* resource advertising through mDNS (multicast DNS)
+
+Some automated processes on your {PRODUCT} system use the email service to send reports and messages to the system administrator. By default, the email, logging, and printing services do not accept connections from other systems.
+
+You can configure your {PRODUCT} system after installation to offer email, file sharing, logging, printing, and remote desktop access services. The SSH service is enabled by default. You can also use NFS to access files on other systems without enabling the NFS sharing service.

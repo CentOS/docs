@@ -1,0 +1,15 @@
+
+:experimental:
+
+[[sect-kdump-s390]]
+=== Kdump
+
+Use this screen to select whether or not to use [application]*Kdump* on this system. [application]*Kdump* is a kernel crash dumping mechanism which, in the event of a system crash, captures information that can be invaluable in determining the cause of the crash.
+
+Note that if you enable [application]*Kdump*, you must reserve a certain amount of system memory for it. As a result, less memory is available for your processes.
+
+If you do not want to use [application]*Kdump* on this system, uncheck btn:[Enable kdump]. Otherwise, set the amount of memory to reserve for [application]*Kdump*. You can let the installer reserve a reasonable amount automatically, or you can set any amount manually. When your are satisfied with the settings, click btn:[Done] to save the configuration and return to the previous screen.
+
+.Kdump Enablement and Configuration
+
+image::images/kdump/kdump-enablement-configuration.png[Kdump Enablement and Configuration.]

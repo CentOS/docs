@@ -1,0 +1,41 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-getting-started]]
+== Getting Started
+
+You can install {PRODUCT} with an installation utility called [application]*Anaconda*. Most users can simply follow the procedure outlined in <<sect-simple-install>> to install {PRODUCT} using the graphical interface in [application]*Anaconda*.
+
+Users with advanced requirements can also use the graphical interface to configure many aspects of the installation, and install {PRODUCT} on a wide variety of systems. On systems without a local interface, installation can be accessed entirely remotely. Installation can also be automated by using a [application]*Kickstart* file, and performed with no interaction at all.
+
+[[sect-graphical-installation]]
+=== Graphical Installation
+
+The {PRODUCT} installer, [application]*Anaconda*, provides a simple graphical method to install {PRODUCT}. The graphical installation interface has a built-in help system which can guide you through most installations, even if you have never installed Linux before. However, [application]*Anaconda* can also be used to configure advanced installation options if required.
+
+[application]*Anaconda* is different from most other operating system installation programs due to its parallel nature. Most installers follow a linear path; you must choose your language first, then you configure networking, and so on. There is usually only one way to proceed at any given time.
+
+In the graphical interface in [application]*Anaconda* you are at first only required to select your language and locale, and then you are presented with a central screen, where you can configure most aspects of the installation in any order you like. While certain parts require others to be completed before configuration - for example, when installing from a network location, you must configure networking before you can select which packages to install - most options in [application]*Anaconda* can be configured in any order. If a background task, such as network initialization or disk detection, is blocking configuration of a certain option, you can configure unrelated options while waiting for it to complete.
+
+Additional differences appear in certain screens; notably the custom partition process is very different from other Linux distributions. These differences are described in each screen's subsection.
+
+Some screens will be automatically configured depending on your hardware and the type of media you used to start the installation. You can still change the detected settings in any screen. Screens which have not been automatically configured, and therefore require your attention before you begin the installation, are marked by an exclamation mark. You cannot start the actual installation process before you finish configuring these settings.
+
+Installation can also be performed in text mode, however certain options, notably including custom partitioning, are unavailable. See <<sect-installation-text-mode-x86>>, or if using an IBM Power system or IBM System z, see <<sect-installation-text-mode-ppc>>, or <<sect-installation-text-mode-s390>>, respectively, for more information.
+
+[[sect-remote-installation]]
+=== Remote Installation
+
+You can use the graphical interface remotely to install {PRODUCT}. For headless systems, `Connect Mode` can be used to perform a graphical installation completely remotely. For systems with a display and keyboard, but without the capacity to run the graphical interface, `Direct Mode` can instead be used to facilitate setup. For more information, see the <<chap-vnc-installations>>.
+
+[[sect-automated-installation]]
+=== Automated Installation
+
+[application]*Anaconda* installations can be automated through the use of a [application]*Kickstart* file. [application]*Kickstart* files can be used to configure any aspect of installation, allowing installation without user interaction, and can be used to easily automate installation of multiple instances of {PRODUCT}.
+
+In most situations, you can simply follow the procedure outlined in <<sect-simple-install-kickstart>> to create and configure a [application]*Kickstart* file, which can be used to perform an arbitrary number of non-interactive installations of {PRODUCT}.
+
+[application]*Kickstart* files can be automatically created based on choices made using the graphical interface, through the online [citetitle]_link:++https://access.redhat.com/labsinfo/kickstartconfig++[Kickstart Generator]_ tool, or written from scratch using any text editor. For more information, see <<sect-kickstart-file-create>>.
+
+[application]*Kickstart* files can be easily maintained and updated using various utilities in {PRODUCT}. For more information, see <<sect-kickstart-maintain>>.

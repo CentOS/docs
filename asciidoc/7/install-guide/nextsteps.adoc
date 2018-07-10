@@ -1,0 +1,104 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-next-steps]]
+== Your Next Steps
+
+This chapter lists common steps that might be required after installation. Not all steps listed here are always necessary. You can use this list to find other manuals, describing how to perform the tasks you need.
+
+Find help, answers, and utilize diagnostic services::
++
+[application]*Red{nbsp}Hat Access* is a GUI application which allows you to conveniently access Red{nbsp}Hat knowledge and solutions. It can be used to search for error codes, messages, or any topic of interest, and view related knowledge from the Red{nbsp}Hat Customer Portal. More information about [application]*Red{nbsp}Hat Access* can be found in the link:++https://access.redhat.com/articles/535483++[Red{nbsp}Hat Access GUI] article on the Red{nbsp}Hat Customer Portal.
+
+Recover a lost root password::
++
+The root password, which is configured during the installation, is required for accessing the system as the root user. Without the root password you will not be able to configure your system or install additional software. If you lost or forgot your root password, you can reset it by following the steps described in <<sect-rescue-mode-reset-root-password>>.
+
+Install driver updates::
++
+Usually, drivers for system devices are already supported in the kernel provided by {PRODUCT}. However, occasionally, support for devices that have been released recently can be missing. In these cases, a driver update enabling your device might be available.
++
+Devices necessary to complete the installation can have driver updates provided before the installation begins. If a device is missing a driver, but it is not essential during the installation, it is recommended to wait until after the installation completes, and install additional drivers afterwards. For instructions on installing and enabling additional drivers on the installed system using [application]*RPM* and [application]*Yum*, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
+
+Configure the network::
++
+In most cases network access is configured during the installation process, either in the installation program or in a Kickstart file. For information on configuring the network after the installation, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/index.html++[
+Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Networking Guide].
+
+Set up [application]*Kdump*::
++
+[application]*Kdump* is a kernel crash dumping mechanism. If your system encounters a significant error, [application]*Kdump* can save the contents of the system's memory into a _kernel crash dump_, which can then be analyzed to find the cause of the error.
++
+[application]*Kdump* can be enabled during the installation process (see <<sect-kdump-x86>>). It can also be configured at any time afterwards. link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Kernel_Crash_Dump_Guide/index.html++[
+Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Kernel Crash Dump Guide] provides all information necessary to understand how [application]*Kdump* works and how to configure it on your system.
+
+Register the system::
++
+The products installed on a system (including the operating system itself) are covered by subscriptions. A subscription service is used to track registered systems, the products installed on those systems, and the subscriptions attached to those products. Registration is a part of the [application]*Initial Setup* configuration process (see <<sect-initial-setup-subsciption-manager>>).
++
+However, if you have not registered your system during [application]*Initial Setup*, you can register it afterwards. See link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Subscription_Management/1/html/RHSM/index.html++[
+Using and Configuring Red{nbsp}Hat Subscription{nbsp}Manager] and link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Satellite/6.1/html/User_Guide/index.html++[
+Red{nbsp}Hat Satellite User Guide] for more information.
++
+[NOTE]
+====
+
+You can also use the link:++https://access.redhat.com/labs/registrationassistant/++[Registration Assistant] application to guide you through the registration process.
+
+====
+
+Automate the initial configuration of cloud instances using cloud-init::
++
+For the initial configuration of cloud instances, you can use the [package]*cloud-init* package. On a new cloud instance, [application]*cloud-init* can automatically:
++
+** set the default locale
++
+** configure the host name
++
+** configure network interfaces
++
+** generate private SSH keys
++
+** add SSH keys to the user's `.ssh/authorized_keys` file
++
+** set up ephemeral mount points
++
+[application]*Cloud-init* is used with Red{nbsp}Hat's cloud products. See documentation on using [application]*cloud-init* with Red{nbsp}Hat products:
++
+** Red{nbsp}Hat Enterprise{nbsp}Linux Atomic{nbsp}Host{nbsp}7 link:++https://access.redhat.com/documentation/en/red-hat-enterprise-linux-atomic-host/7/single/installation-and-configuration-guide/#setting_up_cloud_init++[Installation and Configuration Guide]
++
+** Red{nbsp}Hat OpenStack{nbsp}Platform{nbsp}8 link:++https://access.redhat.com/documentation/en/red-hat-openstack-platform/8/single/instances-and-images-guide/++[Instances and Images Guide]
++
+** Red{nbsp}Hat Enterprise{nbsp}Virtualization link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Virtualization/3.6/html/Virtual_Machine_Management_Guide/sect-Using_Cloud-Init_to_Automate_the_Configuration_of_Virtual_Machines.html++[Virtual Machine Management Guide]
++
+** Red{nbsp}Hat CloudForms link:++https://access.redhat.com/documentation/en/red-hat-cloudforms/4.1/provisioning-virtual-machines-and-hosts/chapter-2-provisioning-requests++[Provisioning Virtual Machines and Hosts Guide]
++
+See also link:++http://cloudinit.readthedocs.io/en/latest/index.html++[upstream cloud-init documentation]
+
+Perform an initial system update::
++
+After the installation is complete, Red{nbsp}Hat recommends that you perform an initial system update. During this process, all installed packages are updated to their latest available versions. Updates to packages provide security fixes, bug fixes and enhancements.
++
+In {PRODUCT}, the [application]*Yum* package manager is used for updating the installed packages. For more information about updating your system with [application]*Yum*, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
+
+Configure additional repositories::
++
+New software is installed from _package repositories_. Package repositories are organized sets of software and metadata that can be accessed by the [application]*Yum* package manager. If you registered your system with Red{nbsp}Hat, update repositories are configured automatically and you can install updates and additional software from those. However, if you want to set up additional repositories, for example containing your own software, some extra steps are needed.
++
+For information about configuring additional software repositories, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
+
+Install additional packages::
++
+You can control which packages will be installed by selecting an environment in the `Software Selection` dialog in the graphical installation. This dialog does not provide a way to choose individual packages, only predefined sets. However, you can use the [application]*Yum* packages manager to install additional packages after the installation. See the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide] for more information.
+
+Switch to a graphical login::
++
+Depending on the options you chose during the installation process, it is possible that your system does not have a graphical interface, instead offering only a text-based prompt. If this is the case and you want to enable a graphical desktop after the installation, you must install the [application]*X Window System* and your preferred desktop environment (either [application]*GNOME* or [application]*KDE*).
++
+As with all other software, these packages can be installed using the [application]*Yum* package manager. For information about using [application]*Yum* to install new packages, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide]. For information on how to enable graphical login by default, see <<sect-trouble-after-graphical-login-x86>>.
+
+Enable or disable [application]*GNOME* 3 extensions::
++
+The default desktop environment in {PRODUCT}{nbsp}7 is [application]*GNOME* 3 which provides [application]*GNOME Shell* and [application]*GNOME Classic* user interfaces. It is possible to customize these interfaces by enabling and disabling [application]*GNOME* 3 extensions. See the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Desktop_Migration_and_Administration_Guide/index.html++[
+Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Desktop Migration and Administration Guide] for more information.

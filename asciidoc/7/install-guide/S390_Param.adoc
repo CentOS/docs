@@ -1,0 +1,350 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-parameter-configuration-files-s390]]
+== Parameter and Configuration Files on IBM System{nbsp}z
+
+The IBM System{nbsp}z architecture can use a customized parameter file to pass boot parameters to the kernel and the installation program. This section describes the contents of this parameter file.
+
+You need only read this section if you intend to change the shipped parameter file. You need to change the parameter file if you want to:
+
+* install unattended with Kickstart.
+
+* choose non-default installation settings that are not accessible through the installation program"s interactive user interface, such as rescue mode.
+
+The parameter file can be used to set up networking non-interactively before the installation program (loader and [application]*Anaconda*) starts.
+
+The kernel parameter file is limited to 895 characters plus an end-of-line character. The parameter file can be variable or fixed record format. Fixed record format increases the file size by padding each line up to the record length. Should you encounter problems with the installation program not recognizing all specified parameters in LPAR environments, you can try to put all parameters in one single line or start and end each line with a space character.
+
+The parameter file contains kernel parameters, such as `ro`, and parameters for the installation process, such as `vncpassword=test` or `vnc`.
+
+[[sect-parameter-configuration-files-required-s390]]
+=== Required Parameters
+
+The following parameters are required and must be included in the parameter file. They are also provided in the file `generic.prm` in directory `images/` of the installation DVD:
+
+`ro`::
++
+mounts the root file system, which is a RAM disk, read-only.
+
+`ramdisk_size=pass:attributes[{blank}]_size_pass:attributes[{blank}]`::
++
+modifies the memory size reserved for the RAM disk to ensure that the {PRODUCT} installation program fits within it. For example: `ramdisk_size=40000`.
+
+The `generic.prm` file also contains the additional parameter `cio_ignore=all,!condev`. This setting speeds up boot and device detection on systems with many devices. The installation program transparently handles the activation of ignored devices.
+
+[IMPORTANT]
+====
+
+To avoid installation problems arising from [command]`cio_ignore` support not being implemented throughout the entire stack, adapt the `cio_ignore=` parameter value to your system or remove the parameter entirely from your parameter file used for booting (IPL) the installation program.
+
+====
+
+[[sect-parameter-configuration-files-zvm-s390]]
+=== The z/VM Configuration File
+
+This applies only if installing under z/VM. Under z/VM, you can use a configuration file on a CMS-formatted disk. The purpose of the CMS configuration file is to save space in the parameter file by moving the parameters that configure the initial network setup, the DASD, and the FCP specification out of the parameter file (see <<sect-parameter-configuration-files-network-s390>>).
+
+Each line of the CMS configuration file contains a single variable and its associated value, in the following shell-style syntax:  `pass:attributes[{blank}]_variable_pass:attributes[{blank}]=pass:attributes[{blank}]_value_pass:attributes[{blank}]` .
+
+You must also add the `CMSDASD` and `CMSCONFFILE` parameters to the parameter file. These parameters point the installation program to the configuration file:
+
+`CMSDASD=pass:attributes[{blank}]_cmsdasd_address_pass:attributes[{blank}]`::
++
+Where _cmsdasd_address_ is the device number of a CMS-formatted disk that contains the configuration file. This is usually the CMS user"s `A` disk.
++
+For example: `CMSDASD=191`
+
+`CMSCONFFILE=pass:attributes[{blank}]_configuration_file_pass:attributes[{blank}]`::
++
+Where _configuration_file_ is the name of the configuration file. This value must be specified in lower case. It is specified in a Linux file name format: `pass:attributes[{blank}]_CMS_file_name_._CMS_file_type_pass:attributes[{blank}]`.
++
+The CMS file `REDHAT CONF` is specified as `redhat.conf`. The CMS file name and the file type can each be from one to eight characters that follow the CMS conventions.
++
+For example: `CMSCONFFILE=redhat.conf`
+
+[[sect-parameter-configuration-files-network-s390]]
+=== Installation Network Parameters
+
+The following parameters can be used to set up the preliminary network automatically and can be defined in the CMS configuration file. The parameters in this section are the only parameters that can also be used in a CMS configuration file. All other parameters in other sections must be specified in the parameter file.
+
+`NETTYPE="pass:attributes[{blank}]_type_pass:attributes[{blank}]"`::
++
+Where _type_ must be one of the following: `qeth`, `lcs`, or `ctc`. The default is `qeth`.
++
+Choose `lcs` for:
++
+** OSA-2 Ethernet/Token Ring
++
+** OSA-Express Fast Ethernet in non-QDIO mode
++
+** OSA-Express High Speed Token Ring in non-QDIO mode
++
+** Gigabit Ethernet in non-QDIO mode
++
+Choose `qeth` for:
++
+** OSA-Express Fast Ethernet
++
+** Gigabit Ethernet (including 1000Base-T)
++
+** High Speed Token Ring
++
+** HiperSockets
++
+** ATM (running Ethernet LAN emulation)
+
+`SUBCHANNELS="pass:attributes[{blank}]_device_bus_IDs_pass:attributes[{blank}]"`::
++
+Where _device_bus_IDs_ is a comma-separated list of two or three device bus IDs. The IDs must be specified in lowercase.
++
+Provides required device bus IDs for the various network interfaces:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+qeth: SUBCHANNELS="pass:quotes[_read_device_bus_id_],pass:quotes[_write_device_bus_id_],pass:quotes[_data_device_bus_id_]"
+lcs or ctc: SUBCHANNELS="pass:quotes[_read_device_bus_id_],pass:quotes[_write_device_bus_id_]"
+....
++
+For example (a sample qeth SUBCHANNEL statement):
++
+[literal,subs="+quotes,verbatim"]
+....
+SUBCHANNELS="0.0.f5f0,0.0.f5f1,0.0.f5f2"
+....
+
+`PORTNAME="pass:attributes[{blank}]_osa_portname_pass:attributes[{blank}]"`pass:attributes[{blank}]pass:attributes[{blank}]`PORTNAME="pass:attributes[{blank}]_lcs_portnumber_pass:attributes[{blank}]"`::
++
+This variable supports OSA devices operating in qdio mode or in non-qdio mode.
++
+When using qdio mode (`NETTYPE="qeth"`), _osa_portname_ is the portname specified on the OSA device when operating in qeth mode.
++
+When using non-qdio mode (`NETTYPE="lcs"`), _lcs_portnumber_ is used to pass the relative port number as a decimal integer in the range of 0 through 15.
+
+`PORTNO="pass:attributes[{blank}]_portnumber_pass:attributes[{blank}]"`::
++
+You can add either `PORTNO="0"` (to use port 0) or `PORTNO="1"` (to use port 1 of OSA features with two ports per CHPID) to the CMS configuration file to avoid being prompted for the mode.
+
+`LAYER2="pass:attributes[{blank}]_value_pass:attributes[{blank}]"`::
++
+Where _value_ can be `0` or `1`.
++
+Use `LAYER2="0"` to operate an OSA or HiperSockets device in layer 3 mode (`NETTYPE="qeth"`). Use `LAYER2="1"` for layer 2 mode. For virtual network devices under z/VM this setting must match the definition of the GuestLAN or VSWITCH to which the device is coupled.
++
+To use network services that operate on layer 2 (the Data Link Layer or its MAC sublayer) such as DHCP, layer 2 mode is a good choice.
++
+The qeth device driver default for OSA devices is now layer 2 mode. To continue using the previous default of layer 3 mode, set `LAYER2="0"` explicitly.
+
+`VSWITCH="pass:attributes[{blank}]_value_pass:attributes[{blank}]"`::
++
+Where _value_ can be `0` or `1`.
++
+Specify `VSWITCH="1"` when connecting to a z/VM VSWITCH or GuestLAN, or `VSWITCH="0"` (or nothing at all) when using directly attached real OSA or directly attached real HiperSockets.
+
+`MACADDR="pass:attributes[{blank}]_MAC_address_pass:attributes[{blank}]"`::
++
+If you specify `LAYER2="1"` and `VSWITCH="0"`, you can optionally use this parameter to specify a MAC address. Linux requires six colon-separated octets as pairs lower case hex digits - for example, `MACADDR=62:a3:18:e7:bc:5f`. Note that this is different from the notation used by z/VM.
++
+If you specify `LAYER2="1"` and `VSWITCH="1"`, you must not specify the `MACADDR`, because z/VM assigns a unique MAC address to virtual network devices in layer 2 mode.
+
+`CTCPROT="pass:attributes[{blank}]_value_pass:attributes[{blank}]"`::
++
+Where _value_ can be `0`, `1`, or `3`.
++
+Specifies the CTC protocol for `NETTYPE="ctc"`. The default is `0`.
+
+`HOSTNAME="pass:attributes[{blank}]_string_pass:attributes[{blank}]"`::
++
+Where _string_ is the host name of the newly-installed Linux instance.
+
+`IPADDR="pass:attributes[{blank}]_IP_pass:attributes[{blank}]"`::
++
+Where _IP_ is the IP address of the new Linux instance.
+
+`NETMASK="pass:attributes[{blank}]_netmask_pass:attributes[{blank}]"`::
++
+Where _netmask_ is the netmask.
++
+The netmask supports the syntax of a prefix integer (from 1 to 32) as specified in IPv4 _classless interdomain routing_ (CIDR). For example, you can specify `24` instead of `255.255.255.0`, or `20` instead of `255.255.240.0`.
+
+`GATEWAY="pass:attributes[{blank}]_gw_pass:attributes[{blank}]"`::
++
+Where _gw_ is the gateway IP address for this network device.
+
+`MTU="pass:attributes[{blank}]_mtu_pass:attributes[{blank}]"`::
++
+Where _mtu_ is the _Maximum Transmission Unit_ (MTU) for this network device.
+
+`DNS="pass:attributes[{blank}]_server1_:pass:attributes[{blank}]_server2_:pass:attributes[{blank}]_additional_server_terms_:pass:attributes[{blank}]_serverN_pass:attributes[{blank}]"`::
++
+Where "pass:attributes[{blank}]_server1_:pass:attributes[{blank}]_server2_:pass:attributes[{blank}]_additional_server_terms_:pass:attributes[{blank}]_serverN_pass:attributes[{blank}]" is a list of DNS servers, separated by colons. For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+DNS="10.1.2.3:10.3.2.1"
+....
+
+`SEARCHDNS="pass:attributes[{blank}]_domain1_:pass:attributes[{blank}]_domain2_:pass:attributes[{blank}]_additional_dns_terms_:pass:attributes[{blank}]_domainN_pass:attributes[{blank}]"`::
++
+Where "pass:attributes[{blank}]_domain1_:pass:attributes[{blank}]_domain2_:pass:attributes[{blank}]_additional_dns_terms_:pass:attributes[{blank}]_domainN_pass:attributes[{blank}]" is a list of the search domains, separated by colons. For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+SEARCHDNS="subdomain.domain:domain"
+....
++
+You only need to specify `SEARCHDNS=` if you specify the `DNS=` parameter.
+
+`DASD=`::
++
+Defines the DASD or range of DASDs to configure for the installation.
++
+The installation program supports a comma-separated list of device bus IDs or of ranges of device bus IDs with the optional attributes [option]`ro`, [option]`diag`, [option]`erplog`, and [option]`failfast`. Optionally, you can abbreviate device bus IDs to device numbers with leading zeros stripped. Any optional attributes should be separated by colons and enclosed in parentheses. Optional attributes follow a device bus ID or a range of device bus IDs.
++
+The only supported global option is [option]`autodetect`. This does not support the specification of non-existent DASDs to reserve kernel device names for later addition of DASDs. Use persistent DASD device names (for example `/dev/disk/by-path/...`) to enable transparent addition of disks later. Other global options such as [option]`probeonly`, [option]`nopav`, or [option]`nofcx` are not supported by the installation program.
++
+Only specify those DASDs that you really need to install your system. All unformatted DASDs specified here must be formatted after a confirmation later on in the installation program (see <<sect-storage-device-selection-dasd-formatting-s390>>). Add any data DASDs that are not needed for the root file system or the `/boot` partition after installation as described in <<sect-post-installation-dasds-no-root-s390>>.
++
+For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+DASD="eb1c,0.0.a000-0.0.a003,eb10-eb14(diag),0.0.ab1c(ro:diag)"
+....
++
+For FCP-only environments, remove the [option]`DASD=` option from the CMS configuration file to indicate no DASD is present.
+
+`FCP_pass:attributes[{blank}]_n_pass:attributes[{blank}]="pass:attributes[{blank}]_device_bus_ID_ _WWPN_ _FCP_LUN_pass:attributes[{blank}]"`::
++
+Where:
++
+** _n_ is typically an integer value (for example `FCP_1` or `FCP_2`) but could be any string with alphabetic or numeric characters or underscores.
++
+** _device_bus_ID_ specifies the device bus ID of the FCP device representing the _host bus adapter_ (HBA) (for example `0.0.fc00` for device fc00).
++
+** _WWPN_ is the world wide port name used for routing (often in conjunction with multipathing) and is as a 16-digit hex value (for example `0x50050763050b073d`).
++
+** _FCP_LUN_ refers to the storage logical unit identifier and is specified as a 16-digit hexadecimal value padded with zeroes to the right (for example `0x4020400100000000`).
++
+These variables can be used on systems with FCP devices to activate FCP LUNs such as SCSI disks. Additional FCP LUNs can be activated during the installation interactively or by means of a Kickstart file. An example value looks similar to the following:
++
+[literal,subs="+quotes,verbatim"]
+....
+FCP_1="0.0.fc00 0x50050763050b073d 0x4020400100000000"
+....
++
+[IMPORTANT]
+====
+
+Each of the values used in the FCP parameters (for example `FCP_1` or `FCP_2`) are site-specific and are normally supplied by the FCP storage administrator.
+
+====
+
+The installation program prompts you for any required parameters not specified in the parameter or configuration file except for FCP_n.
+
+[[sect-parameter-configuration-files-kickstart-s390]]
+=== Parameters for Kickstart Installations
+
+The following parameters can be defined in a parameter file but do not work in a CMS configuration file.
+
+`inst.ks=pass:attributes[{blank}]_URL_pass:attributes[{blank}]`::
++
+References a Kickstart file, which usually resides on the network for Linux installations on System{nbsp}z. Replace _URL_ with the full path including the file name of the Kickstart file. This parameter activates automatic installation with Kickstart. See <<list-boot-options-kickstart>> and <<sect-kickstart-installation-starting>> for more details.
+
+`RUNKS=pass:attributes[{blank}]_value_pass:attributes[{blank}]`::
++
+[IMPORTANT]
+====
+
+This parameter is deprecated. If you use it in a Kickstart file, it will be ignored. Only the `inst.ks=` parameter is necessary to start a Kickstart installation on IBM System{nbsp}z.
+
+====
++
+Where _value_ is defined as _1_ if you want to run the loader automatically on the Linux console without having to log in over the network with SSH. To use `RUNKS=1`, the console must either support full-screen or the `inst.cmdline` option (below) should be used. The latter applies for the 3270 terminal under z/VM or the operating system messages console for LPAR. We recommend `RUNKS=1` for fully automatic installations with Kickstart. When `RUNKS=1` is set, the installation program automatically continues in case of parameter errors and does not interrupt unattended installations by prompting for user interaction.
++
+Leave out the parameter or specify `RUNKS=0` otherwise.
+
+`inst.cmdline`::
++
+When this option is specified, output on line-mode terminals (such as 3270 under z/VM or operating system messages for LPAR) becomes readable, as the installation program disables escape terminal sequences that are only applicable to UNIX-like consoles. This requires installation with a Kickstart file that answers all questions, because the installation program does not support interactive user input in cmdline mode.
+
+Ensure that your Kickstart file contains all required parameters before you use the `inst.cmdline` option. If a required command is missing, the installation will fail. See <<chap-kickstart-installations>> for details.
+
+[[sect-parameter-configuration-files-other-s390]]
+=== Miscellaneous Parameters
+
+The following parameters can be defined in a parameter file but do not work in a CMS configuration file.
+
+`rd.live.check`::
++
+Turns on testing of an ISO-based installation source; for example, when booted from an FCP-attached DVD or using `inst.repo=` with an ISO on local hard disk or mounted with NFS.
+
+`nompath`::
++
+Disables support for multipath devices.
+
+`proxy=[pass:attributes[{blank}]_protocol_://][pass:attributes[{blank}]_username_pass:attributes[{blank}][:pass:attributes[{blank}]_password_pass:attributes[{blank}]]@]pass:attributes[{blank}]_host_pass:attributes[{blank}][:pass:attributes[{blank}]_port_pass:attributes[{blank}]]`::
++
+Specify a proxy to use with installation over HTTP, HTTPS, or FTP.
+
+`inst.rescue`::
++
+Boot into a rescue system running from a RAM disk that can be used to fix and restore an installed system.
+
+`inst.stage2=pass:attributes[{blank}]_URL_pass:attributes[{blank}]`::
++
+Specifies a path to an `install.img` file instead of to an installation source. Otherwise, follows the same syntax as `inst.repo=`. If `inst.stage2` is specified, it typically takes precedence over other methods of finding `install.img`. However, if [application]*Anaconda* finds `install.img` on local media, the `inst.stage2` URL will be ignored.
++
+If `inst.stage2` is not specified and `install.img` cannot be found locally, [application]*Anaconda* looks to the location given by `inst.repo=` or `method=`.
++
+If only `inst.stage2=` is given without `inst.repo=` or `method=`, [application]*Anaconda* uses whatever repos the installed system would have enabled by default for installation.
++
+Use the option multiple times to specify multiple HTTP, HTTPS or FTP sources. The HTTP, HTTPS or FTP paths are then tried sequentially until one succeeds:
++
+[literal,subs="+quotes,verbatim"]
+....
+inst.stage2=host1/install.img inst.stage2=host2/install.img inst.stage3=host3/install.img
+....
+
+`inst.syslog=pass:attributes[{blank}]_IP/hostname_pass:attributes[{blank}][:pass:attributes[{blank}]_port_pass:attributes[{blank}]]`::
++
+Sends log messages to a remote syslog server.
+
+The boot parameters described here are the most useful for installations and trouble shooting on System{nbsp}z, but only a subset of those that influence the installation program. See <<chap-anaconda-boot-options>> for a more complete list of available boot parameters.
+
+[[sect-parameter-configuration-files-samples-s390]]
+=== Sample Parameter File and CMS Configuration File
+
+To change the parameter file, begin by extending the shipped `generic.prm` file.
+
+Example of `generic.prm` file:
+
+[literal,subs="+quotes,verbatim"]
+....
+ro ramdisk_size=40000 cio_ignore=all,!condev
+CMSDASD="191" CMSCONFFILE="redhat.conf"
+vnc
+inst.repo=http://example.com/path/to/repository
+....
+
+Example of `redhat.conf` file configuring a QETH network device (pointed to by `CMSCONFFILE` in `generic.prm`):
+
+[literal,subs="+quotes,verbatim"]
+....
+
+NETTYPE="qeth"
+SUBCHANNELS="0.0.0600,0.0.0601,0.0.0602"
+PORTNAME="FOOBAR"
+PORTNO="0"
+LAYER2="1"
+MACADDR="02:00:be:3a:01:f3"
+HOSTNAME="foobar.systemz.example.com"
+IPADDR="192.168.17.115"
+NETMASK="255.255.255.0"
+GATEWAY="192.168.17.254"
+DNS="192.168.17.1"
+SEARCHDNS="systemz.example.com:example.com"
+DASD="200-203"
+
+....
