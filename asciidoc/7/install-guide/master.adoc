@@ -50,25 +50,6 @@ include::Graphical_Installation-ppc.adoc[]
 
 include::Trouble-ppc.adoc[]
 
-[[part-installation-system-z]]
-= IBM System{nbsp}z Architecture - Installation and Booting
-
-This part discusses booting, or _initial program load_ (IPL), and installation of {PRODUCT} on IBM System{nbsp}z.
-
-include::Steps-s390.adoc[]
-
-include::S390_Steps_Boot.adoc[]
-
-include::Graphical_Installation-s390.adoc[]
-
-include::Trouble-s390.adoc[]
-
-include::S390_Moreinfo.adoc[]
-
-include::S390_Param.adoc[]
-
-include::S390_References.adoc[]
-
 [[part-advanced-installation-options]]
 = Advanced Installation Options
 

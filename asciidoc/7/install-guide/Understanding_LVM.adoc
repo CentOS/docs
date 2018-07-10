@@ -12,8 +12,6 @@ LVM (Logical Volume Management) partitions provide a number of advantages over s
 
 On AMD, Intel, and ARM systems and IBM Power{nbsp}Systems servers, the boot loader cannot read LVM volumes. You must make a standard, non-LVM disk partition for your `/boot` partition.
 
-On IBM System{nbsp}z, the [application]*zipl* boot loader supports `/boot` on LVM logical volumes with linear mapping.
-
 By default, the installation process always creates the `/` and `swap` partitions within LVM volumes, with a separate `/boot` partition on a physical volume.
 
 ====

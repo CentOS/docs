@@ -118,7 +118,7 @@ menuentry 'Red Hat Enterprise Linux Server (3.10.0-57.el7.x86_64) {PRODVER} (Mai
   linux16 /vmlinuz-3.10.0-57.el7.x86_64 root=/dev/mapper/rhel-root ro rd.lvm.lv=rhel/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=rhel/swap crashkernel=auto vconsole.keymap=us rhgb quiet LANG=en_US.UTF-8
   initrd16 /initramfs-3.10.0-57.el7.x86_64.img
 }
-        
+
 ....
 
 ====
@@ -229,17 +229,3 @@ Press any key while the message is still showing and the Windows installation so
 ... When the prompt reappears, close the command window, then click `Restart`.
 +
 ... Your computer will restart and boot your Windows operating system.
-
-[[sect-uninstall-rhel-s390]]
-=== Removing {PRODUCT} from IBM System{nbsp}z
-
-If you want to delete the existing operating system data, first, if any Linux disks contain sensitive data, ensure that you destroy the data according to your security policy. To proceed you can consider these options:
-
-* Overwrite the disks with a new installation.
-
-* Make the DASD or SCSI disk where Linux was installed visible from another system, then delete the data. However, this might require special privileges. Ask your system administrator for advice. You can use Linux commands such as [command]`dasdfmt` (DASD only), [command]`parted`, [command]`mke2fs` or [command]`dd`. For more details about the commands, see the respective man pages.
-
-[[sect-uninstall-rhel-s390-another-os]]
-==== Running a Different Operating System on Your z/VM Guest or LPAR
-
-If you want to boot from a DASD or SCSI disk different from where the currently installed system resides under a z/VM guest virtual machine or an LPAR, shut down the {PRODUCT} installed and use the desired disk, where another Linux instance is installed, to boot from. This leaves the contents of the installed system unchanged.

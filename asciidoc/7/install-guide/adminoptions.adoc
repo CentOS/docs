@@ -25,8 +25,6 @@ The exact way to specify custom boot options is different on every system archit
 
 * <<sect-boot-menu-ppc>> for IBM Power{nbsp}Systems servers
 
-* <<chap-parameter-configuration-files-s390>> for IBM System{nbsp}z
-
 ====
 
 There are several different ways to edit boot options at the boot menu (that is, the menu which appears after you boot the installation media):
@@ -286,13 +284,9 @@ Use a comma-separated list to disable multiple drivers. For example:
 modprobe.blacklist=ahci,firewire_ohci
 ....
 
-[option]`inst.sshd=0`::
-+
-By default, `sshd` is only automatically started on IBM System z, and on other architectures, `sshd` is not started unless the [option]`inst.sshd` option is used. This option prevents `sshd` from starting automatically on IBM System z.
-
 [option]`inst.sshd`::
 +
-Starts the `sshd` service during the installation, which allows you to connect to the system during the installation using `SSH` and monitor its progress. For more information on SSH, see the `ssh(1)` man page and the corresponding chapter in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide]. By default, `sshd` is only automatically started on IBM System z, and on other architectures, `sshd` is not started unless the [option]`inst.sshd` option is used.
+Starts the `sshd` service during the installation, which allows you to connect to the system during the installation using `SSH` and monitor its progress. For more information on SSH, see the `ssh(1)` man page and the corresponding chapter in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
 +
 [NOTE]
 ====

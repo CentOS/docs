@@ -14,7 +14,7 @@ The procedure for performing an in-place upgrade on your current system is handl
 [NOTE]
 ====
 
-In-place upgrades are currently only supported on AMD64 and Intel{nbsp}64 (`x86_64`) systems and on IBM System{nbsp}z (`s390x`). Additionally, only the `Server` variant can be upgraded with [application]*Red{nbsp}Hat Upgrade Tool*.
+In-place upgrades are currently only supported on AMD64 and Intel{nbsp}64 (`x86_64`) systems. Additionally, only the `Server` variant can be upgraded with [application]*Red{nbsp}Hat Upgrade Tool*.
 
 ====
 

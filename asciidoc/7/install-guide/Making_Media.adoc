@@ -5,7 +5,7 @@ include::entities.adoc[]
 [[chap-making-media]]
 == Making Media
 
-This chapter describes how to use ISO image files obtained by following the steps in <<chap-download-red-hat-enterprise-linux>> to create bootable physical media, such as a DVD or a USB flash drive. You can then use these media to boot the installation program and start the installation. These steps only apply if you plan to install {PRODUCT} on a 64-bit AMD, Intel, or ARM system, or an IBM Power{nbsp}Systems server using physical boot media. For information about installing {PRODUCT} on an IBM System{nbsp}z server, see <<chap-installer-booting-ipl-s390>>. For instructions on how to set up a _Preboot Execution Environment_ (PXE) server to perform a PXE-based installation over a network, see <<chap-installation-server-setup>>.
+This chapter describes how to use ISO image files obtained by following the steps in <<chap-download-red-hat-enterprise-linux>> to create bootable physical media, such as a DVD or a USB flash drive. You can then use these media to boot the installation program and start the installation. These steps only apply if you plan to install {PRODUCT} on a 64-bit AMD, Intel, or ARM system, or an IBM Power{nbsp}Systems server using physical boot media. For instructions on how to set up a _Preboot Execution Environment_ (PXE) server to perform a PXE-based installation over a network, see <<chap-installation-server-setup>>.
 
 [NOTE]
 ====
@@ -286,8 +286,6 @@ You can specify an installation source in any of the following ways:
 ** <<sect-installation-source-x86>> for 64-bit AMD, Intel, and ARM systems
 +
 ** <<sect-installation-source-ppc>> for IBM Power{nbsp}Systems servers
-+
-** <<sect-installation-source-s390>> for IBM System{nbsp}z
 
 * Using a boot option: You can specify custom boot options to configure the installation program before it starts. One of these options allows you to specify the installation source to be used. See the [option]`inst.repo=` option in <<sect-boot-options-installer>> for details.
 

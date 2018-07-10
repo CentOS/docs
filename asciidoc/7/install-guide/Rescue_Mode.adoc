@@ -55,14 +55,12 @@ For detailed information about booting the system using media provided by Red{nb
 
 * <<chap-booting-installer-ppc>> for IBM Power{nbsp}Systems servers
 
-* <<chap-installer-booting-ipl-s390>> for IBM System{nbsp}z
-
 [IMPORTANT]
 ====
 
-Advanced storage, such as iSCSI or zFCP devices, must be configured either using `dracut` boot options (such as [option]`rd.zfcp=` or [option]`root=iscsi:pass:attributes[{blank}]_options_pass:attributes[{blank}]`), or in the CMS configuration file on IBM System{nbsp}z. It is not possible to configure these storage devices interactively after booting into rescue mode.
+Advanced storage, such as iSCSI or zFCP devices, must be configured using `dracut` boot options such as [option]`rd.zfcp=` or [option]`root=iscsi:pass:attributes[{blank}]_options_pass:attributes[{blank}]`. It is not possible to configure these storage devices interactively after booting into rescue mode.
 
-For information about `dracut` boot options, see the `dracut.cmdline(7)` man page. For information about the CMS configuration file, see <<chap-parameter-configuration-files-s390>>.
+For information about `dracut` boot options, see the `dracut.cmdline(7)` man page.
 
 ====
 

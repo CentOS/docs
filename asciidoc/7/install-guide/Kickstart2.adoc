@@ -164,7 +164,7 @@ To start a Kickstart installation, use the boot option [option]`inst.ks=pass:att
 
 64-bit AMD, Intel and ARM systems and IBM Power{nbsp}Systems servers have the ability to boot using a PXE server. When you configure the PXE server, you can add the boot option into the boot loader configuration file, which in turn allows you to start the installation automatically. Using this approach, it is possible to automate the installation completely, including the boot process. For information about setting up a PXE server, see <<chap-installation-server-setup>>.
 
-Procedures in this section assume that you already have a Kickstart file ready in a location accessible from the installation system, as well as boot media or a PXE server which can be used to boot the system and begin the installation. The procedures are intended as a general reference; some steps differ based on your system's architecture, and not all options are available on all architectures (for example, you cannot use PXE boot on IBM System{nbsp}z).
+Procedures in this section assume that you already have a Kickstart file ready in a location accessible from the installation system, as well as boot media or a PXE server which can be used to boot the system and begin the installation. The procedures are intended as a general reference; some steps differ based on your system's architecture, and not all options are available on all architectures.
 
 [[sect-kickstart-installation-starting-manual]]
 ===== Starting the Kickstart Installation Manually
@@ -178,8 +178,6 @@ This section explains how to start a Kickstart installation manually, which mean
 ** <<chap-booting-installer-x86>> for 64-bit AMD, Intel, and ARM systems
 +
 ** <<chap-booting-installer-ppc>> for IBM Power{nbsp}Systems servers
-+
-** <<chap-installer-booting-ipl-s390>> for IBM System{nbsp}z
 
 . At the boot prompt, specify the [option]`inst.ks=` boot option and the location of the Kickstart file. If the Kickstart file is in a network location, you must also configure the network using the [option]`ip=` option. In some cases, the [option]`inst.repo=` option is also necessary in order to access a software source from which necessary packages will be installed.
 +
@@ -193,13 +191,6 @@ The installation begins now, using the options specified in the Kickstart file. 
 ===== Starting the Kickstart Installation Automatically
 
 The following procedure explains how to completely automate the Kickstart installation, using a network boot (PXE) server and a properly configured boot loader. If you follow this procedure, you only need to turn on the system; no other interaction will be required from that moment until the installation finishes.
-
-[NOTE]
-====
-
-PXE installations are not available on IBM System{nbsp}z.
-
-====
 
 [[proc-kickstart-installation-starting-network]]
 .Starting the Kickstart Installation by Editing Boot Loader Configuration
@@ -424,13 +415,6 @@ Ensure your system is not at risk of attack before disabling any of the vulnerab
 +
 ** [option]`--boot-drive=` - Specifies which drive the boot loader should be written to, and therefore which drive the computer will boot from. If you use a multipath device as the boot drive, specify only one member of the device.
 +
-[IMPORTANT]
-====
-
-The [option]`--boot-drive=` option is currently being ignored in {PRODUCT} installations on IBM System{nbsp}z systems using the [application]*zipl* boot loader. When [application]*zipl* is installed, it determines the boot drive on its own.
-
-====
-+
 ** [option]`--leavebootorder` - The installer will add {PRODUCT} 7 to the top of the list of installed systems in the boot loader, and preserve all existing entries as well as their order.
 +
 ** [option]`--driveorder=` - Specifies which drive is first in the BIOS boot order. For example:
@@ -624,7 +608,7 @@ Using the [command]`clearpart --all` command in a Kickstart file to remove all e
 
 [command]`cmdline` (optional)::
 +
-Perform the installation in a completely non-interactive command line mode. Any prompt for interaction halts the installation. This mode is useful on IBM System{nbsp}z systems with the x3270 terminal. See <<sect-parameter-configuration-files-kickstart-s390>>.
+Perform the installation in a completely non-interactive command line mode. Any prompt for interaction halts the installation.
 +
 [IMPORTANT]
 ====
@@ -1148,7 +1132,7 @@ To determine the size of the swap partition automatically and also allow extra s
 +
 The size assigned will be equivalent to the swap space assigned by [option]`--recommended` plus the amount of RAM on your system.
 +
-For the swap sizes assigned by these commands, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM systems, <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems servers, and <<sect-recommended-partitioning-scheme-s390>> for IBM System{nbsp}z.
+For the swap sizes assigned by these commands, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM systems, and <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems servers.
 +
 The options are as follows:
 +
@@ -1181,7 +1165,7 @@ Note that this behavior is only applies to Red{nbsp}Hat Enterprise{nbsp}Linux{nb
 +
 ** [option]`--maxsize=` - The maximum size in MiB when the logical volume is set to grow. Specify an integer value here such as `500` (do not include the unit).
 +
-** [option]`--recommended` - Use this option when creating a `swap` logical volume to determine the size of this volume automatically, based on your system's hardware. For details about the recommended scheme, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM systems, <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems, and <<sect-recommended-partitioning-scheme-s390>> for IBM System{nbsp}z.
+** [option]`--recommended` - Use this option when creating a `swap` logical volume to determine the size of this volume automatically, based on your system's hardware. For details about the recommended scheme, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM systems, and <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems.
 +
 ** [option]`--resize` - Resize a logical volume. If you use this option, you must also specify [option]`--useexisting` and [option]`--size`.
 +
@@ -1635,7 +1619,7 @@ To determine the size of the swap partition automatically but also allow extra s
 +
 The size assigned will be equivalent to the swap space assigned by [option]`--recommended` plus the amount of RAM on your system.
 +
-For the swap sizes assigned by these commands, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM systems, <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems servers, and <<sect-recommended-partitioning-scheme-s390>> for IBM System{nbsp}z.
+For the swap sizes assigned by these commands, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM systems, and <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems servers.
 +
 *** `raid._id_pass:attributes[{blank}]`
 +
@@ -1730,7 +1714,7 @@ Never specify multipath devices by device names like `mpatha`. Device names such
 +
 ** [option]`--label=` - assign a label to an individual partition.
 +
-** [option]`--recommended` - Determine the size of the partition automatically. For details about the recommended scheme, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM, <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems, and <<sect-recommended-partitioning-scheme-s390>> for IBM System{nbsp}z.
+** [option]`--recommended` - Determine the size of the partition automatically. For details about the recommended scheme, see <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM, and <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems.
 +
 [IMPORTANT]
 ====
@@ -1945,8 +1929,6 @@ Join an Active Directory or IPA domain. For more information about this command,
 Reboot after the installation is successfully completed (no arguments). Normally, Kickstart displays a message and waits for the user to press a key before rebooting.
 +
 The [command]`reboot` option is equivalent to the [command]`shutdown -r` command.
-+
-Specify [command]`reboot` to automate installation fully when installing in command line mode on System{nbsp}z.
 +
 For other completion methods, see the [command]`halt`, [command]`poweroff`, and [command]`shutdown` Kickstart options.
 +
@@ -2371,17 +2353,6 @@ It is currently not possible to specify [application]*KDE* as your default deskt
 [command]`zerombr` (optional)::
 +
 If [command]`zerombr` is specified, any invalid partition tables found on disks are initialized. This destroys all of the contents of disks with invalid partition tables. This command is required when performing an unattended installation on a system with previously initialized disks.
-+
-[WARNING]
-====
-
-On IBM System{nbsp}z, if [command]`zerombr` is specified, any _Direct Access Storage Device_ (DASD) visible to the installation program which is not already low-level formatted is automatically low-level formatted with [application]*dasdfmt*. The command also prevents user choice during interactive installations.
-
-If [command]`zerombr` is not specified and there is at least one unformatted DASD visible to the installation program, a non-interactive Kickstart installation exits unsuccessfully.
-
-If [command]`zerombr` is not specified and there is at least one unformatted DASD visible to the installation program, an interactive installation exits if the user does not agree to format all visible and unformatted DASDs. To circumvent this, only activate those DASDs that you will use during installation. You can always add more DASDs after installation is complete.
-
-====
 
 [command]`zfcp` (optional)::
 +

@@ -21,13 +21,6 @@ Supplementary DVD::
 +
 An image containing additional packages, such as the IBM Java Runtime Environment, and additional virtualization drivers.
 
-[NOTE]
-====
-
-Binary DVDs are also available for IBM System{nbsp}z. They can be used to boot the installation program using a SCSI DVD drive or as installation sources.
-
-====
-
 The following table indicates the types of boot and installation media available for different architectures and notes the image file that you need to produce the media.
 
 If you have a subscription or evaluation subscription, follow these steps to obtain the {PRODUCT}{nbsp}7 ISO image files:

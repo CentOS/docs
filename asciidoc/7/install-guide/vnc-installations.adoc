@@ -5,7 +5,7 @@ include::entities.adoc[]
 [[chap-vnc-installations]]
 == Using VNC
 
-The graphical installation interface is the recommended method of installing {PRODUCT}. However, in some cases, accessing the graphical interface directly is difficult or impossible. Many enterprise systems, notably servers (IBM Power{nbsp}Systems and IBM System{nbsp}z), lack the capability to connect a display and a keyboard, making VNC a necessity for manual (non-Kickstart) installations.
+The graphical installation interface is the recommended method of installing {PRODUCT}. However, in some cases, accessing the graphical interface directly is difficult or impossible. Many enterprise systems, notably servers (IBM Power{nbsp}Systems), lack the capability to connect a display and a keyboard, making VNC a necessity for manual (non-Kickstart) installations.
 
 To allow manual installations on _headless systems_ (systems without a directly connected display, keyboard and mouse), the [application]*Anaconda* installation program includes a _Virtual Network Computing_ (VNC) installation which allows the graphical mode of the installation program to run locally, but display on a system connected to the network. The VNC installation provides you with the full range of installation options, even in situations where the system lacks a display or input devices.
 
@@ -74,8 +74,6 @@ You must specify custom boot options to start a VNC installation. The exact way 
 
 * <<sect-boot-menu-ppc>> for IBM Power{nbsp}Systems servers
 
-* <<chap-parameter-configuration-files-s390>> for IBM System{nbsp}z
-
 ====
 
 [[sect-vnc-installations-direct-mode]]
@@ -128,8 +126,6 @@ You can proceed with:
 * <<chap-installing-using-anaconda-x86>> for 64-bit AMD, Intel, and ARM systems
 
 * <<chap-installing-using-anaconda-ppc>> for IBM Power{nbsp}Systems servers
-
-* <<chap-installing-using-anaconda-s390>> for IBM System{nbsp}z
 
 [[sect-vnc-installations-connect-mode]]
 ==== Installing in VNC Connect Mode
@@ -188,8 +184,6 @@ Afer you finish the procedure, you can proceed with:
 * <<chap-installing-using-anaconda-x86>> for 64-bit AMD, Intel, and ARM systems
 
 * <<chap-installing-using-anaconda-ppc>> for IBM Power{nbsp}Systems servers
-
-* <<chap-installing-using-anaconda-s390>> for IBM System{nbsp}z
 
 [[sect-vnc-kickstart-considerations]]
 === Kickstart Considerations

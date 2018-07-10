@@ -22,7 +22,7 @@ Additional differences appear in certain screens; notably the custom partition p
 
 Some screens will be automatically configured depending on your hardware and the type of media you used to start the installation. You can still change the detected settings in any screen. Screens which have not been automatically configured, and therefore require your attention before you begin the installation, are marked by an exclamation mark. You cannot start the actual installation process before you finish configuring these settings.
 
-Installation can also be performed in text mode, however certain options, notably including custom partitioning, are unavailable. See <<sect-installation-text-mode-x86>>, or if using an IBM Power system or IBM System z, see <<sect-installation-text-mode-ppc>>, or <<sect-installation-text-mode-s390>>, respectively, for more information.
+Installation can also be performed in text mode, however certain options, notably including custom partitioning, are unavailable. For more information, see <<sect-installation-text-mode-x86>> if using a AMD64/Intel 64 system or <<sect-installation-text-mode-ppc>> if using an IBM Power Systems server.
 
 [[sect-remote-installation]]
 === Remote Installation

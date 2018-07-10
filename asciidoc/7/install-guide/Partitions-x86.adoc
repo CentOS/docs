@@ -370,4 +370,4 @@ At this point in the process of preparing to install {PRODUCT}, you must give so
 
 Keeping this in mind, Red{nbsp}Hat recommends that, unless you have a reason for doing otherwise, you should _at least_ create the following partitions: `swap`, `/boot/`, and `/` (root).
 
-For more information, see <<sect-recommended-partitioning-scheme-x86>> for AMD64 and Intel{nbsp}64 systems, <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems servers, and <<sect-recommended-partitioning-scheme-s390>> for IBM System{nbsp}z.
+For more information, see <<sect-recommended-partitioning-scheme-x86>> for AMD64, Intel{nbsp}64, and ARM systems, and <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems servers.
