@@ -47,7 +47,7 @@ This procedure is destructive. Any data on the USB flash drive will be destroyed
 
 ====
 
-Many Linux distributions provide their own tools for creating live USB media: [package]*liveusb-creator* on Fedora, [package]*usb-creator* on Ubuntu, and others. Describing these tools is beyond the scope of this book; the following procedure will work on most Linux systems.
+Many Linux distributions provide their own tools for creating live USB media, for example, [package]*usb-creator* on Ubuntu. Describing these tools is beyond the scope of this book; the following procedure will work on most Linux systems.
 
 [[proc-making-usb-media-linux]]
 .Making USB Media on Linux
