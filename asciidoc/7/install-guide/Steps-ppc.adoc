@@ -10,7 +10,7 @@ This chapter outlines the decisions and preparations you will need to make when 
 [[sect-installation-planning-upgrade-or-install-ppc]]
 === Upgrade or Install?
 
-While automated in-place upgrades are now supported, the support is currently limited to AMD64 and Intel{nbsp}64 systems. If you have an existing installation of a previous release of {PRODUCT} on an IBM Power{nbsp}Systems server, you must perform a clean install to migrate to {PRODUCT}{nbsp}7. A clean install is performed by backing up all data from the system, formatting disk partitions, performing an installation of {PRODUCT} from installation media, and then restoring any user data.
+While the Red{nbsp}Hat Enterprise{nbsp}Linux distribution, which CentOS is based on, provides tooling for in-place upgrades without reinstalling the entire system, these tools do not support upgrades on IBM Power Systems, and they are not currently available in CentOS at all. At the same time, upgrading functionality available in RHEL/CentOS{nbsp}6 is now deprecated. Therefore the only way to upgrade between major releases (for example from {PRODUCT}{nbsp}6 to 7) is to perform a clean installation. A clean install is performed by backing up all data from the system, formatting disk partitions, performing an installation of {PRODUCT} from installation media, and then restoring any user data.
 
 [[sect-installation-planning-hardware-compatibility-ppc]]
 === Is Your Hardware Compatible?

@@ -10,7 +10,7 @@ To select the disks and partition the storage space on which you will install Re
 [WARNING]
 ====
 
-Red{nbsp}Hat recommends that you always back up any data that you have on your systems. For example, if you are upgrading or creating a dual-boot system, you should back up any data you want to keep on your storage devices. Unforeseen circumstances can result in loss of all your data.
+Back up any data that you have on your systems. Unforeseen circumstances can result in loss of all your data.
 
 ====
 

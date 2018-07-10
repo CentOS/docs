@@ -10,7 +10,7 @@ The `Manual Partitioning` screen is displayed when you click btn:[Done] from Ins
 [WARNING]
 ====
 
-Red{nbsp}Hat recommends that you always back up any data that you have on your systems. For example, if you are upgrading or creating a dual-boot system, you should back up any data you want to keep on your storage devices. Unforeseen circumstances can result in loss of all your data.
+Back up any data that you have on your systems. Unforeseen circumstances can result in loss of all your data.
 
 ====
 
@@ -305,7 +305,7 @@ Do not confuse the `/` directory with the `/root` directory. The `/root` directo
 
 `/home` - recommended size at least 1 GiB::
 +
-To store user data separately from system data, create a dedicated file system for the `/home` directory. This file system should be sized based on the amount of data that will be stored locally, number of users, and so on. This will enable you to upgrade or reinstall {PRODUCT} without erasing user data files. If you select automatic partitioning, it is recommended to have at least 55GiB of disk space available for the installation, to ensure that the `/home` file system is created.
+To store user data separately from system data, create a dedicated file system for the `/home` directory. This file system should be sized based on the amount of data that will be stored locally, number of users, and so on. This will enable you to reinstall {PRODUCT} without erasing user data files. If you select automatic partitioning, it is recommended to have at least 55GiB of disk space available for the installation, to ensure that the `/home` file system is created.
 
 `swap` partition - recommended size at least 1 GB::
 +

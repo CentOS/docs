@@ -711,7 +711,7 @@ Used to disable IPv6 support in the installation program. IPv6 is now built into
 
 [option]`upgradeany`::
 +
-Upgrades are done in a different way in {PRODUCT}{nbsp}7. For more information about upgrading your system, see <<chap-upgrading-your-current-system>>.
+Upgrades are done in a different way in {PRODUCT}{nbsp}7.
 
 [option]`vlanid=`::
 +

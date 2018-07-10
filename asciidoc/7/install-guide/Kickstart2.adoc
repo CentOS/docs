@@ -17,7 +17,7 @@ All Kickstart scripts and the log files of their execution are stored in the `/t
 [NOTE]
 ====
 
-In previous versions of {PRODUCT}, Kickstart allowed for upgrading the system as well. In {PRODUCT}{nbsp}7, this functionality has been removed and system upgrades are instead handled by specialized tools. See <<chap-upgrading-your-current-system>> for details.
+In previous versions of {PRODUCT}, Kickstart allowed for upgrading the system as well. In {PRODUCT}{nbsp}7, this functionality has been removed.
 
 ====
 

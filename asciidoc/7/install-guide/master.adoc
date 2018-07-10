@@ -65,8 +65,6 @@ This part of the [citetitle]_{PRODUCT} Installation Guide_ covers more advanced 
 
 * installing into a disk image instead of a physical drive
 
-* upgrading a previous release of {PRODUCT} to the current version
-
 include::adminoptions.adoc[]
 
 include::pxe-server.adoc[]
@@ -78,8 +76,6 @@ include::headless-installations.adoc[]
 include::Kickstart2.adoc[]
 
 include::disk-image-install.adoc[]
-
-include::Upgrade-x86.adoc[]
 
 [[part-after-installation]]
 = After Installation

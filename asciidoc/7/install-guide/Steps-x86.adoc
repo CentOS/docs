@@ -10,29 +10,7 @@ This chapter outlines the decisions and preparations you will need to make when 
 [[sect-installation-planning-upgrade-or-install-x86]]
 === Upgrade or Install?
 
-There are two procedures available for upgrading your current system to the next major version of {PRODUCT}. To decide which procedure is the right one for your system, read the following descriptions:
-
-Clean Install::
-+
-A clean install is performed by backing up all data from the system, formatting disk partitions, performing an installation of {PRODUCT} from installation media, and then restoring any user data.
-+
-[NOTE]
-====
-
-This is the recommended method for upgrading between major versions of {PRODUCT}.
-
-====
-
-In-Place Upgrade::
-+
-An in-place upgrade is a way of upgrading your system without removing the older version first. The procedure requires installing the migration utilities available for your system and running them as any other software. In {PRODUCT}, the [application]*Preupgrade Assistant* assesses your current system and identifies potential problems you might encounter during or after the upgrade. It also performs minor fixes and modifications to the system. The [application]*Red{nbsp}Hat Upgrade Tool* utility downloads the packages and performs the actual upgrade. An in-place upgrade requires a lot of troubleshooting and planning and should only be done if there is no other choice. For more information on the [application]*Preupgrade Assistant*, see <<chap-upgrading-your-current-system>>.
-+
-[WARNING]
-====
-
-Never perform an in-place upgrade on a production system without first testing it on a cloned backup copy of the system.
-
-====
+While the Red{nbsp}Hat Enterprise{nbsp}Linux distribution, which CentOS is based on, provides tooling for in-place upgrades without reinstalling the entire system, these tools are not available in CentOS. At the same time, upgrading functionality available in RHEL/CentOS{nbsp}6 is now deprecated. Therefore the only way to upgrade between major releases (for example from {PRODUCT}{nbsp}6 to 7) is to perform a clean installation. A clean install is performed by backing up all data from the system, formatting disk partitions, performing an installation of {PRODUCT} from installation media, and then restoring any user data.
 
 [[sect-installation-planning-hardware-compatibility-x86]]
 === Is Your Hardware Compatible?
