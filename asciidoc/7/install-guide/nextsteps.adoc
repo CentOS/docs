@@ -7,10 +7,6 @@ include::entities.adoc[]
 
 This chapter lists common steps that might be required after installation. Not all steps listed here are always necessary. You can use this list to find other manuals, describing how to perform the tasks you need.
 
-Find help, answers, and utilize diagnostic services::
-+
-[application]*Red{nbsp}Hat Access* is a GUI application which allows you to conveniently access Red{nbsp}Hat knowledge and solutions. It can be used to search for error codes, messages, or any topic of interest, and view related knowledge from the Red{nbsp}Hat Customer Portal. More information about [application]*Red{nbsp}Hat Access* can be found in the link:++https://access.redhat.com/articles/535483++[Red{nbsp}Hat Access GUI] article on the Red{nbsp}Hat Customer Portal.
-
 Recover a lost root password::
 +
 The root password, which is configured during the installation, is required for accessing the system as the root user. Without the root password you will not be able to configure your system or install additional software. If you lost or forgot your root password, you can reset it by following the steps described in <<sect-rescue-mode-reset-root-password>>.
@@ -49,7 +45,7 @@ For the initial configuration of cloud instances, you can use the [package]*clou
 +
 ** set up ephemeral mount points
 +
-[application]*Cloud-init* is used with Red{nbsp}Hat's cloud products. See documentation on using [application]*cloud-init* with Red{nbsp}Hat products:
+[application]*Cloud-init* is used with certain cloud products. See documentation on using [application]*cloud-init*:
 +
 ** Red{nbsp}Hat Enterprise{nbsp}Linux Atomic{nbsp}Host{nbsp}7 link:++https://access.redhat.com/documentation/en/red-hat-enterprise-linux-atomic-host/7/single/installation-and-configuration-guide/#setting_up_cloud_init++[Installation and Configuration Guide]
 +
@@ -63,7 +59,7 @@ See also link:++http://cloudinit.readthedocs.io/en/latest/index.html++[upstream 
 
 Perform an initial system update::
 +
-After the installation is complete, Red{nbsp}Hat recommends that you perform an initial system update. During this process, all installed packages are updated to their latest available versions. Updates to packages provide security fixes, bug fixes and enhancements.
+After the installation is complete, you should perform an initial system update. During this process, all installed packages are updated to their latest available versions. Updates to packages provide security fixes, bug fixes and enhancements.
 +
 In {PRODUCT}, the [application]*Yum* package manager is used for updating the installed packages. For more information about updating your system with [application]*Yum*, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
 

@@ -49,7 +49,7 @@ The [application]*Anaconda* installation program's rescue mode is a minimal Linu
 
 To boot into [application]*Anaconda* rescue mode, you must be able to boot the system using one {PRODUCT} boot media, such as a minimal boot disc or USB drive, or a full installation DVD.
 
-For detailed information about booting the system using media provided by Red{nbsp}Hat, see the appropriate chapters:
+For detailed information about booting the system using media provided by {PRODUCT}, see the appropriate chapters:
 
 * <<chap-booting-installer-x86>> for 64-bit AMD, Intel, and ARM systems
 

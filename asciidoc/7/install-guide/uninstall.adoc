@@ -100,10 +100,10 @@ These instructions assume that your system uses the [application]*GRUB2* boot lo
 .A {PRODUCT} Entry in `grub.cfg`
 ====
 
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
 
-menuentry 'Red Hat Enterprise Linux Server (3.10.0-57.el7.x86_64) {PRODVER} (Maipo)' --class red --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.10.0-53.el7.x86_64-advanced-9eecdce6-58ce-439b-bfa4-76a9ea6b0906' {
+menuentry '{PRODUCT} (3.10.0-57.el7.x86_64) {PRODVER} (Maipo)' --class red --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.10.0-53.el7.x86_64-advanced-9eecdce6-58ce-439b-bfa4-76a9ea6b0906' {
   load_video
   set gfxpayload=keep
   insmod gzio

@@ -52,7 +52,7 @@ The recommended approach to creating Kickstart files is to perform a manual inst
 
 If you have a Red{nbsp}Hat Customer{nbsp}Portal account, you can use the [application]*Kickstart Configuration Tool* available at link:++https://access.redhat.com/labs/kickstartconfig/++[] in the Customer Portal Labs. This tool will walk you through basic configuration and allows you to download the resulting Kickstart file. However, the tool currently does not supported any advanced partitioning.
 
-[application]*Kickstart Configurator*, the graphical tool for creating Kickstart files, is still available. However, it is no longer being updated and it does not reflect changes in Kickstart syntax between Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}6 and 7.
+[application]*Kickstart Configurator*, the graphical tool for creating Kickstart files, is still available. However, it is no longer being updated and it does not reflect changes in Kickstart syntax between {PRODUCT}{nbsp}6 and 7.
 
 ====
 
@@ -334,7 +334,7 @@ The process can be sped up by interacting with the installation system (typing o
 +
 ** [option]`--backuppassphrase` - Adds a randomly-generated passphrase to each encrypted volume. Store these passphrases in separate files in `/root`, encrypted using the X.509 certificate specified with [option]`--escrowcert`. This option is only meaningful if [option]`--escrowcert` is specified.
 +
-** [option]`--cipher=` - Specifies the type of encryption to use if the [application]*Anaconda* default `aes-xts-plain64` is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but Red{nbsp}Hat strongly recommends using either `aes-xts-plain64` or `aes-cbc-essiv:sha256`.
+** [option]`--cipher=` - Specifies the type of encryption to use if the [application]*Anaconda* default `aes-xts-plain64` is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either `aes-xts-plain64` or `aes-cbc-essiv:sha256`.
 +
 [NOTE]
 ====
@@ -358,7 +358,7 @@ Specifies how the boot loader should be installed.
 [IMPORTANT]
 ====
 
-Red{nbsp}Hat recommends setting up a boot loader password on every system. An unprotected boot loader can allow a potential attacker to modify the system's boot options and gain unauthorized access to the system.
+{PRODUCT} recommends setting up a boot loader password on every system. An unprotected boot loader can allow a potential attacker to modify the system's boot options and gain unauthorized access to the system.
 
 ====
 +
@@ -867,7 +867,7 @@ The default installation mode. You must specify the type of installation from `c
 +
 ** [command]`cdrom` - Install from the first optical drive on the system.
 +
-** [command]`harddrive` - Install from a Red{nbsp}Hat installation tree or full installation ISO image on a local drive. The drive must contain a file system the installation program can mount: `ext2`, `ext3`, `ext4`, `vfat`, or `xfs`.
+** [command]`harddrive` - Install from a {PRODUCT} installation tree or full installation ISO image on a local drive. The drive must contain a file system the installation program can mount: `ext2`, `ext3`, `ext4`, `vfat`, or `xfs`.
 +
 *** [option]`--biospart=` - BIOS partition to install from (such as `82`).
 +
@@ -1159,7 +1159,7 @@ The options are as follows:
 
 When creating a new logical volume, you must either specify its size statically using the [option]`--size=` option, or as a percentage of remaining free space using the [option]`--percent=` option. You cannot use both of these options on the same logical volume.
 
-Note that this behavior is only applies to Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7.1 and later. In Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7.0, these two options interacted differently.
+Note that this behavior is only applies to {PRODUCT}{nbsp}7.1 and later. In {PRODUCT}{nbsp}7.0, these two options interacted differently.
 
 ====
 +
@@ -1182,7 +1182,7 @@ The process can be sped up by interacting with the installation system (typing o
 +
 ** [option]`--passphrase=` - Specifies the passphrase to use when encrypting this logical volume. You must use this option together with the [option]`--encrypted` option; it has no effect by itself.
 +
-** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default aes-xts-plain64 is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but Red{nbsp}Hat strongly recommends using either aes-xts-plain64 or aes-cbc-essiv:sha256.
+** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default aes-xts-plain64 is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either aes-xts-plain64 or aes-cbc-essiv:sha256.
 +
 ** [option]`--escrowcert=pass:attributes[{blank}]_URL_of_X.509_certificate_pass:attributes[{blank}]` - Store data encryption keys of all encrypted volumes as files in `/root`, encrypted using the X.509 certificate from the URL specified with _URL_of_X.509_certificate_. The keys are stored as a separate file for each encrypted volume. This option is only meaningful if [option]`--encrypted` is specified.
 +
@@ -1738,7 +1738,7 @@ The process can be sped up by interacting with the installation system (typing o
 +
 ** [option]`--passphrase=` - Specifies the passphrase to use when encrypting this partition. You must use this option together with the [option]`--encrypted` option; by itself it has no effect.
 +
-** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default `aes-xts-plain64` is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but Red{nbsp}Hat strongly recommends using either `aes-xts-plain64` or `aes-cbc-essiv:sha256`.
+** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default `aes-xts-plain64` is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either `aes-xts-plain64` or `aes-cbc-essiv:sha256`.
 +
 ** [option]`--escrowcert=pass:attributes[{blank}]_URL_of_X.509_certificate_pass:attributes[{blank}]` - Store data encryption keys of all encrypted partitions as files in `/root`, encrypted using the X.509 certificate from the URL specified with _URL_of_X.509_certificate_. The keys are stored as a separate file for each encrypted partition. This option is only meaningful if [option]`--encrypted` is specified.
 +
@@ -1868,7 +1868,7 @@ The process can be sped up by interacting with the installation system (typing o
 
 ====
 +
-** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default aes-xts-plain64 is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but Red{nbsp}Hat strongly recommends using either aes-xts-plain64 or aes-cbc-essiv:sha256.
+** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default aes-xts-plain64 is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either aes-xts-plain64 or aes-cbc-essiv:sha256.
 +
 ** [option]`--passphrase=` - Specifies the passphrase to use when encrypting this RAID device. You must use this option together with the [option]`--encrypted` option; by itself it has no effect.
 +
@@ -2204,7 +2204,7 @@ Sets the system time zone to _timezone_.
 +
 ** [option]`--ntpservers=` - Specify a list of NTP servers to be used as a comma-separated list without spaces.
 +
-Starting with Red{nbsp}Hat Entrerprise{nbsp}Linux{nbsp}7.5, time zone names are validated using the `pytz.all_timezones` list, provided by the [package]*pytz* package. In previous releases, the names were validated against `pytz.common_timezones`, which is a subset of the currently used list. Note that the graphical and text mode interfaces still use the more restricted `pytz.common_timezones` list; you must use a Kickstart file to use additional time zone definitions.
+Starting with {PRODUCT}{nbsp}7.5, time zone names are validated using the `pytz.all_timezones` list, provided by the [package]*pytz* package. In previous releases, the names were validated against `pytz.common_timezones`, which is a subset of the currently used list. Note that the graphical and text mode interfaces still use the more restricted `pytz.common_timezones` list; you must use a Kickstart file to use additional time zone definitions.
 
 [command]`unsupported_hardware` (optional)::
 +
@@ -2394,7 +2394,7 @@ You can specify a package group or environment using either its ID (the `<id>` t
 [IMPORTANT]
 ====
 
-If you are not sure what package should be installed, Red{nbsp}Hat recommends you to select the `Minimal Install` environment. `Minimal install` provides only the packages which are essential for running {PRODUCT}{nbsp}7. This will substantially reduce the chance of the system being affected by a vulnerability. If necessary, additional packages can be added later after the installation. For more details on `Minimal install`, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Installing_the_Minimum_Amount_of_Packages_Required.html++[Installing the Minimum Amount of Packages Required] section of the Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide.
+If you are not sure what packages should be installed, select the `Minimal Install` environment. `Minimal install` provides only the packages which are essential for running {PRODUCT}{nbsp}7. This will substantially reduce the chance of the system being affected by a vulnerability. If necessary, additional packages can be added later after the installation. For more details on `Minimal install`, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Installing_the_Minimum_Amount_of_Packages_Required.html++[Installing the Minimum Amount of Packages Required] section of the Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide.
 
 ====
 

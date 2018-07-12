@@ -84,7 +84,7 @@ Text mode installation offers an interactive, non-graphical interface for instal
 [IMPORTANT]
 ====
 
-Red{nbsp}Hat recommends that you install {PRODUCT} using the graphical interface. If you are installing {PRODUCT} on a system that lacks a graphical display, consider performing the installation over a VNC connection - see <<chap-vnc-installations>>. The text mode installation program will prompt you to confirm the use of text mode if it detects that a VNC-based installation is possible.
+Installations using the graphical interface are preferred. If you are installing {PRODUCT} on a system that lacks a graphical display, consider performing the installation over a VNC connection - see <<chap-vnc-installations>>. The text mode installation program will prompt you to confirm the use of text mode if it detects that a VNC-based installation is possible.
 
 If your system has a graphical display, but graphical installation fails, try booting with the [command]`inst.xdriver=vesa` option - see <<chap-anaconda-boot-options>>.
 

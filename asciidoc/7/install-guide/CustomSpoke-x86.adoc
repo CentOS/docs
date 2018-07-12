@@ -32,7 +32,7 @@ For recommendations and additional information about disk partitions, see <<appe
 [[sect-partition-configuration-x86]]
 ===== Adding File Systems and Configuring Partitions
 
-An installation of {PRODUCT} requires a minimum of one partition but Red{nbsp}Hat recommends using at least the following partitions or volumes: `/`, `/home`, `/boot`, and `swap`. You can also create additional partitions and volumes as you require. See <<sect-recommended-partitioning-scheme-x86>> for further details.
+An installation of {PRODUCT} requires a minimum of one partition but {PRODUCT} recommends using at least the following partitions or volumes: `/`, `/home`, `/boot`, and `swap`. You can also create additional partitions and volumes as you require. See <<sect-recommended-partitioning-scheme-x86>> for further details.
 
 [NOTE]
 ====
@@ -268,7 +268,7 @@ Placing the `/boot` partition on an LVM volume is not supported.
 [[sect-recommended-partitioning-scheme-x86]]
 ===== Recommended Partitioning Scheme
 
-Red{nbsp}Hat recommends that you create separate file systems at the following mount points:
+{PRODUCT} recommends that you create separate file systems at the following mount points:
 
 * `/boot`
 

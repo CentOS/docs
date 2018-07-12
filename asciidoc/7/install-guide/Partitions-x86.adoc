@@ -368,6 +368,6 @@ Continuing the example, it is also possible that one or more directories below `
 
 At this point in the process of preparing to install {PRODUCT}, you must give some consideration to the number and size of the partitions to be used by your new operating system. However, there is no one right answer to this question. It depends on your needs and requirements.
 
-Keeping this in mind, Red{nbsp}Hat recommends that, unless you have a reason for doing otherwise, you should _at least_ create the following partitions: `swap`, `/boot/`, and `/` (root).
+Keeping this in mind, unless you have a reason for doing otherwise, you should _at least_ create the following partitions: `swap`, `/boot/`, and `/` (root).
 
 For more information, see <<sect-recommended-partitioning-scheme-x86>> for AMD64, Intel{nbsp}64, and ARM systems, and <<sect-recommended-partitioning-scheme-ppc>> for IBM Power{nbsp}Systems servers.

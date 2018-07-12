@@ -2,7 +2,7 @@
 :experimental:
 include::entities.adoc[]
 
-[[chap-download-red-hat-enterprise-linux]]
+[[chap-download]]
 == Downloading {PRODUCT}
 
 //If you have a Red{nbsp}Hat subscription, you can download _ISO image files_ of the {PRODUCT}{nbsp}7 installation DVD from the Red{nbsp}Hat Customer Portal. If you do not have a subscription, either purchase one or obtain a free evaluation subscription from the Software & Download Center at link:++https://access.redhat.com/downloads/++[].
@@ -15,7 +15,7 @@ A full installation image which can be used to boot the installation program and
 
 boot.iso::
 +
-A minimal boot image which can be used to boot the installation program, but requires access to additional package repositories from which software will be installed. Red{nbsp}Hat does not provide such a repository; you must create it using the full installation ISO image.
+A minimal boot image which can be used to boot the installation program, but requires access to additional package repositories from which software will be installed. {PRODUCT} does not provide such a repository; you must create it using the full installation ISO image.
 
 Supplementary DVD::
 +
@@ -33,7 +33,7 @@ The following table indicates the types of boot and installation media available
 
 . Click `{PRODUCT}`.
 
-. Ensure that you select the appropriate `Product Variant`  and `Architecture` for your installation target. By default, `{PRODUCT} Server` and `x86_64` are selected. If you are not sure which variant best suits your needs, see link:++http://www.redhat.com/en/technologies/linux-platforms/enterprise-linux++[]. Additionally, a list of packages available for every variant is available in the link:++http://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Package_Manifest/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Package Manifest].
+//. Ensure that you select the appropriate `Product Variant`  and `Architecture` for your installation target. By default, `{PRODUCT} Server` and `x86_64` are selected. If you are not sure which variant best suits your needs, see link:++http://www.redhat.com/en/technologies/linux-platforms/enterprise-linux++[]. Additionally, a list of packages available for every variant is available in the link:++http://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Package_Manifest/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Package Manifest].
 
 . A list of available downloads is displayed; most notably, a minimal `Boot ISO` image and a full installation `Binary DVD` ISO image. These files are described above. Additional images can be available, such as preconfigured virtual machine images, which are beyond the scope of this document.
 

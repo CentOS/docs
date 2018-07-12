@@ -5,7 +5,7 @@ include::entities.adoc[]
 [[sect-security-policy-ppc]]
 === Security Policy
 
-The `Security Policy` spoke allows you to configure the installed system following restrictions and recommendations (_compliance policies_) defined by the Security Content Automation Protocol (SCAP) standard. This functionality is provided by an add-on which has been enabled by default since Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7.2. When enabled, the packages necessary to provide this functionality will automatically be installed. However, by default, no policies are enforced, meaning that no checks are performed during or after installation unless specifically configured.
+The `Security Policy` spoke allows you to configure the installed system following restrictions and recommendations (_compliance policies_) defined by the Security Content Automation Protocol (SCAP) standard. This functionality is provided by an add-on which has been enabled by default since {PRODUCT}{nbsp}7.2. When enabled, the packages necessary to provide this functionality will automatically be installed. However, by default, no policies are enforced, meaning that no checks are performed during or after installation unless specifically configured.
 
 The link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/chap-Compliance_and_Vulnerability_Scanning.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide] provides detailed information about security compliance including background information, practical examples, and additional resources.
 

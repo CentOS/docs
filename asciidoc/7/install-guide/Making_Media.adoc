@@ -5,7 +5,7 @@ include::entities.adoc[]
 [[chap-making-media]]
 == Making Media
 
-This chapter describes how to use ISO image files obtained by following the steps in <<chap-download-red-hat-enterprise-linux>> to create bootable physical media, such as a DVD or a USB flash drive. You can then use these media to boot the installation program and start the installation. These steps only apply if you plan to install {PRODUCT} on a 64-bit AMD, Intel, or ARM system, or an IBM Power{nbsp}Systems server using physical boot media. For instructions on how to set up a _Preboot Execution Environment_ (PXE) server to perform a PXE-based installation over a network, see <<chap-installation-server-setup>>.
+This chapter describes how to use ISO image files obtained by following the steps in <<chap-download>> to create bootable physical media, such as a DVD or a USB flash drive. You can then use these media to boot the installation program and start the installation. These steps only apply if you plan to install {PRODUCT} on a 64-bit AMD, Intel, or ARM system, or an IBM Power{nbsp}Systems server using physical boot media. For instructions on how to set up a _Preboot Execution Environment_ (PXE) server to perform a PXE-based installation over a network, see <<chap-installation-server-setup>>.
 
 [NOTE]
 ====
@@ -38,7 +38,7 @@ You can use a USB drive or an SD card instead of a CD or DVD to create bootable 
 [[sect-making-usb-media-linux]]
 ==== Making Installation USB Media on Linux
 
-The following procedure assumes you are using a Linux system and that you have downloaded an appropriate ISO image as described in <<chap-download-red-hat-enterprise-linux>>. On most Linux distributions, it will work without the need for installing any additional packages.
+The following procedure assumes you are using a Linux system and that you have downloaded an appropriate ISO image as described in <<chap-download>>. On most Linux distributions, it will work without the need for installing any additional packages.
 
 [WARNING]
 ====
@@ -131,7 +131,7 @@ Non-virtualized installations (known as "bare metal" installations) on IBM Power
 [[sect-making-usb-media-windows]]
 ==== Making Installation USB Media on Windows
 
-The procedure of creating bootable USB media on Windows depends on which tool you use. There are many different utilities which allow you to write an ISO image to a USB drive. Red{nbsp}Hat recommends using the [application]*Fedora Media Writer*, available for download at link:++https://github.com/MartinBriza/MediaWriter/releases++[].
+The procedure of creating bootable USB media on Windows depends on which tool you use. There are many different utilities which allow you to write an ISO image to a USB drive. {PRODUCT} recommends using the [application]*Fedora Media Writer*, available for download at link:++https://github.com/MartinBriza/MediaWriter/releases++[].
 
 [IMPORTANT]
 ====
@@ -144,7 +144,7 @@ Transferring the ISO image file to the USB drive using Windows Explorer or a sim
 .Making USB Media on Windows
 . Download and install [application]*Fedora Media Writer*.
 
-. Download the {PRODUCT} ISO image you want to use to create the media. (See <<chap-download-red-hat-enterprise-linux>> for instructions on obtaining ISO images.)
+. Download the {PRODUCT} ISO image you want to use to create the media. (See <<chap-download>> for instructions on obtaining ISO images.)
 
 . Plug in the USB drive you will be using to create bootable media.
 
@@ -259,7 +259,7 @@ The flash drive is now ready to be used as a boot device. You can continue with 
 [[sect-making-media-additional-sources]]
 === Preparing Installation Sources
 
-As explained in <<chap-download-red-hat-enterprise-linux>>, two basic types of media are available for {PRODUCT}: a minimal boot image and a full installation image (also known as a binary DVD). If you downloaded the binary DVD and created a boot DVD-ROM or USB drive from it, you can proceed with the installation immediately, as this image contains everything you need to install the system.
+As explained in <<chap-download>>, two basic types of media are available for {PRODUCT}: a minimal boot image and a full installation image (also known as a binary DVD). If you downloaded the binary DVD and created a boot DVD-ROM or USB drive from it, you can proceed with the installation immediately, as this image contains everything you need to install the system.
 
 However, if you use the minimal boot image, you must also configure an additional source of the installation. This is because the minimal boot image only contains the installation program itself and tools needed to boot your system and start the installation; it does not include the software packages to be installed on your system.
 

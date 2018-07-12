@@ -5,7 +5,7 @@ include::entities.adoc[]
 [[sect-disk-partitioning-setup-ppc]]
 === Installation Destination
 
-To select the disks and partition the storage space on which you will install Red{nbsp}Hat{nbsp}Enterprise{nbsp}Linux, select `Installation Destination` in the `Installation Summary` screen. If you are unfamiliar with disk partitions, see <<appe-disk-partitions-overview>> for more information.
+To select the disks and partition the storage space on which you will install {PRODUCT}, select `Installation Destination` in the `Installation Summary` screen. If you are unfamiliar with disk partitions, see <<appe-disk-partitions-overview>> for more information.
 
 [WARNING]
 ====

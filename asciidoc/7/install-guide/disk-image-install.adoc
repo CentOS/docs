@@ -12,7 +12,7 @@ This chapter describes the process of creating custom, bootable images of severa
 
 Creating custom images using [application]*livemedia-creator* is currently supported only on AMD64 and Intel{nbsp}64 (x86_64) and IBM POWER (big endian) systems.
 
-Additionally, Red{nbsp}Hat only supports creating custom images of {PRODUCT}{nbsp}7.
+Additionally, {PRODUCT} only supports creating custom images of {PRODUCT}{nbsp}7.
 
 ====
 
@@ -20,7 +20,7 @@ If you choose the manual approach, you will be able to perform the installation 
 
 Automated disk image installations using [application]*livemedia-creator* are somewhat similar to Kickstart installations with network boot. To use this approach, you must prepare a valid Kickstart file, which will be used by [application]*livemedia-creator* to perform the installation. The disk image file will be created automatically.
 
-Both approaches to disk image installations require a separate installation source. In most cases, the best approach is to use an ISO image of the binary {PRODUCT} DVD. See <<chap-download-red-hat-enterprise-linux>> for information about obtaining installation ISO images.
+Both approaches to disk image installations require a separate installation source. In most cases, the best approach is to use an ISO image of the binary {PRODUCT} DVD. See <<chap-download>> for information about obtaining installation ISO images.
 
 [IMPORTANT]
 ====
@@ -142,7 +142,7 @@ You will also need to install several other packages in addition to [package]*lo
 
 * [package]*virt-install*: a package providing tools to build new virtual machines, used in the first stage of live media creation unless the [option]`--no-virt` option is specified.
 
-* [package]*libvirt*, [package]*qemu-kvm*, [package]*libvirt-client* and other virtualization tools: when using [package]*virt-install*, your system must be prepared to create, run and manage a virtual machine. See the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Virtualization_Deployment_and_Administration_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Virtualization Deployment and Administration Guide] for information on virtualization in Red{nbsp}Hat Enterprise{nbsp}Linux and for documentation about installing and working with virtualization tools.
+* [package]*libvirt*, [package]*qemu-kvm*, [package]*libvirt-client* and other virtualization tools: when using [package]*virt-install*, your system must be prepared to create, run and manage a virtual machine. See the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Virtualization_Deployment_and_Administration_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Virtualization Deployment and Administration Guide] for information on virtualization in {PRODUCT} and for documentation about installing and working with virtualization tools.
 
 * [package]*anaconda*: the {PRODUCT} installation program, used in the first stage instead of virt-install if the [option]`--no-virt` option is used.
 
@@ -171,7 +171,7 @@ Do not modify the samples in their original location. Copy them to another direc
 [NOTE]
 ====
 
-Red{nbsp}Hat only supports the repositories provided by Red{nbsp} as installation source.
+Only repositories provided by {PRODUCT} are supported as installation sources.
 
 ====
 
@@ -199,7 +199,7 @@ It is recommended to use lorax on a system that is the same release of {PRODUCT}
 
 ====
 
-After running the following as root, an installation image named `boot.iso` will exist in the `results/images` directory. The [option]`--repo=` command loads a Yum repository configuration file, in this case the default one, and use it to download package from Red Hat's content delivery network the same way they would be downloaded during a system update.
+After running the following as root, an installation image named `boot.iso` will exist in the `results/images` directory. The [option]`--repo=` command loads a Yum repository configuration file, in this case the default one, and use it to download packages the same way they would be downloaded during a system update.
 
 [literal,subs="+quotes,verbatim,macros"]
 ....

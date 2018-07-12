@@ -32,7 +32,7 @@ For recommendations and additional information about disk partitions, see <<appe
 [[sect-partition-configuration-ppc]]
 ===== Adding File Systems and Configuring Partitions
 
-An installation of {PRODUCT} requires a PReP boot partition and one other partition but Red{nbsp}Hat recommends at least five: `PReP`, `/`, `/home`, `/boot`, and `swap`. You can also create additional partitions you require. See <<sect-recommended-partitioning-scheme-ppc>> for further details.
+An installation of {PRODUCT} requires a PReP boot partition and one other partition but {PRODUCT} recommends at least five: `PReP`, `/`, `/home`, `/boot`, and `swap`. You can also create additional partitions you require. See <<sect-recommended-partitioning-scheme-ppc>> for further details.
 
 [NOTE]
 ====
@@ -266,7 +266,7 @@ Placing the `/boot` partition on an LVM volume is not supported.
 [[sect-recommended-partitioning-scheme-ppc]]
 ===== Recommended Partitioning Scheme
 
-Unless you have a reason for doing otherwise, Red{nbsp}Hat recommends that you create the following partitions:
+Unless you have a reason for doing otherwise, {PRODUCT} recommends that you create the following partitions:
 
 A PReP boot partition - recommended size of 4 to 8 MiB::
 +

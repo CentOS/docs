@@ -200,11 +200,11 @@ This section _only_ concerns Beta releases of {PRODUCT}{nbsp}7.
 
 ====
 
-The UEFI Secure Boot technology requires that the operating system kernel must be signed with a recognized private key in order to be able to boot. In every beta release of {PRODUCT}{nbsp}7, the kernel is signed with a Red{nbsp}Hat Beta-specific private key, which is different from the more common Red{nbsp}Hat key used to sign kernels in a General Availability (non-Beta) releases.
+The UEFI Secure Boot technology requires that the operating system kernel must be signed with a recognized private key in order to be able to boot. In every beta release of {PRODUCT}{nbsp}7, the kernel is signed with a Beta-specific private key, which is different from the more common key used to sign kernels in a General Availability (non-Beta) releases.
 
-The Beta private key will likely not be recognized by your hardware, which means that any Beta release of {PRODUCT} 7 will not be able to boot. In order to use a Beta release with UEFI Secure Boot enabled, you need to add the Red{nbsp}Hat Beta public key to your system using the _Machine Owner Key_ (MOK) facility.
+The Beta private key will likely not be recognized by your hardware, which means that any Beta release of {PRODUCT} 7 will not be able to boot. In order to use a Beta release with UEFI Secure Boot enabled, you need to add the Beta public key to your system using the _Machine Owner Key_ (MOK) facility.
 
-The procedure to add the Red{nbsp}Hat Beta key to your system is below.
+The procedure to add the Beta key to your system is below.
 
 [[proc-add-uefi-secure-boot-key]]
 .Adding a Custom Private Key for UEFI Secure Boot
@@ -219,7 +219,7 @@ The procedure to add the Red{nbsp}Hat Beta key to your system is below.
 pass:quotes[`#`] yum install kernel-doc
 ....
 +
-This package provides a certificate file which contains the Red Hat CA public Beta key, located in `/usr/share/doc/kernel-keys/pass:attributes[{blank}]_kernel-version_pass:attributes[{blank}]/kernel-signing-ca.cer`, where _kernel-version_ is the kernel version string without the platform architecture suffix - for example, `3.10.0-686.el7`.
+This package provides a certificate file which contains the public Beta key, located in `/usr/share/doc/kernel-keys/pass:attributes[{blank}]_kernel-version_pass:attributes[{blank}]/kernel-signing-ca.cer`, where _kernel-version_ is the kernel version string without the platform architecture suffix - for example, `3.10.0-686.el7`.
 
 . Execute the following commands to enroll the public key into the system Machine Owner Key (MOK) list:
 +

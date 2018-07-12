@@ -87,7 +87,7 @@ An installation target is a storage device that will store {PRODUCT} and boot th
 
 * Virtualized installation on IBM Power{nbsp}Systems servers is also supported when using Virtual SCSI (vSCSI) adapters in virtual client LPARs
 
-Red{nbsp}Hat does not support installation to USB drives or SD memory cards. For information about the support for third-party virtualization technologies, see the [citetitle]_Red{nbsp}Hat Hardware Compatibility List_, available online at link:++https://hardware.redhat.com++[].
+{PRODUCT} does not support installation to USB drives or SD memory cards. For information about the support for third-party virtualization technologies, see the [citetitle]_Red{nbsp}Hat Hardware Compatibility List_, available online at link:++https://hardware.redhat.com++[].
 
 [IMPORTANT]
 ====

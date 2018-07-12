@@ -11,8 +11,8 @@ Installing {PRODUCT}{nbsp}{PRODVER} on all architectures
 
 This manual explains how to boot the {PRODUCT}{nbsp}{PRODVER} installation program ([application]*Anaconda*) and how to install {PRODUCT}{nbsp}{PRODVER} on AMD64 and Intel{nbsp}64 systems, 64-bit ARM systems, and 64-bit IBM Power{nbsp}Systems servers. It also covers advanced installation methods such as _Kickstart_ installations, PXE installations, and installations over VNC. Finally, it describes common post-installation tasks and explains how to troubleshoot installation problems.
 
-Information on installing Red{nbsp}Hat Enterprise{nbsp}Linux Atomic{nbsp}Host can be found in the link:++https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html-single/installation_and_configuration_guide/++[Red{nbsp}Hat Enterprise{nbsp}Linux Atomic{nbsp}Host Installation and Configuration Guide].
+Information on installing {PRODUCT} Atomic{nbsp}Host can be found in the link:++https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html-single/installation_and_configuration_guide/++[Red{nbsp}Hat Enterprise{nbsp}Linux Atomic{nbsp}Host Installation and Configuration Guide].
 
 --
-image:Common_Content/images/title_logo.svg[Red{nbsp}Hat Customer Content Services]
+image:Common_Content/images/title_logo.svg[CentOS Documentation Project]
 include::Author_Group.adoc[]

@@ -398,7 +398,7 @@ A signal 11 error, commonly known as a _segmentation fault_, means that a progra
 
 If you receive a fatal signal 11 error during the installation, first make sure you are using the most recent installation images, and let [application]*Anaconda* verify them to make sure they are not corrupted. Bad installation media (such as an improperly burned or scratched optical disk) are a common cause of signal 11 errors. Verifying the integrity of the installation media is recommended before every installation.
 
-For information about obtaining the most recent installation media, see <<chap-download-red-hat-enterprise-linux>>. To perform a media check before the installation starts, append the [option]`rd.live.check` boot option at the boot menu. See <<sect-boot-options-mediacheck>> for details.
+For information about obtaining the most recent installation media, see <<chap-download>>. To perform a media check before the installation starts, append the [option]`rd.live.check` boot option at the boot menu. See <<sect-boot-options-mediacheck>> for details.
 
 If you performed a media check without any errors and you still have issues with segmentation faults, it usually means that your system encountered a hardware error. In this case, the problem is most likely in the system's memory (RAM). This can be a problem even if you previously used a different operating system on the same computer without any errors. On BIOS-based systems, you can use the [application]*Memtest86+* memory testing module included on the installation media to perform a thorough test of your system's memory. See <<sect-boot-options-memtest>> for details.
 

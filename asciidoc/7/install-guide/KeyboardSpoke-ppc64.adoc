@@ -22,7 +22,7 @@ To test additional layouts, you can click the language selector at the top on th
 [IMPORTANT]
 ====
 
-If you use a layout that cannot accept Latin characters, such as `Russian`, Red{nbsp}Hat recommends additionally adding the `English (United States)` layout and configuring a keyboard combination to switch between the two layouts. If you only select a layout without Latin characters, you might be unable to enter a valid root password and user credentials later in the installation process. This can prevent you from completing the installation.
+If you use a layout that cannot accept Latin characters, such as `Russian`, you should also add the `English (United States)` layout and configure a keyboard combination to switch between the two layouts. If you only select a layout without Latin characters, you might be unable to enter a valid root password and user credentials later in the installation process. This can prevent you from completing the installation.
 
 ====
 

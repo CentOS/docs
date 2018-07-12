@@ -485,7 +485,7 @@ The [option]`selinux=0` and [option]`inst.selinux=0` options are not the same. T
 
 [option]`inst.nosave=`::
 +
-This option, introduced in Red{nbsp}Hat Enterprise Linux 7.3, controls which Kickstart files and installation logs are saved to the installed system. It can be especially useful to disable saving such data when performing OEM operating system installations, or when generating images using sensitive resources (such as internal repository URLs), as these resources might otherwise be mentioned in kickstart files, or in logs on the image, or both. Possible values for this option are:
+This option, introduced in {PRODUCT} 7.3, controls which Kickstart files and installation logs are saved to the installed system. It can be especially useful to disable saving such data when performing OEM operating system installations, or when generating images using sensitive resources (such as internal repository URLs), as these resources might otherwise be mentioned in kickstart files, or in logs on the image, or both. Possible values for this option are:
 +
 `input_ks` - disables saving of the input Kickstart file (if any).
 +

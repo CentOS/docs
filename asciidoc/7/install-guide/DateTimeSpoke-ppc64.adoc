@@ -20,7 +20,7 @@ If your city is not available on the map or in the drop-down menu, select the ne
 [NOTE]
 ====
 
-The list of available cities and regions comes from the Time Zone Database (tzdata) public domain, which is maintained by the Internet Assigned Numbers Authority (IANA). Red{nbsp}Hat cannot add cities or regions into this database. You can find more information at the official website, available at link:++http://www.iana.org/time-zones++[].
+The list of available cities and regions comes from the Time Zone Database (tzdata) public domain, which is maintained by the Internet Assigned Numbers Authority (IANA). {PRODUCT} cannot add cities or regions into this database. You can find more information at the official website, available at link:++http://www.iana.org/time-zones++[].
 
 ====
 

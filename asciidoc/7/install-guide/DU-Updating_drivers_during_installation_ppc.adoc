@@ -5,7 +5,7 @@ include::entities.adoc[]
 [[chap-driver-updates-ppc]]
 == Updating Drivers During Installation on IBM Power{nbsp}Systems
 
-In most cases, {PRODUCT} already includes drivers for the devices that make up your system. However, if your system contains hardware that has been released very recently, drivers for this hardware might not yet be included. Sometimes, a driver update that provides support for a new device might be available from Red{nbsp}Hat or your hardware vendor on a _driver disc_ that contains _RPM packages_. Typically, the driver disc is available for download as an _ISO image file_.
+In most cases, {PRODUCT} already includes drivers for the devices that make up your system. However, if your system contains hardware that has been released very recently, drivers for this hardware might not yet be included. Sometimes, a driver update that provides support for a new device might be available from {PRODUCT} or your hardware vendor on a _driver disc_ that contains _RPM packages_. Typically, the driver disc is available for download as an _ISO image file_.
 
 [IMPORTANT]
 ====
@@ -22,7 +22,7 @@ In other situations, you might want to add drivers for a device during the insta
 
 . create a driver disc by extracting the image file onto a CD or a DVD, or a USB flash drive. See the instructions for making installation discs in <<sect-making-cd-dvd-media>> for more information on burning ISO image files to a CD or DVD, and <<sect-making-usb-media>> for instructions on writing ISO images to USB drives.
 
-If Red{nbsp}Hat, your hardware vendor, or a trusted third party told you that you will require a driver update during the installation process, choose a method to supply the update from the methods described in this chapter and test it before beginning the installation. Conversely, do not perform a driver update during installation unless you are certain that your system requires it. The presence of a driver on a system for which it was not intended can complicate support.
+If {PRODUCT}, your hardware vendor, or a trusted third party told you that you will require a driver update during the installation process, choose a method to supply the update from the methods described in this chapter and test it before beginning the installation. Conversely, do not perform a driver update during installation unless you are certain that your system requires it. The presence of a driver on a system for which it was not intended can complicate support.
 
 [WARNING]
 ====
@@ -34,7 +34,7 @@ Driver update disks sometimes disable conflicting kernel drivers, where necessar
 [[sect-driver-updates-during-installation-preparing-ppc]]
 === Preparing for a Driver Update During Installation
 
-If a driver update is necessary and available for your hardware, Red{nbsp}Hat, your hardware vendor, or another trusted third party will typically provide it in the form of an image file in ISO format. Once you obtain the ISO image, you must decide on the method you want to use to perform the driver update.
+If a driver update is necessary and available for your hardware, {PRODUCT}, your hardware vendor, or another trusted third party will typically provide it in the form of an image file in ISO format. Once you obtain the ISO image, you must decide on the method you want to use to perform the driver update.
 
 The available methods are:
 
