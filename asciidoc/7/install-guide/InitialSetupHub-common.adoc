@@ -34,7 +34,6 @@ The [application]*Initial Setup* application can display the following options:
 						footnote:[This option is only displayed if you did not previously set it.]|No|Yes
 |Date & time|Yes|Yes
 						footnote:[This option is only available if you run [application]*Initial Setup* in reconfiguration mode]
-|Subscription Manager|Yes|No
 |Network & host name|Yes|No
 |Root password|Yes|Yes
 |User creation|Yes|Yes
@@ -77,13 +76,9 @@ The `User Creation` screen is the same as the one used when creating an account 
 
 Similarly, the `Network & Host Name` screen is the same as the one used when setting up network. See <<sect-network-hostname-configuration-x86>> for information.
 
-The `Subscription Manager` screen allows you to register your system with Red{nbsp}Hat to receive updates and install additional packages from repositories provided by Red{nbsp}Hat. For information about how to register your system, see <<sect-initial-setup-subsciption-manager>>.
-
-Once ready, click the btn:[FINISH CONFIGURATION] button to register your system, before completing the [application]*Initial Setup* configuration process.
+Once ready, click the btn:[FINISH CONFIGURATION] button to exit [application]*Initial Setup*.
 
 To start the [application]*Initial Setup* again, see <<starting_initial_setup_manually>>.
-
-include::SubscriptionManagerSpoke-common.adoc[]
 
 include::InitialSetup-text.adoc[]
 

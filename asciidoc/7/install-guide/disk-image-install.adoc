@@ -211,13 +211,6 @@ pass:quotes[`#`] setenforce 1
 
 ....
 
-[NOTE]
-====
-
-The above commands require that the system they are executed on has been registered and subscribed with Red{nbsp}Hat Subscription{nbsp}Manager. For more information, see link:++https://access.redhat.com/documentation/en-US/Red_Hat_Subscription_Management/1/html/RHSM/index.html++[Red{nbsp}Hat Subscription{nbsp}Management].
-
-====
-
 [[sect-livemedia-usage-virt]]
 ===== Creating a Live Image Using virt-install
 

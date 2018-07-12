@@ -15,6 +15,6 @@ the start process is hidden behind a graphical screen that displays
 a progress bar. Eventually, a GUI login screen (or if the X Window
 System is not installed, a `login:` prompt) appears.
 
-If your system was installed with the X Window System during this installation process, the first time you start your {PRODUCT} system, applications to set up your system are launched. These applications guide you through initial configuration of {PRODUCT} and allow you to set your system time and date, register your machine with Red{nbsp}Hat Network, and more.
+If your system was installed with the X Window System during this installation process, the first time you start your {PRODUCT} system, applications to set up your system are launched. These applications guide you through initial configuration of {PRODUCT} and allow you to set your system time and date, and more.
 
-See <<chap-initial-setup>> for information about the configuration process. For instructions on post-installation procedures, configuration and updates for Red{nbsp}Hat Enterprise{nbsp}Linux Atomic{nbsp}Host, see the link:++https://access.redhat.com/articles/rhel-atomic-getting-started++[Getting Started withRed{nbsp}Hat Enterprise{nbsp}Linux Atomic{nbsp}Host] document.
+See <<chap-initial-setup>> for information about the configuration process.

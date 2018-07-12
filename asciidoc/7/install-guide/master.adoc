@@ -82,7 +82,7 @@ include::disk-image-install.adoc[]
 
 This part of the [citetitle]_{PRODUCT} Installation Guide_ covers finalizing the installation, as well as some installation tasks related to installation that you might perform at some time in the future. These include:
 
-* performing common post-installation tasks, such as registering the system to Red{nbsp}Hat Subscription Management services
+* performing common post-installation tasks
 
 * using a {PRODUCT} installation disc to rescue a damaged system
 
@@ -93,8 +93,6 @@ include::InitialSetupHub-common.adoc[]
 include::nextsteps.adoc[]
 
 include::Rescue_Mode.adoc[]
-
-include::Deregister_RHN_entitlement.adoc[]
 
 include::uninstall.adoc[]
 

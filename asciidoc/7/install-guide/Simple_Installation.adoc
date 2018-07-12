@@ -8,7 +8,7 @@ include::entities.adoc[]
 [[sect-simple-install]]
 === Interactive Installation
 
-This section describes the simple procedure to install and register {PRODUCT} after you have created and booted from an installation USB drive.
+This section describes the simple procedure to install {PRODUCT} after you have created and booted from an installation USB drive.
 
 Prerequisites: Create an installation USB drive and boot it. For details, see:
 
@@ -122,30 +122,12 @@ image::images/accountconfig/createuser.png[]
 
 . After the installed system has been started:
 +
-** If you installed the server using the `Server with GUI` base environment, the [application]*Initial Setup* application is started automatically:
-+
-... Accept the license agreement.
-+
-... Register the system.
-+
-For details, see <<chap-initial-setup>>.
-+
-** If you selected any other base environment during the installation:
-+
-... Log into the system as the `root` user.
-+
-... Register the system and automatically attach a subscription:
-+
-[literal,subs="+quotes,verbatim,macros"]
-....
-# subscription-manager register --auto-attach \
---username=pass:quotes[_user_name_] --password=pass:quotes[_password_]
-....
+** If you installed the server using the `Server with GUI` base environment, the [application]*Initial Setup* application is started automatically. Review and accept the license agreement to exit Initial Setup and start using your system. For details, see <<chap-initial-setup>>.
 
 [[sect-simple-install-kickstart]]
 === Automatic Installation
 
-This section describes a simple procedure on how to add a Kickstart file to the installation USB drive, which automatically installs and registers {PRODUCT}. You can use this procedure to deploy {PRODUCT} on multiple machines.
+This section describes a simple procedure on how to add a Kickstart file to the installation USB drive, which automatically installs {PRODUCT}. You can use this procedure to deploy {PRODUCT} on multiple machines.
 
 [[bridgehead.gen-usb-media]]
 [discrete]
@@ -189,15 +171,6 @@ This section describes a simple procedure on how to add a Kickstart file to the 
 [literal,subs="+quotes,verbatim"]
 ....
 # cp /root/anaconda-ks.cfg /root/rhel-install/
-....
-
-. To register {PRODUCT} after the installation automatically and attach a subscription, append the following to the `/root/rhel-install/anaconda-ks.cfg` file:
-+
-[literal,subs="+quotes,verbatim,macros"]
-....
-%post
-subscription-manager register --auto-attach --username=pass:quotes[_user_name_] --password=pass:quotes[_password_]
-%end
 ....
 
 . Display the installation DVD volume name:

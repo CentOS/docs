@@ -2796,31 +2796,6 @@ The above example mounts an NFS share and executes a script named `runme` locate
 
 ====
 
-One of the most common uses of post-installation scripts in Kickstart installations is automatic registration of the installed system using Red{nbsp}Hat Subscription Manager. The following is an example of automatic subscription in a [command]`%post` script:
-
-[[exam-kickstart-entitlements]]
-.Running subscription-manager as a Post-Install Script
-====
-
-[literal,subs="+quotes,verbatim,macros"]
-....
-
-[command]`%post --log=/root/ks-post.log`
-/usr/sbin/subscription-manager register --username=admin@example.com --password=secret --serverurl=sam-server.example.com --org="Admin Group" --environment="Dev" --servicelevel=standard --release="7.0"
-[command]`%end`
-
-....
-
-The [command]`subscription-manager` command-line script registers a system to a Red{nbsp}Hat Subscription Management server (Customer Portal Subscription Management, Subscription Asset Manager, or CloudForms System Engine). This script can also be used to assign or attach subscriptions automatically to the system that best-match that system.
-
-When registering to the Customer Portal, use the Red{nbsp}Hat Network login credentials. When registering to Subscription Asset Manager or CloudForms System{nbsp}Engine, use a user account created by the local administrator.
-
-Additional options can be used with the registration command to set a preferred service level for the system and to restrict updates and errata to a specific operating system version.
-
-Also see the link:++https://access.redhat.com/solutions/748313++[How do I use subscription-manager in a kickstart file?] article on the Red{nbsp}Hat Customer Portal for additional information about using [command]`subscription-manager` in a Kickstart [command]`%post` section.
-
-====
-
 [[sect-kickstart-onerror]]
 ==== Kickstart error handling
 

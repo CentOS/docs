@@ -33,21 +33,6 @@ Set up [application]*Kdump*::
 [application]*Kdump* can be enabled during the installation process (see <<sect-kdump-x86>>). It can also be configured at any time afterwards. link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Kernel_Crash_Dump_Guide/index.html++[
 Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Kernel Crash Dump Guide] provides all information necessary to understand how [application]*Kdump* works and how to configure it on your system.
 
-Register the system::
-+
-The products installed on a system (including the operating system itself) are covered by subscriptions. A subscription service is used to track registered systems, the products installed on those systems, and the subscriptions attached to those products. Registration is a part of the [application]*Initial Setup* configuration process (see <<sect-initial-setup-subsciption-manager>>).
-+
-However, if you have not registered your system during [application]*Initial Setup*, you can register it afterwards. See link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Subscription_Management/1/html/RHSM/index.html++[
-Using and Configuring Red{nbsp}Hat Subscription{nbsp}Manager] and link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Satellite/6.1/html/User_Guide/index.html++[
-Red{nbsp}Hat Satellite User Guide] for more information.
-+
-[NOTE]
-====
-
-You can also use the link:++https://access.redhat.com/labs/registrationassistant/++[Registration Assistant] application to guide you through the registration process.
-
-====
-
 Automate the initial configuration of cloud instances using cloud-init::
 +
 For the initial configuration of cloud instances, you can use the [package]*cloud-init* package. On a new cloud instance, [application]*cloud-init* can automatically:
@@ -84,7 +69,7 @@ In {PRODUCT}, the [application]*Yum* package manager is used for updating the in
 
 Configure additional repositories::
 +
-New software is installed from _package repositories_. Package repositories are organized sets of software and metadata that can be accessed by the [application]*Yum* package manager. If you registered your system with Red{nbsp}Hat, update repositories are configured automatically and you can install updates and additional software from those. However, if you want to set up additional repositories, for example containing your own software, some extra steps are needed.
+New software is installed from _package repositories_. Package repositories are organized sets of software and metadata that can be accessed by the [application]*Yum* package manager. The basic update repositories are configured automatically and you can install updates and additional software from those. However, if you want to set up additional repositories, for example containing your own software, some extra steps are needed.
 +
 For information about configuring additional software repositories, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
 

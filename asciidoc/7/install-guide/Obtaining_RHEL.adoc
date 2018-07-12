@@ -5,7 +5,7 @@ include::entities.adoc[]
 [[chap-download-red-hat-enterprise-linux]]
 == Downloading {PRODUCT}
 
-If you have a Red{nbsp}Hat subscription, you can download _ISO image files_ of the {PRODUCT}{nbsp}7 installation DVD from the Red{nbsp}Hat Customer Portal. If you do not have a subscription, either purchase one or obtain a free evaluation subscription from the Software & Download Center at link:++https://access.redhat.com/downloads/++[].
+//If you have a Red{nbsp}Hat subscription, you can download _ISO image files_ of the {PRODUCT}{nbsp}7 installation DVD from the Red{nbsp}Hat Customer Portal. If you do not have a subscription, either purchase one or obtain a free evaluation subscription from the Software & Download Center at link:++https://access.redhat.com/downloads/++[].
 
 There are two basic types of installation media available for the AMD64 and Intel{nbsp}64 (x86_64), ARM (Aarch64), and IBM Power{nbsp}Systems (ppc64) architectures:
 
@@ -23,7 +23,7 @@ An image containing additional packages, such as the IBM Java Runtime Environmen
 
 The following table indicates the types of boot and installation media available for different architectures and notes the image file that you need to produce the media.
 
-If you have a subscription or evaluation subscription, follow these steps to obtain the {PRODUCT}{nbsp}7 ISO image files:
+//If you have a subscription or evaluation subscription, follow these steps to obtain the {PRODUCT}{nbsp}7 ISO image files:
 
 [[proc-downloading-rhel-images]]
 .Downloading {PRODUCT} ISO Images
