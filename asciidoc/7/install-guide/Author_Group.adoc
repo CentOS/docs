@@ -2,49 +2,12 @@
 :experimental:
 include::entities.adoc[]
 
-.Petr Bokoč
+.CentOS Project
 
-*Red{nbsp}Hat*
-Customer Content Services
+centos-docs@centos.org
 
-pbokoc@redhat.com
+This document is adapted and modified from the Red Hat Enterprise Linux 7 Installation Guide, available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/.
 
-.Clayton Spicer
+The text of and illustrations in this document are licensed by Red Hat under a Creative Commons Attribution–Share Alike 3.0 Unported license ("CC-BY-SA"). An explanation of CC-BY-SA is available at http://creativecommons.org/licenses/by-sa/3.0/. In accordance with CC-BY-SA, if you distribute this document or an adaptation of it, you must provide the URL for the original version.
 
-*Red{nbsp}Hat*
-Customer Content Services
-
-.Tomáš Čapek
-
-*Red{nbsp}Hat*
-Customer Content Services
-
-.Barbora Ančincová
-
-*Red{nbsp}Hat*
-Customer Content Services
-
-.Yoana Ruseva
-
-*Red{nbsp}Hat*
-Customer Content Services
-
-.Brian Exelbierd
-
-*Red{nbsp}Hat*
-Customer Content Services
-
-.Jack Reed
-
-*Red{nbsp}Hat*
-Customer Content Services
-
-.Radek Bíba
-
-*Red{nbsp}Hat*
-Customer Content Services
-
-.Zac Dover
-
-*Red{nbsp}Hat*
-Customer Content Services
+Red Hat, as the licensor of this document, waives the right to enforce, and agrees not to assert, Section 4d of CC-BY-SA to the fullest extent permitted by applicable law.
