@@ -308,11 +308,11 @@ If you are having trouble with the [application]*X* server crashing when a user 
 
 The output will help you diagnose which partition is full - in most cases, the problem will be on the `/home` partition. The following is a sample output of the [command]`df` command:
 
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
 
 Filesystem                                  Size  Used Avail Use% Mounted on
-/dev/mapper/vg_rhel-root                     20G  6.0G   13G  32% /
+/dev/mapper/vg_centos-root                     20G  6.0G   13G  32% /
 devtmpfs                                    1.8G     0  1.8G   0% /dev
 tmpfs                                       1.8G  2.7M  1.8G   1% /dev/shm
 tmpfs                                       1.8G 1012K  1.8G   1% /run
@@ -322,7 +322,6 @@ tmpfs                                       1.8G  2.6M  1.8G   1% /tmp
 /dev/dm-4                                    90G   90G     0 100% /home
 
 ....
-
 In the above example, you can see that the `/home` partition is full, which causes the crash. You can make some room on the partition by removing unneeded files. After you free up some disk space, start [application]*X* using the [command]`startx` command.
 
 For additional information about [command]`df` and an explanation of the options available (such as the [option]`-h` option used in this example), see the `df(1)` man page.
@@ -385,7 +384,7 @@ GRUB_DISTRIBUTOR="$(sed 's, release.*$,,g' /etc/system-release)"
 GRUB_DEFAULT=saved
 GRUB_DISABLE_SUBMENU=true
 GRUB_TERMINAL_OUTPUT="console"
-GRUB_CMDLINE_LINUX="rd.lvm.lv=rhel/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=rhel/swap $([ -x /usr/sbin/rhcrashkernel.param ] && /usr/sbin/rhcrashkernel-param || :) vconsole.keymap=us rhgb quiet mem=1024M"
+GRUB_CMDLINE_LINUX="rd.lvm.lv=centos/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=centos/swap $([ -x /usr/sbin/rhcrashkernel.param ] && /usr/sbin/rhcrashkernel-param || :) vconsole.keymap=us rhgb quiet mem=1024M"
 GRUB_DISABLE_RECOVERY="true"
 
 ....

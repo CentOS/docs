@@ -252,11 +252,11 @@ If you are having trouble with the [application]*X* server crashing when a user 
 
 The output will help you diagnose which partition is full - in most cases, the problem will be on the `/home` partition. The following is a sample output of the [command]`df` command:
 
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
 
 Filesystem                                  Size  Used Avail Use% Mounted on
-/dev/mapper/vg_rhel-root                     20G  6.0G   13G  32% /
+/dev/mapper/vg_centos-root                     20G  6.0G   13G  32% /
 devtmpfs                                    1.8G     0  1.8G   0% /dev
 tmpfs                                       1.8G  2.7M  1.8G   1% /dev/shm
 tmpfs                                       1.8G 1012K  1.8G   1% /run

@@ -97,7 +97,7 @@ Disk device names can be set using the following formats:
 +
 ** Kernel device name, for example `/dev/sda1` or `sdb2`
 +
-** File system label, for example `LABEL=Flash` or `LABEL=RHEL7`
+** File system label, for example `LABEL=Flash` or `LABEL={PRODUCT}{PRODVER}`
 +
 ** File system UUID, for example `UUID=8176c7bf-04ff-403a-a832-9557f94e61db`
 +
@@ -117,7 +117,7 @@ inst.stage2=host1/install.img inst.stage2=host2/install.img	inst.stage2=host3/in
 [NOTE]
 ====
 
-By default, the [option]`inst.stage2=` boot option is used on the installation media and set to a specific label (for example, [option]`inst.stage2=hd:LABEL=RHEL7\x20Server.x86_64`). If you modify the default label of the file system containing the runtime image, or if you use a customized procedure to boot the installation system, you must ensure this option is set to the correct value.
+By default, the [option]`inst.stage2=` boot option is used on the installation media and set to a specific label (for example, [option]`inst.stage2=hd:LABEL={PRODUCT}\x20Server.x86_64`). If you modify the default label of the file system containing the runtime image, or if you use a customized procedure to boot the installation system, you must ensure this option is set to the correct value.
 
 ====
 
@@ -651,7 +651,7 @@ modprobe.blacklist=firewire_ohci
 [option]`nicdelay=`::
 +
 Used to indicate the delay after which the network was considered active; the system waited until either the gateway was successfully pinged, or until the amount of seconds specified in this parameter passed.
-In RHEL 7, network devices are configured and activated during the early stage of installation by the [application]*dracut* modules
+In {PRODUCT} {PRODVER}, network devices are configured and activated during the early stage of installation by the [application]*dracut* modules
 which ensure that the gateway is accessible before proceeding. For more information about [application]*dracut*, see the `dracut.cmdline(7)` man page.
 
 [option]`linksleep=`::

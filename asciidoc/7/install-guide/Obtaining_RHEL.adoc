@@ -61,7 +61,7 @@ If your Linux distribution does not use [application]*yum*, or if you do not use
 $ curl -o filename.iso 'copied_link_location'
 ....
 +
-Replace _filename.iso_ with the ISO image name as displayed in the Customer Portal, such as `rhel-server-7.0-x86_64-dvd.iso`. This is important because the download link in the Customer Portal contains extra characters which [application]*curl* would otherwise use in the downloaded file name, too. Then, keep the single quotation mark in front of the next parameter, and replace _copied_link_location_ with the link that you have copied from the Customer Portal; copy it again if you copied the commands above in the meantime. Note that in Linux, you can paste the content of the clipboard into the terminal window by middle-clicking anywhere in the window, or by pressing kbd:[Shift + Insert]. Finally, use another single quotation mark after the last parameter, and press kbd:[Enter] to run the command and start transferring the ISO image. The single quotation marks prevent the command line interpreter from misinterpreting any special characters that might be included in the download link.
+Replace _filename.iso_ with the ISO image name as displayed in the Customer Portal, such as `{PRODUCT}-server-{PRODVER}-x86_64-dvd.iso`. This is important because the download link in the Customer Portal contains extra characters which [application]*curl* would otherwise use in the downloaded file name, too. Then, keep the single quotation mark in front of the next parameter, and replace _copied_link_location_ with the link that you have copied from the Customer Portal; copy it again if you copied the commands above in the meantime. Note that in Linux, you can paste the content of the clipboard into the terminal window by middle-clicking anywhere in the window, or by pressing kbd:[Shift + Insert]. Finally, use another single quotation mark after the last parameter, and press kbd:[Enter] to run the command and start transferring the ISO image. The single quotation marks prevent the command line interpreter from misinterpreting any special characters that might be included in the download link.
 +
 [[exam-downloading-rhel-images-with-curl-first]]
 .Downloading an ISO image with curl
@@ -69,9 +69,9 @@ Replace _filename.iso_ with the ISO image name as displayed in the Customer Port
 
 The following is an example of a [application]*curl* command line:
 
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-$ curl -o rhel-server-7.0-x86_64-dvd.iso 'https://access.cdn.redhat.com//content/origin/files/sha256/85/85a...46c/rhel-server-7.0-x86_64-dvd.iso?_auth_=141...7bf'
+$ curl -o {PRODUCT}-server-{PRODVER}-x86_64-dvd.iso 'https://access.cdn.redhat.com//content/origin/files/sha256/85/85a...46c/{PRODUCT}-server-{PRODVER}-x86_64-dvd.iso?_auth_=141...7bf'
 ....
 
 Note that the actual download link is much longer because it contains complicated identifiers.
@@ -86,19 +86,19 @@ Note that the actual download link is much longer because it contains complicate
 
 The following is an example of a [application]*curl* command line that you use if you have only partially downloaded the ISO image of your choice:
 
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-$ curl -o rhel-server-7.0-x86_64-dvd.iso 'https://access.cdn.redhat.com//content/origin/files/sha256/85/85a...46c/rhel-server-7.0-x86_64-dvd.iso?_auth_=141...963' -C -
+$ curl -o {PRODUCT}-server-{PRODVER}-x86_64-dvd.iso 'https://access.cdn.redhat.com//content/origin/files/sha256/85/85a...46c/{PRODUCT}-server-{PRODVER}-x86_64-dvd.iso?_auth_=141...963' -C -
 ....
 
 ====
 
 . Optionally, you can use a checksum utility such as [application]*sha256sum* to verify the integrity of the image file after the download finishes. All downloads on the Download {PRODUCT} page are provided with their checksums for reference:
 +
-[literal,subs="+quotes,verbatim,macros"]
+[literal,subs="+quotes,attributes,verbatim,macros"]
 ....
-$ sha256sum rhel-server-7.0-x86_64-dvd.iso
-			pass:quotes[`85a...46c  rhel-server-7.0-x86_64-dvd.iso`]
+$ sha256sum {PRODUCT}-server-{PRODVER}-x86_64-dvd.iso
+`85a...46c  {PRODUCT}-server-{PRODVER}-x86_64-dvd.iso`
 ....
 +
 Similar tools are available for link:++http://www.labtestproject.com/files/win/sha256sum/sha256sum.exe++[Microsoft Windows] and link:++https://itunes.apple.com/us/app/hashtab/id517065482++[Mac OS X]. You can also use the installation program to verify the media when starting the installation; see <<sect-boot-options-mediacheck>> for details.

@@ -10,7 +10,7 @@ This chapter describes how to use ISO image files obtained by following the step
 [NOTE]
 ====
 
-By default, the [option]`inst.stage2=` boot option is used on the installation media and set to a specific label (for example, [option]`inst.stage2=hd:LABEL=RHEL7\x20Server.x86_64`). If you modify the default label of the file system containing the runtime image, or if using a customized procedure to boot the installation system, you must ensure this option is set to the correct value. See <<list-boot-options-sources>> for details.
+By default, the [option]`inst.stage2=` boot option is used on the installation media and set to a specific label (for example, [option]`inst.stage2=hd:LABEL={PRODUCT}\x20Server.x86_64`). If you modify the default label of the file system containing the runtime image, or if using a customized procedure to boot the installation system, you must ensure this option is set to the correct value. See <<list-boot-options-sources>> for details.
 
 ====
 
@@ -69,11 +69,11 @@ Note the name of the connected device - in the above example, it is `sdb`.
 +
 Provide your root password when prompted.
 
-. Make sure that the device is not mounted. First, use the [command]`findmnt _device_pass:attributes[{blank}]` command and the device name you found in the earlier steps. For example, if the device name is `sdb`, use the following command:
+. Make sure that the device is not mounted. First, use the [command]`findmnt _device_` command and the device name you found in the earlier steps. For example, if the device name is `sdb`, use the following command:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] findmnt /dev/sdb
+`# findmnt /dev/sdb`
 ....
 +
 If the command displays no output, you can proceed with the next step. However, if the command does provide output, it means that the device was automatically mounted and you must unmount it before proceeding. A sample output will look similar to the following:
@@ -81,24 +81,24 @@ If the command displays no output, you can proceed with the next step. However, 
 [literal,subs="+quotes,verbatim,macros"]
 ....
 
-pass:quotes[`#`] findmnt /dev/sdb
+`# findmnt /dev/sdb`
 TARGET   SOURCE   FSTYPE  OPTIONS
 /mnt/iso /dev/sdb iso9660 ro,relatime
 
 ....
 +
-Note the `TARGET` column. Next, use the [command]`umount _target_pass:attributes[{blank}]` command to unmount the device:
+Note the `TARGET` column. Next, use the [command]`umount _target_` command to unmount the device:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] umount /mnt/iso
+`# umount /mnt/iso`
 ....
 
 . Use the [command]`dd` command to write the installation ISO image directly to the USB device:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] dd if=/image_directory/image.iso of=/dev/device bs=blocksize
+`# dd if=/image_directory/image.iso of=/dev/device bs=blocksize`
 ....
 +
 Replace _/image_directory/image.iso_ with the full path to the ISO image file you downloaded, _device_ with the device name as reported by the [command]`dmesg` command earlier, and _blocksize_ with a reasonable block size (for example, `512k`) to speed up the writing process. The [option]`bs` parameter is optional, but it can speed up the process considerably.
@@ -110,11 +110,11 @@ Make sure to specify the output as the device name (for example, `/dev/sda`), no
 
 ====
 +
-For example, if the ISO image is located in `/home/testuser/Downloads/rhel-server-{PRODVER}x86_64-boot.iso` and the detected device name is `sdb`, the command will look like the following:
+For example, if the ISO image is located in `/home/testuser/Downloads/{PRODUCT}-server-x86_64-boot.iso` and the detected device name is `sdb`, the command will look like the following:
 +
-[literal,subs="+quotes,verbatim,macros"]
+[literal,subs="+quotes,attributes,verbatim,macros"]
 ....
-pass:quotes[`#`] dd if=/home/testuser/Downloads/rhel-server-{PRODVER}x86_64-boot.iso of=/dev/sdb bs=512k
+`# dd if=/home/testuser/Downloads/{PRODUCT}-server-x86_64-boot.iso of=/dev/sdb bs=512k`
 ....
 
 . Wait for [command]`dd` to finish writing the image to the device. Note that no progress bar is displayed; the data transfer is finished when the `#` prompt appears again. After the prompt is displayed, log out from the `root` account and unplug the USB drive.
@@ -179,7 +179,7 @@ All data on the USB flash drive will be deleted by this procedure.
 
 [[proc-making-usb-media-macosx]]
 .Making USB Media on Mac OS X
-. Connect a USB flash drive to the system and identify the device path with the [command]`diskutil list` command. The device path has the format of `/dev/diskpass:attributes[{blank}]_number_pass:attributes[{blank}]`, where _number_ is the number of the disk. The disks are numbered starting at zero (0). Disk 0 is likely to be the OS X recovery disk, and Disk 1 is likely to be your main OS X installation. In the following example, it is `disk2`:
+. Connect a USB flash drive to the system and identify the device path with the [command]`diskutil list` command. The device path has the format of `/dev/diskpass:attributes[{blank}]_number_`, where _number_ is the number of the disk. The disks are numbered starting at zero (0). Disk 0 is likely to be the OS X recovery disk, and Disk 1 is likely to be your main OS X installation. In the following example, it is `disk2`:
 +
 [literal,subs="+quotes,verbatim"]
 ....
@@ -210,8 +210,8 @@ To identify your USB flash drive, compare the `NAME`, `TYPE` and `SIZE` columns 
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-$ [command]`diskutil unmountDisk /dev/diskpass:attributes[{blank}]_number_pass:attributes[{blank}]`
-					Unmount of all volumes on diskpass:attributes[{blank}]_number_ was successful
+`$` [command]`diskutil unmountDisk /dev/diskpass:attributes[{blank}]_number_pass:attributes[{blank}]`
+Unmount of all volumes on diskpass:attributes[{blank}]_number_ was successful
 ....
 +
 When you do this, the icon for the flash drive disappears from your desktop. If it does not, you might have identified the wrong disk. If you attempt to unmount the system disk accidentally, you get a `failed to unmount` error.
@@ -233,11 +233,11 @@ Mac OS X provides both a block (`/dev/disk*`) and character device (`/dev/rdisk*
 .Writing an ISO Image to a Disk
 ====
 
-To write the `/Users/pass:attributes[{blank}]_user_name_pass:attributes[{blank}]/Downloads/rhel-server-{PRODVER}x86_64-boot.iso` file to the `/dev/rdisk2` device:
+To write the `/Users/pass:attributes[{blank}]_user_name_pass:attributes[{blank}]/Downloads/{PRODUCT}-server-x86_64-boot.iso` file to the `/dev/rdisk2` device:
 
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-$ sudo dd if=/Users/user_name/Downloads/rhel-server-{PRODVER}x86_64-boot.iso of=/dev/rdisk2
+$ sudo dd if=/Users/user_name/Downloads/{PRODUCT}-server-x86_64-boot.iso of=/dev/rdisk2
 ....
 
 ====
@@ -339,7 +339,7 @@ The following procedure is only meant as a basic outline of the process. The pre
 pass:quotes[`#`] yum install nfs-utils
 ....
 
-. Copy the full {PRODUCT}{nbsp}7 binary DVD ISO image to a suitable directory on the NFS server. For example, you can create directory `/rhel7-install/` for this purpose and save the ISO image here.
+. Copy the full {PRODUCT}{nbsp}7 binary DVD ISO image to a suitable directory on the NFS server. For example, you can create directory `/{PRODUCT}-install/` for this purpose and save the ISO image here.
 
 . Open the `/etc/exports` file using a text editor and add a line with the following syntax:
 +
@@ -350,11 +350,11 @@ pass:quotes[_/exported_directory/_] pass:quotes[_clients_]
 +
 Replace _/exported_directory/_ with the full path to the directory holding the ISO image. Instead of _clients_, use the host name or IP address of the computer which is to be installed from this NFS server, the subnetwork from which all computers are to have access the ISO image, or the asterisk sign (`*`) if you want to allow any computer with network access to the NFS server to use the ISO image. See the `exports(5)` man page for detailed information about the format of this field.
 +
-The following is a basic configuration which makes the `/rhel7-install/` directory available as read-only to all clients:
+The following is a basic configuration which makes the `/{PRODUCT}-install/` directory available as read-only to all clients:
 +
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-/rhel7-install *
+/{PRODUCT}-install *
 ....
 
 . Save the `/etc/exports` file after finishing the configuration and exit the text editor.
@@ -363,19 +363,19 @@ The following is a basic configuration which makes the `/rhel7-install/` directo
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] systemctl start nfs.service
+`#` [command]`systemctl start nfs.service`
 ....
 +
 If the service was already running before you changed the `/etc/exports` file, enter the following command instead, in order for the running NFS server to reload its configuration:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] systemctl reload nfs.service
+`#` [command]`systemctl reload nfs.service`
 ....
 
 After completing the procedure above, the ISO image is accessible over `NFS` and ready to be used as an installation source.
 
-When configuring the installation source before or during the installation, use `nfs:` as the protocol, the server's host name or IP address, the colon sign (`:`), and the directory holding the ISO image. For example, if the server's host name is `myserver.example.com` and you have saved the ISO image in `/rhel7-install/`, specify `nfs:myserver.example.com:/rhel7-install/` as the installation source.
+When configuring the installation source before or during the installation, use `nfs:` as the protocol, the server's host name or IP address, the colon sign (`:`), and the directory holding the ISO image. For example, if the server's host name is `myserver.example.com` and you have saved the ISO image in `/{PRODUCT}-install/`, specify `nfs:myserver.example.com:/{PRODUCT}-install/` as the installation source.
 
 [[sect-making-media-sources-http-ftp]]
 ===== Installation Source on an HTTP, HTTPS or FTP Server
@@ -392,7 +392,7 @@ The following procedure is only meant as a basic outline of the process. The pre
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] yum install httpd
+`#` [command]`yum install httpd`
 ....
 +
 An `HTTPS` server needs additional configuration. For detailed information, see section link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/ch-Web_Servers.html#s2-apache-mod_ssl++[Setting Up an SSL Server] in the Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide. However, `HTTPS` is not necessary in most cases, because no sensitive data is sent between the installation source and the installer, and `HTTP` is sufficient.
@@ -417,30 +417,30 @@ If you decide to use `HTTPS` and the server is using a self-signed certificate, 
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] mount -o loop,ro -t iso9660 /image_directory/image.iso /mount_point/
+`#` [command]`mount -o loop,ro -t iso9660 /image_directory/image.iso /mount_point/`
 ....
 +
-Replace _/image_directory/image.iso_ with the path to the binary DVD ISO image, and _/mount_point/_ with the path to the directory in which you want the content of the ISO image to appear. For example, you can create directory `/mnt/rhel7-install/` for this purpose and use that as the parameter of the [command]`mount` command.
+Replace _/image_directory/image.iso_ with the path to the binary DVD ISO image, and _/mount_point/_ with the path to the directory in which you want the content of the ISO image to appear. For example, you can create directory `/mnt/{PRODUCT}-install/` for this purpose and use that as the parameter of the [command]`mount` command.
 
 . Copy the files from the mounted image to the HTTP server root.
 +
-[literal,subs="+quotes,verbatim,macros"]
+[literal,subs="+quotes,attributes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp -r /mnt/rhel7-install/ /var/www/html/
+`#` [command]`cp -r /mnt/{PRODUCT}-install/ /var/www/html/`
 ....
 +
-This command creates the `/var/www/html/rhel7-install/` directory with the content of the image.
+This command creates the `/var/www/html/{PRODUCT}-install/` directory with the content of the image.
 
 . Start the `httpd` service:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] systemctl start httpd.service
+`#` [command]`systemctl start httpd.service`
 ....
 
 After completing the procedure above, the installation tree is accessible and ready to be used as the installation source.
 
-When configuring the installation source before or during the installation, use `http://` or `https://` as the protocol, the server's host name or IP address, and the directory in which you have stored the files from the ISO image, relative to the HTTP server root. For example, if you are using `HTTP`, the server's host name is `myserver.example.com`, and you have copied the files from the image to `/var/www/html/rhel7-install/`, specify `http://myserver.example.com/rhel7-install/` as the installation source.
+When configuring the installation source before or during the installation, use `http://` or `https://` as the protocol, the server's host name or IP address, and the directory in which you have stored the files from the ISO image, relative to the HTTP server root. For example, if you are using `HTTP`, the server's host name is `myserver.example.com`, and you have copied the files from the image to `/var/www/html/{PRODUCT}-install/`, specify `http://myserver.example.com/{PRODUCT}-install/` as the installation source.
 
 [[proc-installation-server-setup-ftp]]
 .Preparing for Installation Using FTP
@@ -448,7 +448,7 @@ When configuring the installation source before or during the installation, use 
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] yum install vsftpd
+`#` [command]`yum install vsftpd`
 ....
 
 . Optionally, open the `/etc/vsftpd/vsftpd.conf` configuration file in a text editor, and edit any options you want to change. For available options, see the `vsftpd.conf(5)` man page. The rest of this procedure assumes that default options are used; notably, to follow the rest of the procedure, anonymous users of the FTP server must be permitted to download files.
@@ -466,37 +466,37 @@ If you configured SSL/TLS security in your `vsftpd.conf` file, make sure to only
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] mount -o loop,ro -t iso9660 /image_directory/image.iso /mount_point
+`#` [command]`mount -o loop,ro -t iso9660 /image_directory/image.iso /mount_point`
 ....
 +
-Replace _/image_directory/image.iso_ with the path to the binary DVD ISO image, and _/mount_point_ with the path to the directory in which you want the content of the ISO image to appear. For example, you can create directory `/mnt/rhel7-install/` for this purpose and use that as the parameter of the [command]`mount` command.
+Replace _/image_directory/image.iso_ with the path to the binary DVD ISO image, and _/mount_point_ with the path to the directory in which you want the content of the ISO image to appear. For example, you can create directory `/mnt/{PRODUCT}-install/` for this purpose and use that as the parameter of the [command]`mount` command.
 
 . Copy the files from the mounted image to the FTP server root:
 +
-[literal,subs="+quotes,verbatim,macros"]
+[literal,subs="+quotes,attributes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp -r /mnt/rhel7-install/ /var/ftp/
+`#` [command]`cp -r /mnt/{PRODUCT}-install/ /var/ftp/`
 ....
 +
-This command creates the `/var/ftp/rhel7-install/` directory with the content of the image.
+This command creates the `/var/ftp/{PRODUCT}-install/` directory with the content of the image.
 
 . Start the `vsftpd` service:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] systemctl start vsftpd.service
+`#` [command]`systemctl start vsftpd.service`
 ....
 +
 If the service was already running before you changed the `/etc/vsftpd/vsftpd.conf` file, restart it to ensure the edited file is loaded. To restart, execute the following command:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] systemctl restart vsftpd.service
+`#` [command]`systemctl restart vsftpd.service`
 ....
 
 After completing the procedure above, the installation tree is accessible and ready to be used as the installation source.
 
-When configuring the installation source before or during the installation, use `ftp://` as the protocol, the server's host name or IP address, and the directory in which you have stored the files from the ISO image, relative to the FTP server root. For example, if the server's host name is `myserver.example.com` and you have copied the files from the image to `/var/ftp/rhel7-install/`, specify `ftp://myserver.example.com/rhel7-install/` as the installation source.
+When configuring the installation source before or during the installation, use `ftp://` as the protocol, the server's host name or IP address, and the directory in which you have stored the files from the ISO image, relative to the FTP server root. For example, if the server's host name is `myserver.example.com` and you have copied the files from the image to `/var/ftp/{PRODUCT}-install/`, specify `ftp://myserver.example.com/{PRODUCT}-install/` as the installation source.
 
 [[sect-making-media-sources-firewall]]
 ===== Firewall Considerations for Network-based Installations

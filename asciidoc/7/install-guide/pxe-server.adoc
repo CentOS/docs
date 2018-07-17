@@ -73,14 +73,14 @@ The following procedure will prepare the PXE server for booting BIOS-based AMD64
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] yum install tftp-server
+# [command]`yum install tftp-server`
 ....
 
 . Allow incoming connections to the `tftp` service in the firewall:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] firewall-cmd --add-service=tftp
+# [command]`firewall-cmd --add-service=tftp`
 ....
 +
 [NOTE]
@@ -126,52 +126,51 @@ subnet 10.0.0.0 netmask 255.255.255.0 {
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] mount -t iso9660 /path_to_image/name_of_image.iso /mount_point -o loop,ro
+# [command]`mount -t iso9660 /path_to_image/name_of_image.iso /mount_point -o loop,ro`
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp -pr /mount_point/Packages/syslinux-version-architecture.rpm /publicly_available_directory
+# [command]`cp -pr /mount_point/Packages/syslinux-version-architecture.rpm /publicly_available_directory`
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] umount /mount_point
+# [command]`umount /mount_point`
 ....
 +
 Extract the package:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] rpm2cpio syslinux-version-architecture.rpm | cpio -dimv
+# [command]`rpm2cpio syslinux-version-architecture.rpm | cpio -dimv`
 ....
 
 . Create a `pxelinux/` directory within `tftpboot/` and copy the `pxelinux.0` file into it:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] mkdir /var/lib/tftpboot/pxelinux
+# [command]`mkdir /var/lib/tftpboot/pxelinux`
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp publicly_available_directory/usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/pxelinux
+# [command]`cp publicly_available_directory/usr/share/syslinux/pxelinux.0 /var/lib/tftpboot/pxelinux`
 ....
 
 . Create the directory `pxelinux.cfg/` in the `pxelinux/` directory:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] mkdir /var/lib/tftpboot/pxelinux/pxelinux.cfg
+# [command]`mkdir /var/lib/tftpboot/pxelinux/pxelinux.cfg`
 ....
 +
 Add a configuration file named `default` to the `pxelinux.cfg/` directory.
 +
 A sample configuration file at `/var/lib/tftpboot/pxelinux/pxelinux.cfg/default` might look like:
 +
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-
 default vesamenu.c32
 prompt 1
 timeout 600
@@ -181,16 +180,16 @@ display boot.msg
 label linux
   menu label ^Install system
   menu default
-  kernel images/RHEL-7.1/vmlinuz
-  append initrd=images/RHEL-7.1/initrd.img ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/os/
+  kernel images/{PRODUCT}-{PRODVER}/vmlinuz
+  append initrd=images/{PRODUCT}-{PRODVER}/initrd.img ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/{PRODUCT}/{PRODVER}/Server/x86_64/os/
 label vesa
   menu label Install system with ^basic video driver
-  kernel images/RHEL-7.1/vmlinuz
-  append initrd=images/RHEL-7.1/initrd.img ip=dhcp inst.xdriver=vesa nomodeset inst.repo=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/os/
+  kernel images/{PRODUCT}-{PRODVER}/vmlinuz
+  append initrd=images/{PRODUCT}-{PRODVER}/initrd.img ip=dhcp inst.xdriver=vesa nomodeset inst.repo=http://10.32.5.1/mnt/archive/{PRODUCT}/{PRODVER}/Server/x86_64/os/
 label rescue
   menu label ^Rescue installed system
-  kernel images/RHEL-7.1/vmlinuz
-  append initrd=images/RHEL-7.1/initrd.img rescue
+  kernel images/{PRODUCT}-{PRODVER}/vmlinuz
+  append initrd=images/{PRODUCT}-{PRODVER}/initrd.img rescue
 label local
   menu label Boot from ^local drive
   localboot 0xffff
@@ -203,12 +202,12 @@ The [option]`inst.repo=` [application]*Anaconda* option, shown in the example ab
 
 ====
 
-. Create a subdirectory to store the boot image files within the `/var/lib/tftpboot/` directory, and copy the boot image files to it. In this example, we use the directory `/var/lib/tftpboot/images/RHEL-7.1/`:
+. Create a subdirectory to store the boot image files within the `/var/lib/tftpboot/` directory, and copy the boot image files to it. In this example, we use the directory `/var/lib/tftpboot/images/{PRODUCT}-{PRODVER}/`:
 +
-[literal,subs="+quotes,verbatim,macros"]
+[literal,subs="+quotes,attributes,verbatim,macros"]
 ....
-pass:quotes[`#`] mkdir -p /var/lib/tftpboot/images/RHEL-7.1/
-pass:quotes[`#`] cp /path_to_x86_64_images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/images/RHEL-7.1/
+# [command]`mkdir -p /var/lib/tftpboot/images/{PRODUCT}-{PRODVER}/`
+# [command]`cp /path-to-x86-64-images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/images/{PRODUCT}-{PRODVER}/`
 ....
 
 . Finally, start and enable the services:
@@ -217,16 +216,16 @@ pass:quotes[`#`] cp /path_to_x86_64_images/pxeboot/{vmlinuz,initrd.img} /var/lib
 +
 [literal,subs="+quotes,verbatim"]
 ....
-# systemctl start dhcpd
-# systemctl enable dhcpd
+# [command]`systemctl start dhcpd`
+# [command]`systemctl enable dhcpd`
 ....
 +
 ** The `xinetd` service, that manages the [application]*tftpd* service:
 +
 [literal,subs="+quotes,verbatim"]
 ....
-# systemctl start xinetd
-# systemctl enable xinetd
+# [command]`systemctl start xinetd`
+# [command]`systemctl enable xinetd`
 ....
 
 After finishing this procedure, the PXE boot server is ready to serve PXE clients. You can now start the system you want to install {PRODUCT} on, select PXE Boot when prompted to specify a boot source, and start the network installation. For more information, see <<sect-booting-from-pxe-x86>>.
@@ -241,14 +240,14 @@ The following procedure will prepare the PXE server for booting UEFI-based AMD64
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] yum install tftp-server
+# [command]`yum install tftp-server`
 ....
 
 . Allow incoming connections to the `tftp` service in the firewall:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] firewall-cmd --add-service=tftp
+# [command]`firewall-cmd --add-service=tftp`
 ....
 +
 [NOTE]
@@ -264,7 +263,6 @@ A sample configuration in the `/etc/dhcp/dhcpd.conf` file might look like:
 +
 [literal,subs="+quotes,verbatim"]
 ....
-
 option space pxelinux;
 option pxelinux.magic code 208 = string;
 option pxelinux.configfile code 209 = text;
@@ -287,66 +285,63 @@ subnet 10.0.0.0 netmask 255.255.255.0 {
 		}
   }
 }
-
 ....
 
 . You now need the `shim.efi` file from the [package]*shim* package and the `grubx64.efi` file from the [package]*grub2-efi* package in the ISO image file. To access them, enter the following commands as root:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] mount -t iso9660 /path_to_image/name_of_image.iso /mount_point -o loop,ro
+# [command]`mount -t iso9660 /path_to_image/name_of_image.iso /mount_point -o loop,ro`
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp -pr /mount_point/Packages/shim-version-architecture.rpm /publicly_available_directory
+# [command]`cp -pr /mount_point/Packages/shim-version-architecture.rpm /publicly_available_directory`
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp -pr /mount_point/Packages/grub2-efi-version-architecture.rpm /publicly_available_directory
+# [command]`cp -pr /mount_point/Packages/grub2-efi-version-architecture.rpm /publicly_available_directory`
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] umount /mount_point
+# [command]`umount /mount_point`
 ....
 +
 Extract the packages:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] rpm2cpio shim-version-architecture.rpm | cpio -dimv
+# [command]`rpm2cpio shim-version-architecture.rpm | cpio -dimv`
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] rpm2cpio grub2-efi-version-architecture.rpm | cpio -dimv
+# [command]`rpm2cpio grub2-efi-version-architecture.rpm | cpio -dimv`
 ....
 
 . Copy the EFI boot images from your boot directory:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp publicly_available_directory/boot/efi/EFI/redhat/shim.efi /var/lib/tftpboot/
+# [command]`cp publicly_available_directory/boot/efi/EFI/redhat/shim.efi /var/lib/tftpboot/``
 ....
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] cp publicly_available_directory/boot/efi/EFI/redhat/grubx64.efi /var/lib/tftpboot/
+# [command]`cp publicly_available_directory/boot/efi/EFI/redhat/grubx64.efi /var/lib/tftpboot/``
 ....
 
 . Add a configuration file named `grub.cfg` to the `tftpboot/` directory. A sample configuration file at `/var/lib/tftpboot/grub.cfg` might look like:
 +
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-
 set timeout=60
-menuentry 'RHEL 7' {
-  linuxefi images/RHEL-7.1/vmlinuz ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/RHEL-7/7.1/Server/x86_64/os/
-  initrdefi images/RHEL-7.1/initrd.img
+menuentry '{PRODUCT}' {
+  linuxefi images/{PRODUCT}-{PRODVER}/vmlinuz ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/{PRODUCT}-{PRODVER}/{PRODVER}/Server/x86_64/os/
+  initrdefi images/{PRODUCT}-{PRODVER}/initrd.img
 }
-
 ....
 +
 [IMPORTANT]
@@ -356,11 +351,12 @@ The [option]`inst.repo=` [application]*Anaconda* option, shown in the example ab
 
 ====
 
-. Create a subdirectory to store the boot image files within the `/var/lib/tftpboot/` directory, and copy the boot image files to it. In this example, we use the directory `/var/lib/tftpboot/images/RHEL-7.1/`:
+. Create a subdirectory to store the boot image files within the `/var/lib/tftpboot/` directory, and copy the boot image files to it. In this example, we use the directory `/var/lib/tftpboot/images/{PRODUCT}-{PRODVER}/`:
 +
-[literal,subs="+quotes,verbatim,macros"]
+[literal,subs="+quotes,attributes,verbatim,macros"]
 ....
-pass:quotes[`#`] mkdir -p /var/lib/tftpboot/images/RHEL-7.1/pass:quotes[`#`] cp /path_to_x86_64_images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/images/RHEL-7.1/
+# [command]`mkdir -p /var/lib/tftpboot/images/{PRODUCT}-{PRODVER}`
+# [command]`cp /path-to-x86-64-images/pxeboot/{vmlinuz,initrd.img} /var/lib/tftpboot/images/{PRODUCT}-{PRODVER}/`
 ....
 
 . Finally, start and enable the services:
@@ -369,16 +365,16 @@ pass:quotes[`#`] mkdir -p /var/lib/tftpboot/images/RHEL-7.1/pass:quotes[`#`] cp 
 +
 [literal,subs="+quotes,verbatim"]
 ....
-# systemctl start dhcpd
-# systemctl enable dhcpd
+# [command]`systemctl start dhcpd`
+# [command]`systemctl enable dhcpd`
 ....
 +
 ** The `xinetd` service, that manages the [application]*tftpd* service:
 +
 [literal,subs="+quotes,verbatim"]
 ....
-# systemctl start xinetd
-# systemctl enable xinetd
+# [command]`systemctl start xinetd`
+# [command]`systemctl enable xinetd`
 ....
 
 After finishing this procedure, the PXE boot server is ready to serve PXE clients. You can now start the system you want to install {PRODUCT} on, select PXE Boot when prompted to specify a boot source, and start the network installation. For more information, see <<sect-booting-from-pxe-x86>>.
@@ -391,14 +387,14 @@ After finishing this procedure, the PXE boot server is ready to serve PXE client
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] yum install tftp-server
+# [command]`yum install tftp-server`
 ....
 
 . Allow incoming connections to the `tftp` service in the firewall:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] firewall-cmd --add-service=tftp
+# [command]`firewall-cmd --add-service=tftp`
 ....
 +
 [NOTE]
@@ -412,7 +408,7 @@ The above command only enables access until the next server reboot. To allow acc
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-pass:quotes[`#`] grub2-mknetdir --net-directory=/var/lib/tftpboot
+# [command]`grub2-mknetdir --net-directory=/var/lib/tftpboot`
 Netboot directory for powerpc-ieee1275 created. Configure your DHCP server to point to /boot/grub2/powerpc-ieee1275/core.elf
 ....
 +
@@ -424,7 +420,6 @@ Below is an example configuration file:
 +
 [literal,subs="+quotes,attributes,verbatim"]
 ....
-
 set default=0
 set timeout=5
 
@@ -434,7 +429,6 @@ menuentry '{PRODUCT} {PRODVER}' {
   linux grub2-ppc64/vmlinuz ro ip=dhcp inst.repo=http://10.32.5.1/mnt/archive/{PRODUCT}/{PRODVER}/Server/ppc64/os/
   initrd grub2-ppc64/initrd.img
 }
-
 ....
 +
 [IMPORTANT]

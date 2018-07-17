@@ -2,10 +2,10 @@
 :experimental:
 include::entities.adoc[]
 
-[[chap-uninstall-rhel]]
+[[chap-uninstall]]
 == Uninstalling {PRODUCT}
 
-[[sect-uninstall-rhel-x86]]
+[[sect-uninstall-x86]]
 === Removing {PRODUCT} from 64-bit AMD, Intel, and ARM Systems
 
 The method for removing {PRODUCT} from your computer varies, depending on whether {PRODUCT} is the only operating system installed on the computer.
@@ -37,21 +37,21 @@ These instructions cannot cover every possible computer configuration, common co
 
 * only {PRODUCT}
 +
-See <<sect-uninstall-rhel-single-x86>>.
+See <<sect-uninstall-single-x86>>.
 
 * {PRODUCT} and different Linux Distribution
 +
-See <<sect-uninstall-rhel-dual-linux-x86>>.
+See <<sect-uninstall-dual-linux-x86>>.
 
 * {PRODUCT} and Windows 2000, Windows Server 2000, Windows XP, Windows Vista, Windows Server 2003 and Windows Server 2008
 +
-See <<sect-uninstall-rhel-dual-windows-x86>>.
+See <<sect-uninstall-dual-windows-x86>>.
 
 If your configuration is not listed or has a highly-customized partition scheme, use the following sections as a general guide. In these situations, you will also need to learn to configure your chosen boot loader. See link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide] for more information on the [application]*GRUB2* boot loader.
 
 To keep neither {PRODUCT} nor the other operating system, follow the steps described for a computer with only {PRODUCT} installed.
 
-[[sect-uninstall-rhel-single-x86]]
+[[sect-uninstall-single-x86]]
 ==== Only {PRODUCT} is Installed
 
 The following procedure shows how to remove {PRODUCT} on systems where it is the only operating system installed. You will use the installation media for the replacement operating system to remove {PRODUCT}. Examples of installation media include the Windows XP installation CD, Windows Vista installation DVD, or the installation CD, CDs, or DVD of another Linux distribution.
@@ -75,7 +75,7 @@ If your computer has system restore software stored on a partition on a hard dri
 
 ====
 
-[[sect-uninstall-rhel-dual-linux-x86]]
+[[sect-uninstall-dual-linux-x86]]
 ==== {PRODUCT} installed with a Different Linux Distribution
 
 The following procedure shows how to remove {PRODUCT} on systems also installed with another Linux distribution. You can use the other Linux distribution to remove the boot loader entry (or entries) and to remove any {PRODUCT} partitions.
@@ -115,7 +115,7 @@ menuentry '{PRODUCT} (3.10.0-57.el7.x86_64) {PRODVER} (Maipo)' --class red --cla
   else
     search --no-floppy --fs-uuid --set=root 0c70bc74-7675-4989-9dc8-bbcf5418ddf1
   fi
-  linux16 /vmlinuz-3.10.0-57.el7.x86_64 root=/dev/mapper/rhel-root ro rd.lvm.lv=rhel/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=rhel/swap crashkernel=auto vconsole.keymap=us rhgb quiet LANG=en_US.UTF-8
+  linux16 /vmlinuz-3.10.0-57.el7.x86_64 root=/dev/mapper/centos-root ro rd.lvm.lv=centos/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=centos/swap crashkernel=auto vconsole.keymap=us rhgb quiet LANG=en_US.UTF-8
   initrd16 /initramfs-3.10.0-57.el7.x86_64.img
 }
 
@@ -146,7 +146,7 @@ Be careful not to remove partitions that are still in use by the other installat
 +
 *** [application]*lvremove* and [application]*vgremove* to remove logical volumes and volume groups. For details, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/index.html++[Red{nbsp}Hat Storage Administration Guide].
 
-[[sect-uninstall-rhel-dual-windows-x86]]
+[[sect-uninstall-dual-windows-x86]]
 ==== {PRODUCT} installed with a Microsoft Windows Operating System
 
 The following procedure shows how to remove {PRODUCT} on systems also installed with Windows 2000, Windows Server 2000, Windows XP, Windows Server 2003, Windows Vista or Windows Server 2008. You can use the Microsoft Windows installation and its installation media to remove the boot loader and to remove any {PRODUCT} partitions.

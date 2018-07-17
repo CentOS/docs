@@ -198,16 +198,16 @@ The following procedure explains how to completely automate the Kickstart instal
 +
 ** On AMD64 and Intel{nbsp}64 systems with _BIOS_, the file name can be either `default` or based on your system's IP address. In this case, add the [option]`inst.ks=` option to the `append` line in the installation entry. A sample `append` line in the configuration file looks similar to the following:
 +
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-append initrd=initrd.img inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kickstarts/ks.cfg
+append initrd=initrd.img inst.ks=http://10.32.5.1/mnt/archive/{PRODUCT}/{PRODVER}/Server/x86_64/kickstarts/ks.cfg
 ....
 +
 ** On systems using the [application]*GRUB2* boot loader (64-bit AMD, Intel, and ARM systems with UEFI firmware and IBM Power{nbsp}Systems servers), the file name will be `grub.cfg`. In this file, append the [option]`inst.ks=` option to the `kernel` line in the installation entry. A sample `kernel` line in the configuration file will look similar to the following:
 +
-[literal,subs="+quotes,verbatim"]
+[literal,subs="+quotes,attributes,verbatim"]
 ....
-kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/RHEL-7/7.x/Server/x86_64/kickstarts/ks.cfg
+kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/{PRODUCT}/{PRODVER}/Server/x86_64/kickstarts/ks.cfg
 ....
 
 . Boot the installation from the network server. For architecture-specific instructions, see:
@@ -502,9 +502,9 @@ The following example shows how to create a Btrfs volume from member partitions 
 [command]`part btrfs.02 --size=6000 --ondisk=sdb`
 [command]`part btrfs.03 --size=6000 --ondisk=sdc`
 
-[command]`btrfs none --data=0 --metadata=1 --label=rhel7 btrfs.01 btrfs.02 btrfs.03`
-[command]`btrfs / --subvol --name=root LABEL=rhel7`
-[command]`btrfs /home --subvol --name=home rhel7`
+[command]`btrfs none --data=0 --metadata=1 --label=centos7 btrfs.01 btrfs.02 btrfs.03`
+[command]`btrfs / --subvol --name=root LABEL=centos7`
+[command]`btrfs /home --subvol --name=home centos7`
 
 ....
 
@@ -1835,7 +1835,7 @@ For a detailed example of [command]`raid` in action, see <<sect-kickstart-partit
 
 Do not use `mdraid` names in the form of `md0` - these names are not guaranteed to be persistent. Instead, use meaningful names such as `root` or `swap`. Using meaningful names creates a symbolic link from `/dev/md/pass:attributes[{blank}]_name_pass:attributes[{blank}]` to whichever `/dev/mdpass:attributes[{blank}]_X_pass:attributes[{blank}]` node is assigned to the array.
 
-If you have an old (v0.90 metadata) array that you cannot assign a name to, you can specify the array by a filesystem label or UUID (for example, [option]`--device=rhel7-root --label=rhel7-root`).
+If you have an old (v0.90 metadata) array that you cannot assign a name to, you can specify the array by a filesystem label or UUID (for example, [option]`--device=centos7-root --label=centos7-root`).
 
 ====
 +
@@ -1896,8 +1896,8 @@ The following example shows how to create a RAID level 1 partition for `/`, and 
 [command]`part raid.12 --size=1 --grow --ondisk=sdb`
 [command]`part raid.13 --size=1 --grow --ondisk=sdc`
 
-[command]`raid / --level=1 --device=rhel7-root --label=rhel7-root raid.01 raid.02 raid.03`
-[command]`raid /home --level=5 --device=rhel7-home --label=rhel7-home raid.11 raid.12 raid.13`
+[command]`raid / --level=1 --device=centos7-root --label=centos7-root raid.01 raid.02 raid.03`
+[command]`raid /home --level=5 --device=centos7-home --label=centos7-home raid.11 raid.12 raid.13`
 
 ....
 
@@ -2312,7 +2312,7 @@ The options are as follows:
 +
 [literal,subs="+quotes,verbatim,macros"]
 ....
-[command]`volgroup rhel00 --useexisting --noformat`
+[command]`volgroup centos00 --useexisting --noformat`
 ....
 +
 ** [option]`--pesize=` - Set the size of the volume group's physical extents in KiB. The default value is 4096 (4 MiB), and the minimum value is 1024 (1 MiB).
