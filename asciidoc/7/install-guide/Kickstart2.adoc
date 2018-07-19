@@ -1826,7 +1826,7 @@ The default {PRODUCT}{nbsp}7 [application]*mdadm* metadata version is not suppor
 +
 For a detailed example of [command]`raid` in action, see <<sect-kickstart-partitioning-example>>.
 +
-** [option]`--level=` - RAID level to use (0, 1, 4, 5, 6, or 10). See <<sect-create-software-raid-x86>> for information about various available RAID levels.
+** [option]`--level=` - RAID level to use (0, 1, 4, 5, 6, or 10).
 +
 ** [option]`--device=` - Name of the RAID device to use - for example, [option]`--device=root`.
 +

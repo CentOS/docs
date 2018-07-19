@@ -128,8 +128,6 @@ The installer will automatically reserve 20% of any requested space for an LVM t
 
 ====
 
-* `software RAID` - Creating two or more software RAID partitions allows you to create a RAID device. One RAID partition is assigned to each disk on the system. To create a RAID device, see <<sect-create-software-raid-x86>>. For more information regarding RAID, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Storage Administration Guide].
-
 .File Systems
 
 * `xfs` - XFS is a highly scalable, high-performance file system that supports file systems up to 16 EiB (approximately 16 billion GiB), files up to 8 EiB (approximately 8 billion GiB), and directory structures containing tens of millions of entries. XFS supports metadata journaling, which facilitates quicker crash recovery. The XFS file system can also be defragmented and resized while mounted and active. This file system is selected by default and is highly recommended. For information on how to translate common commands from previously used ext4 file system to XFS, see <<appe-ext4-to-xfs-command-reference>>.
@@ -153,61 +151,6 @@ The maximum supported size of an ext4 file system in {PRODUCT} is currently _50 
 * `EFI System Partition` - A small partition required for booting a device with a GUID partition table (GPT) on a UEFI system. See <<sect-bootloader-x86>> for details.
 
 Each file system has different size limits for the file system itself as well as individual files contained within. For a list of maximum supported file and file system sizes, see the Red{nbsp}Hat Enterprise{nbsp}Linux technology capabilities and limits page, available on the Customer Portal at link:++https://access.redhat.com/site/articles/rhel-limits++[].
-
-[[sect-create-software-raid-x86]]
-===== Create Software RAID
-
-_Redundant arrays of independent disks_ (RAIDs) are constructed from multiple storage devices that are arranged to provide increased performance and, in some configurations, greater fault tolerance. See below for a description of different kinds of RAIDs.
-
-A RAID device is created in one step and disks are added or removed as necessary. One RAID partition per physical disk is allowed for each device, so the number of disks available to the installation program determines which levels of RAID device are available to you. For example, if your system has two hard drives, the installation program will not allow you to create a RAID10 device, which requires 4 separate partitions.
-
-.Creating a Software RAID Partition - the `Device Type` Menu Expanded
-
-image::images/diskpartitioning/software-raid.png[Configuring a software RAID device in the Manual Partitioning section]
-
-RAID configuration options are only visible if you have selected two or more disks for installation. At least two disks are required to create a RAID device.
-
-To create a RAID device:
-
-. Create a mount point as described in <<sect-partition-configuration-x86>>. By configuring this mount point, you configure the RAID device.
-
-. Keeping the partition selected in the left pane, select the configuration button below the pane to open the `Configure Mount Point` dialog. Select which disks will be included in the RAID device and click btn:[Select].
-
-. Click the `Device Type` drop-down menu and select `RAID`.
-
-. Click the `File System` drop-down menu and select your preferred file system type (see <<sect-file-system-types-x86>>.
-
-. Click the `RAID Level` drop-down menu and select your preferred level of RAID.
-+
-The available RAID levels are:
-+
-RAID0 - `Optimized performance (stripe)`::
-+
-Distributes data across multiple disks. Level 0 RAIDs offer increased performance over standard partitions, and can be used to pool the storage of multiple disks into one large virtual device. Note that Level 0 RAIDs offer no redundancy, and that the failure of one device in the array destroys data in the entire array. RAID 0 requires at least two RAID partitions.
-+
-RAID1 - `Redundancy (mirror)`::
-+
-Mirrors all data on one disk onto one or more other disks. Additional devices in the array provide increasing levels of redundancy. RAID 1 requires at least two RAID partitions.
-+
-RAID4 - `Error detection (parity)`::
-+
-Distributes data across multiple disks, and uses one disk in the array to store parity information that safeguards the array in case any disk within the array fails. Because all parity information is stored on one disk, access to this disk creates a bottleneck in the performance of the array. RAID 4 requires at least three RAID partitions.
-+
-RAID5 - `Distributed error detection`::
-+
-Distributes data _and_ parity information across multiple disks. Level 5 RAIDs therefore offer the performance advantages of distributing data across multiple disks, but do not share the performance bottleneck of level 4 RAIDs because the parity information is also distributed through the array. RAID 5 requires at least three RAID partitions.
-+
-RAID6 - `Redundant`::
-+
-Level 6 RAIDs are similar to level 5 RAIDs, but instead of storing only one set of parity data, they store two sets. RAID 6 requires at least four RAID partitions.
-+
-RAID10 - `Redundancy (mirror)` and `Optimized performance (stripe)`::
-+
-Level 10 RAIDs are _nested RAIDs_ or _hybrid RAIDs_. They are constructed by distributing data over mirrored sets of disks. For example, a level 10 RAID array constructed from four RAID partitions consists of two mirrored pairs of striped partitions. RAID 10 requires at least four RAID partitions.
-
-. Click btn:[Update Settings] to save your changes, and either continue with another partition or click btn:[Done] to return to the `Installation Summary` screen.
-
-If fewer disks are included than the specified RAID level requires, a message will be displayed at the bottom of the window, informing you how many disks are actually required for your selected configuration.
 
 [[sect-create-lvm-x86]]
 ===== Create LVM Logical Volume
@@ -246,7 +189,7 @@ The configuration dialog does not allow you to specify the size of the volume gr
 +
 image::images/diskpartitioning/lvm-volume-x86.png[Customizing an LVM Volume Group.]
 +
-The available RAID levels are the same as with actual RAID devices. See <<sect-create-software-raid-x86>> for more information. You can also mark the volume group for encryption and set the size policy for it. The available policy options are:
+The available RAID levels are the same as with actual RAID devices. You can also mark the volume group for encryption and set the size policy for it. The available policy options are:
 +
 ** `Automatic` - the size of the volume group is set automatically so that it is just large enough to contain the configured logical volumes. This is optimal if you do not need free space within the volume group.
 +
