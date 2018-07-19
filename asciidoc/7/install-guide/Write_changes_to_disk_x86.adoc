@@ -9,7 +9,7 @@ When all required sections of the `Installation Summary` screen have been comple
 
 .Ready to Install
 
-image::images/diskpartitioning/write_changes.png[When all required items on the Installation Summary screen have been attended to, the installation can begin.]
+image::images/diskpartitioning/write_changes.png[The installation can begin when all required items on the Installation Summary screen have been attended to.]
 
 [WARNING]
 ====

@@ -209,7 +209,7 @@ In this situation, the partitions already defined do not span the entire hard di
 [[figu-partitions-unused-space]]
 .Disk Drive with Unpartitioned Free Space
 
-image::images/partitions/unpart-space.png[Image of a disk drive with unpartitioned free space, where 1 represents an undefined partition with unallocated space and 2 represents a defined partition with allocated space.]
+image::images/partitions/unpart-space.png[Image of a disk drive with unpartitioned free space where 1 represents an undefined partition with unallocated space and 2 represents a defined partition with allocated space.]
 
 In the above example, `1` represents an undefined partition with unallocated space and `2` represents a defined partition with allocated space.
 
@@ -225,7 +225,7 @@ In this case, maybe you have one or more partitions that you do not use any long
 [[figu-partitions-unused-partition]]
 .Disk Drive with an Unused Partition
 
-image::images/partitions/unused-partition.png[Image of a disk drive with an unused partition, where 1 represents an unused partition and 2 represents reallocating an unused partition for Linux.]
+image::images/partitions/unused-partition.png[Image of a disk drive with an unused partition where 1 represents an unused partition and 2 represents reallocating an unused partition for Linux.]
 
 In the above example, `1` represents an unused partition and `2` represents reallocating an unused partition for Linux.
 
@@ -254,7 +254,7 @@ After creating a smaller partition for your existing operating system, you can r
 [[figu-partitions-destructive-repartitioning]]
 .Disk Drive Being Destructively Repartitioned
 +
-image::images/partitions/dstrct-reprt.png[Image of a disk drive being destructively repartitioned, where 1 represents before and 2 represents after.]
+image::images/partitions/dstrct-reprt.png[Image of a disk drive being destructively repartitioned where 1 represents before and 2 represents after.]
 +
 In the above example, `1` represents before and `2` represents after.
 +
@@ -287,7 +287,7 @@ As the following figure shows, the first step is to compress the data in your ex
 [[figu-partitions-compress-data]]
 .Disk Drive Being Compressed
 
-image::images/partitions/compression.png[Image of a disk drive being compressed, where 1 represents before and 2 represents after.]
+image::images/partitions/compression.png[Image of a disk drive being compressed where 1 represents before and 2 represents after.]
 
 In the above example, `1` represents before and `2` represents after.
 
@@ -301,7 +301,7 @@ This step is crucial. Without it, the location of the data could prevent the par
 [[figu-partitions-resize-existing]]
 .Disk Drive with Partition Resized
 
-image::images/partitions/part-resize.png[Image of a disk drive with a resized partition, where 1 represents before and 2 represents after.]
+image::images/partitions/part-resize.png[Image of a disk drive with a resized partition where 1 represents before and 2 represents after.]
 
 In the above example, `1` represents before and `2` represents after.
 
@@ -315,7 +315,7 @@ As the previous step implied, it might or might not be necessary to create new p
 [[figu-partitions-final-configuration]]
 .Disk Drive with Final Partition Configuration
 
-image::images/partitions/nondestruct-fin.png[Image of a disk drive with final partition configuration, where 1 represents before and 2 represents after.]
+image::images/partitions/nondestruct-fin.png[Image of a disk drive with final partition configuration where 1 represents before and 2 represents after.]
 
 In the above example, `1` represents before and `2` represents after.
 

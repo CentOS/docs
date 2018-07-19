@@ -51,7 +51,7 @@ For automatic partitioning, you can also select the `I would like to make additi
 +
 .Installation Options Dialog with Option to Reclaim Space
 +
-image::images/diskpartsetup/install-options-reclaim.png[There is not enough room to install {PRODUCT}, so the Installation Options dialog asks if you want to reclaim space from other file systems.]
+image::images/diskpartsetup/install-options-reclaim.png[There is not enough room to install {PRODUCT} so the Installation Options dialog asks if you want to reclaim space from other file systems.]
 +
 You can click to the `{PRODUCT} software selection` link. The link will navigate you to the `Software selection` section, where you can change what software you want to install, and free some aditional storage space.
 +
@@ -136,7 +136,7 @@ Unless you select to shrink a partition, reclaiming space on a partition involve
 
 .Reclaim Disk Space from Existing File Systems
 
-image::images/diskpartsetup/reclaim-space-ppc.png[This dialog allows you to preserve, shrink, or delete existing file systems to generate necessary space for the installation.]
+image::images/diskpartsetup/reclaim-space-ppc.png[This dialog allows you to preserve / shrink / delete existing file systems to generate necessary space for the installation.]
 
 The existing file systems {PRODUCT} has detected are listed in a table as part of their respective disks. The `Reclaimable Space` column lists the space that could be reassigned to this installation. The `Action` column lists what action will be taken with the file system to reclaim space.
 

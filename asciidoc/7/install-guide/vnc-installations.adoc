@@ -88,7 +88,7 @@ The Direct Mode expects the VNC viewer to initiate a connection to the system be
 [[figu-vnc-installations-connection-details]]
 .TigerVNC Connection Details
 +
-image::images/vnc/connection-details.png[TigerVNC after startup, showing the Connection Details dialog]
+image::images/vnc/connection-details.png[TigerVNC after startup showing the Connection Details dialog]
 
 . Boot the installation system and wait for the boot menu to appear. In the menu, press the kbd:[Tab] key to edit boot options. Append the [option]`inst.vnc` option to the end of the command line.
 +
