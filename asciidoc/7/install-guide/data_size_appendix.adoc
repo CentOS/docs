@@ -1,0 +1,36 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[data-size-appendix]]
+== Data Size Terminology Reference Table
+
+[[tabl-data-size-appendix]]
+.Data Size Terminology Reference Table
+
+[options="header"]
+|===
+|Term|Abbreviation|Size (in bytes)
+3+|_Binary (Bytes)_
+|Kibibyte|*KiB*|1024
+|Mebibyte|*MiB*|1024pass:attributes[{blank}]^2^
+|Gibibyte|*GiB*|1024pass:attributes[{blank}]^3^
+|Tebibyte|*TiB*|1024pass:attributes[{blank}]^4^
+|Pebibyte|*PiB*|1024pass:attributes[{blank}]^5^
+|Exbibyte|*EiB*|1024pass:attributes[{blank}]^6^
+|Zebibyte|*ZiB*|1024pass:attributes[{blank}]^7^
+|Yobibyte|*YiB*|1024pass:attributes[{blank}]^8^
+3+|_Decimal (Bytes)_
+|Kilobyte|*KB*|1000
+|Megabyte|*MB*|1000pass:attributes[{blank}]^2^
+|Gigabyte|*GB*|1000pass:attributes[{blank}]^3^
+|Terabyte|*TB*|1000pass:attributes[{blank}]^4^
+|Petabyte|*PB*|1000pass:attributes[{blank}]^5^
+|Exabyte|*EB*|1000pass:attributes[{blank}]^6^
+|Zettabyte|*ZB*|1000pass:attributes[{blank}]^7^
+|Yottabyte|*YB*|1000pass:attributes[{blank}]^8^
+3+|_Decimal (Bits)_
+|Kilobit|*Kb*|125
+|Megabit|*Mb*|125,000
+|Gigabit|*Gb*|125,000,000
+|===

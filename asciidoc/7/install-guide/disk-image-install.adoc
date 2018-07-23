@@ -1,0 +1,511 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-disk-image-installation]]
+== Installing into a Disk Image
+
+This chapter describes the process of creating custom, bootable images of several different types, and other related topics. The image creation and installation process can be either performed manually in a procedure similar to a normal hard drive installation, or it can be automated using a Kickstart file and the [application]*livemedia-creator* tool.
+
+[NOTE]
+====
+
+Creating custom images using [application]*livemedia-creator* is currently supported only on AMD64 and Intel{nbsp}64 (x86_64) and IBM POWER (big endian) systems.
+
+Additionally, {PRODUCT} only supports creating custom images of {PRODUCT}{nbsp}7.
+
+====
+
+If you choose the manual approach, you will be able to perform the installation interactively, using the graphical installation program. The process is similar to installing using {PRODUCT} bootable media and the graphical installation program; however, before you begin the installation, you must create one or more empty image files manually.
+
+Automated disk image installations using [application]*livemedia-creator* are somewhat similar to Kickstart installations with network boot. To use this approach, you must prepare a valid Kickstart file, which will be used by [application]*livemedia-creator* to perform the installation. The disk image file will be created automatically.
+
+Both approaches to disk image installations require a separate installation source. In most cases, the best approach is to use an ISO image of the binary {PRODUCT} DVD. See <<chap-download>> for information about obtaining installation ISO images.
+
+[IMPORTANT]
+====
+
+It is not currently possible to use an installation ISO image of {PRODUCT} without any additional preparation. The installation source for a disk image installation must be prepared the same way it would be prepared when performing a normal installation. See <<sect-making-media-additional-sources>> for information about preparing installation sources.
+
+====
+
+[[sect-disk-image-installation-manual]]
+=== Manual Disk Image Installation
+
+A manual installation into a disk image is performed by executing the [application]*Anaconda* installation program on an existing system and specifying one or more disk image files as installation targets. Additional options can also be used to configure [application]*Anaconda* further. A list of available options can be obtained by using the [command]`anaconda -h` command.
+
+[WARNING]
+====
+
+Image installation using [application]*Anaconda* is potentially dangerous, because it uses the installation program on an already installed system. While no bugs are known at this moment which could cause any problems, it is possible that this process could render the entire system unusable. Installation into disk images should always be performed on systems or virtual machines specifically reserved for this purpose, and not on systems containing any valuable data.
+
+====
+
+This section provides information about creating empty disk images and using the [application]*Anaconda* installation program to install {PRODUCT} into these images.
+
+[[sect-prepare-disk-image]]
+==== Preparing a Disk Image
+
+The first step in manual disk image installation is creating one or more image files, which will later be used as installation targets similar to physical storage devices. On {PRODUCT}, a disk image file can be created using the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`fallocate -l _size_ _name_pass:attributes[{blank}]`
+....
+
+Replace _size_ with a value representing the size of the image (such as `10G` or `5000M`), and _name_ with the file name of the image to be created. For example, to create a disk image file named `myimage.raw` with the size of 30GB, use the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`fallocate -l 30G myimage.raw`
+....
+
+[NOTE]
+====
+
+The [command]`fallocate` command allows you to specify the size of the file to be created in different ways, depending on the suffix used. For details about specifying the size, see the `fallocate(1)` man page.
+
+====
+
+The size of the disk image file you create will limit the maximum capacity of file systems created during the installation. The image must always have a minimum size of 3GB, but in most cases, the space requirements will be larger. The exact size you will need for your installation will vary depending on the software you want to install, the amount of swap space, and the amount of space you will need to be available after the installation. More details about partitioning are available in:
+
+* <<sect-recommended-partitioning-scheme-x86>> for 64-bit AMD, Intel, and ARM systems
+
+* <<sect-recommended-partitioning-scheme-ppc>> for IBM Power Systems servers
+
+After you create one or more empty disk image files, continue with <<sect-install-into-disk-image>>.
+
+[[sect-install-into-disk-image]]
+==== Installing {PRODUCT} into a Disk Image
+
+[IMPORTANT]
+====
+
+Set Security Enhanced Linux (`SELinux`) to permissive (or disabled) mode before creating custom images with [application]*Anaconda*. See link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/SELinux_Users_and_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 SELinux User's and Administrator's Guide] for information on setting `SELinux` modes.
+
+====
+
+To start the installation into a disk image file, execute the following command as `root`:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] anaconda --image=/path/to/image/file
+....
+
+Replace _/path/to/image/file_ with the _full_ path to the image file you created earlier.
+
+After executing this command, [application]*Anaconda* will start on your system. The installation interface will be the same as if you performed the installation normally (booting the system from {PRODUCT} media), but the graphical installation will start directly, skipping the boot menu. This means that boot options must be specified as additional arguments to the [command]`anaconda` command. You can view the full list of supported commands by executing [command]`anaconda -h` on a command line.
+
+One of the most important options is [option]`--repo=`, which allows you to specify an installation source. This option uses the same syntax as the [option]`inst.repo=` boot option. See <<sect-boot-options-installer>> for more information.
+
+When you use the [option]`--image=` option, _only_ the disk image file specified will be available as the installation target. No other devices will be visible in the `Installation Destination` dialog. If you want to use multiple disk images, you must specify the [option]`--image=` option separately for each image file separately. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] anaconda --image=/home/testuser/diskinstall/image1.raw --image=/home/testuser/diskinstall/image2.raw
+....
+
+The above command will start [application]*Anaconda*, and in the `Installation Destination` screen, both image files specified will be available as installation targets.
+
+Optionally, you can also assign custom names to the disk image files used in the installation. To assign a name to a disk image file, append `:pass:attributes[{blank}]_name_pass:attributes[{blank}]` to the end of the disk image file name. For example, to use a disk image file located in `/home/testuser/diskinstall/image1.raw` and assign the name `myimage` to it, execute the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] anaconda --image=/home/testuser/diskinstall/image1.raw:myimage
+....
+
+[[sect-disk-image-installation-automatic]]
+=== Automatic Disk Image Installation
+
+Creation of disk images and the installation into them can be automated using [application]*livemedia-creator*. To perform an automatic installation, you will need an installed {PRODUCT} system and a Kickstart file. The disk images themselves do not need to be created manually. For information about creating and using Kickstart files, see <<chap-kickstart-installations>>.
+
+[[sect-livemedia-creator-overview]]
+==== Overview of livemedia-creator
+
+Creating custom images using [application]*livemedia-creator* is usually a two stage process. In the first stage, a temporary disk image file is created and [application]*Anaconda*, the {PRODUCT} installation program, installs a system on this image based on the parameters provided in a Kickstart file. Then, in the second stage, [application]*livemedia-creator* uses this temporary system to create the final, bootable image.
+
+This behavior can be changed by specifying additional options. For example, it is possible to go through the first stage only, with the result being a disk image file, or to skip the first stage and use an existing disk or file system image to create the final bootable ISO image.
+
+Sample usage of [application]*livemedia-creator* is described in <<sect-livemedia-creator-usage>>. On a system where the [package]*lorax* package is installed, a list of all available options can be displayed using the [command]`livemedia-creator --help` command. Additional documentation is also installed along with the [package]*lorax* package: the `livemedia-creator(1)` man page and the `README.livemedia-creator` file located in the `/usr/share/doc/lorax-_version_pass:attributes[{blank}]/` directory, where _version_ is the version of the [package]*lorax* package you have installed.
+
+[[sect-livemedia-creator-install]]
+==== Installing livemedia-creator
+
+The [application]*livemedia-creator* tool is a part of the [package]*lorax* package. To install the package, execute the following command as `root`:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] yum install lorax
+....
+
+You will also need to install several other packages in addition to [package]*lorax* itself. These packages are not dependencies of [package]*lorax* and therefore they are not installed automatically, but you might need them depending on what exactly are you using [application]*livemedia-creator* for. Among these packages are:
+
+* [package]*virt-install*: a package providing tools to build new virtual machines, used in the first stage of live media creation unless the [option]`--no-virt` option is specified.
+
+* [package]*libvirt*, [package]*qemu-kvm*, [package]*libvirt-client* and other virtualization tools: when using [package]*virt-install*, your system must be prepared to create, run and manage a virtual machine. See the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Virtualization_Deployment_and_Administration_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Virtualization Deployment and Administration Guide] for information on virtualization in {PRODUCT} and for documentation about installing and working with virtualization tools.
+
+* [package]*anaconda*: the {PRODUCT} installation program, used in the first stage instead of virt-install if the [option]`--no-virt` option is used.
+
+Other applications, which are beyond the scope of this chapter, might be necessary. If you attempt to execute [application]*livemedia-creator* and a package required with the options you specified is missing, the program will stop and an error message will be displayed informing you of packages you need to install before proceeding.
+
+[[sect-livemedia-creator-samples]]
+==== Sample Kickstart Files
+
+To successfully create a custom live image, you will need a valid Kickstart configuration file. Two samples are automatically installed along with [package]*lorax*. You can use these samples as a reference when creating your own custom images, or you can copy them and modify them to suit your intended usage. Both provided samples are located in the `/usr/share/doc/lorax-_version_pass:attributes[{blank}]/` directory, where _version_ is the version number of the lorax package installed on your system.
+
+The available samples are:
+
+* `rhel7-minimal.ks`: a configuration file which provides only a minimal installation (the `@core` group) and other essentials such as the kernel and the [application]*GRUB2* boot loader. No users apart from `root` are created, and no graphical interface or additional packages are installed.
+
+* `rhel7-livemedia.ks`: a more advanced configuration file which creates a live system with a graphical interface. A user named `liveuser` is created along with `root`.
+
+Both sample configurations need to be modified to use a valid location as the installation source. To do this edit the file and update the url command to refer to a valid installation source. See <<chap-kickstart-installations>> for more information about Kickstart. No other changes are necessary for these samples to work.
+
+[IMPORTANT]
+====
+
+Do not modify the samples in their original location. Copy them to another directory and modify the copies instead.
+
+====
+
+[NOTE]
+====
+
+Only repositories provided by {PRODUCT} are supported as installation sources.
+
+====
+
+[NOTE]
+====
+
+When modifying the provided samples or making a Kickstart file from scratch, do not use the [command]`%include` statement as they are not supported by [command]`livemedia-creator`. All Kickstart files must be flattened either manually or using the [command]`ksflatten` tool before they can be used.
+
+====
+
+[[sect-livemedia-creator-usage]]
+==== Creating Custom Images
+
+This section describes several common usage patterns for tools in the [package]*lorax* package. It is not intended to be a complete list of available options. To view every available option for livemedia-creator, execute [command]`livemedia-creator --help` or see the `livemedia-creator(1)` man page. For more information about lorax, see link:++https://rhinstaller.github.io/lorax/lorax.html++[].
+
+[[sect-lorax-usage]]
+===== Using lorax to create a boot.iso file
+
+The installation system of {PRODUCT} is created by a tool named lorax. The lorax tool can also be used to create your own installation media, for example containing an updated kernel or additional packages.
+
+[NOTE]
+====
+
+It is recommended to use lorax on a system that is the same release of {PRODUCT} as the image being created.
+
+====
+
+After running the following as root, an installation image named `boot.iso` will exist in the `results/images` directory. The [option]`--repo=` command loads a Yum repository configuration file, in this case the default one, and use it to download packages the same way they would be downloaded during a system update.
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+pass:quotes[`#`] yum install lorax
+pass:quotes[`#`] setenforce 0
+pass:quotes[`#`] lorax -p RHEL -v 7.4 -r 7.4 --repo=/etc/yum.repos.d/redhat.repo ./results/
+pass:quotes[`#`] setenforce 1
+
+....
+
+[[sect-livemedia-usage-virt]]
+===== Creating a Live Image Using virt-install
+
+Perhaps the most common use of [application]*livemedia-creator* involves using [package]*virt-install* to create a temporary virtual machine to be used for the live image creation process. To create a live ISO using virt-install, you will need a valid Kickstart file and a bootable ISO image which contains the [application]*Anaconda* installation program. Such images are provided by Red{nbsp}Hat as "minimal boot media"; see <<sect-making-usb-media>> for details.
+
+The following command is the bare minimum you need to create a live image using [application]*virt-install*:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] livemedia-creator --make-iso --iso=/path/to/boot.iso --ks=/path/to/valid/kickstart.ks
+....
+
+Replace _/path/to/boot.iso_ with a path to a minimal boot image and _/path/to/valid/kickstart.ks_ with a path to a valid Kickstart file to be used in the image creation process.
+
+Other frequently used options in this particular use case are:
+
+* [option]`--vnc vnc`: this option allows you to watch the installation process using a VNC client such as [application]*TigerVNC*. The option is passed to virt-install's [option]`--graphics` option. See <<chap-vnc-installations>> for more information.
+
+* [option]`--ram _x_pass:attributes[{blank}]`: allows you to specify the amount of RAM for the temporary virtual machine in MiB.
+
+* [option]`--vcpus _x_pass:attributes[{blank}]`: the amount of the virtual machine's processors.
+
+[[sect-livemedia-usage-no-virt]]
+===== Creating a Live Image Using Anaconda's Image Install
+
+The [application]*livemedia-creator* application can create a live image using the [package]*Anaconda* package if [application]*virt-install* is not available. In this case, no image containing the installation program is needed, but the [package]*Anaconda* package must be installed on the system. Again, the process has two stages: first, a temporary disk image is created and a system is installed into it, and then this image is used to create the final bootable ISO.
+
+[WARNING]
+====
+
+Live image creation using [application]*Anaconda* is potentially dangerous, because it uses the installation program on the system itself instead of inside a virtual machine. While no bugs are known at this moment that would cause any problems, it is possible that this process could render the entire system unusable. Running [application]*livemedia-creator* with the [option]`--no-virt` option is therefore only recommended on virtual machines (guests) specifically reserved for this purpose.
+
+====
+
+[IMPORTANT]
+====
+
+Set Security Enhanced Linux (`SELinux`) to permissive (or disabled) mode before creating custom images with [application]*Anaconda*. See link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/SELinux_Users_and_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 SELinux User's and Administrator's Guide] for information on setting `SELinux` modes.
+
+====
+
+To create a live image using [application]*Anaconda*, use the [option]`--no-virt` option. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] livemedia-creator --make-iso --ks=/path/to/valid/kickstart.ks --no-virt
+....
+
+[[sect-livemedia-usage-stage1]]
+===== Creating a Disk or File System Image
+
+You can also use [application]*livemedia-creator* to create a disk or file system image. This means running only the first stage of the image creation process. The final ISO will not be created, the program will stop after finishing the installation process on the temporary disk or file system image file. You can then mount and inspect this image for errors, which can be useful when troubleshooting a modified Kickstart file, and you can also keep it for future use to save time when creating images in the future.
+
+[NOTE]
+====
+
+It is also possible to use the [option]`--no-virt` option in all examples in this section.
+
+====
+
+There are several ways to stop the creation process after the first stage. You can use the [option]`--image-only` option as illustrated in the following example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+	pass:quotes[`#`] livemedia-creator --make-iso --ks=/path/to/valid/kickstart.ks --iso=/path/to/boot.iso --image-only
+
+....
+
+Alternatively, you can use the [option]`--make-disk` option instead of [option]`--make-iso`:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+	pass:quotes[`#`] livemedia-creator --make-disk --ks=/path/to/valid/kickstart.ks --iso=/path/to/boot.iso
+
+....
+
+You can also create a file system image instead of partitioned disk image using the [option]`--make-fsimage` option:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+	pass:quotes[`#`] livemedia-creator --make-fsimage --ks=/path/to/valid/kickstart.ks --iso=/path/to/boot.iso
+
+....
+
+In all cases, the result will be a partitioned disk image or a file system image, located in the `/var/tmp/` directory by default. To change the location of the result, use the [option]`--tmp _/path/to/temporary/directory/_pass:attributes[{blank}]` option, where _/path/to/temporary/directory/_ is the path to the target directory.
+
+[[sect-livemedia-usage-stage2]]
+===== Using a Previously Created Disk or File System Image
+
+If you already have a disk or file system image (see <<sect-livemedia-usage-stage1>>), you can supply it to [application]*livemedia-creator* to produce the final bootable ISO image. In this case no Kickstart File or [application]*Anaconda* installation image is necessary; these are only needed in the first stage of the image creation process, which is skipped in this case.
+
+To create a final image from an existing partitioned disk image file, use the [option]`--disk-image` option. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] livemedia-creator --make-iso --disk-image=/path/to/disk/image.img
+....
+
+If you want to use a file system image instead of a disk image, use the [option]`--fs-image` option instead:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] livemedia-creator --make-iso --fs-image=/path/to/filesystem/image.img
+....
+
+[[sect-livemedia-usage-appliance]]
+===== Creating an Appliance
+
+The [application]*livemedia-creator* utility can be used to create appliance images (a partitioned disk image), including an XML file containing its description, generated using a template. Virtual machine installations as well as image installations are supported in this case. To create an appliance image and description, use the [option]`--make-appliance` option instead of [option]`--make-iso`. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] livemedia-creator --make-appliance --ks=/path/to/valid/kickstart.ks --iso=/path/to/boot.iso
+....
+
+Both the image and the description XML file will be stored in the `/var/tmp/` directory unless a different one is specified using the [option]`--resultdir` option.
+
+Additional options specific to appliance creation are:
+
+* [option]`--app-name _name_pass:attributes[{blank}]`: specifies the name of the appliance, which will appear in the XML description file marked by the `<name>` tag. The default value is `None`.
+
+* [option]`--app-template _/path/to/template.tmpl_pass:attributes[{blank}]`: specifies the template to be used. The default is `/usr/share/lorax/appliance/libvirt.tmpl`.
+
+* [option]`--app-file _/path/to/app/file.xml_pass:attributes[{blank}]`: specifies name of the generated description XML file. The default value is `appliance.xml`.
+
+[[sect-livemedia-usage-ami]]
+===== Creating an Amazon Machine Image (AMI)
+
+To create an Amazon Machine Image (AMI) for use within the Amazon Elastic Compute Cloud (EC2), use the [option]`--make-ami` option. Virtualized and image installations are both supported.
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] livemedia-creator --make-ami --ks=/path/to/valid/kickstart.ks --iso=/path/to/boot.iso
+....
+
+The result will be an image file named `ami-root.img`, located in the `/var/tmp/` directory, unless you used the [option]`--resultdir` option to specify a different one.
+
+[[sect-livemedia-usage-common]]
+===== Additional Arguments
+
+The following options can be used with all use cases listed above (virtual installations, [application]*Anaconda* image installations and others).
+
+* [option]`--keep-image`: when you specify this option, the temporary disk image file used in the first stage of the installation will not be deleted. It will be located in the `/var/tmp/` directory and it will have a randomly generated name such as `diskgU42Cq.img`.
+
+* [option]`--image-only`: using this option means that only the first stage of the image creation process will be executed. Instead of producing the final bootable ISO image, [application]*livemedia-creator* will only create the temporary disk image file and perform an installation on it. This option allows you to save time when testing modifications to your Kickstart file, because you can skip the time-consuming second stage and inspect the temporary disk image file.
+
+* [option]`--image-name _name_pass:attributes[{blank}]`: allows you to specify a custom name for the temporary disk image file. The default name is randomly generated (for example, `disk1Fac8G.img`).
+
+* [option]`--tmp _/path/to/temporary/directory/_pass:attributes[{blank}]`: specifies the top level temporary directory. The default value is `/var/tmp/`. When using this option, you must specify a directory which already exists.
+
+* [option]`--resultdir _/path/to/results/directory/_pass:attributes[{blank}]`: specifies the directory where the results (the bootable ISO image) will appear after [application]*livemedia-creator* finishes. An already existing directory cannot be specified. The default is `/var/tmp/`. This option only applies to the final ISO image; if you are creating a disk or file system image and want it to be saved at a specific location, use the [option]`--tmp` option.
+
+* [option]`--logfile _/path/to/log/file/_pass:attributes[{blank}]`: specifies the location of the program's log file.
+
+[[sect-livemedia-creator-trouble]]
+==== Troubleshooting livemedia-creator Problems
+
+This section offers suggestions on solving various issues commonly encountered when using [application]*livemedia-creator*. If you encounter a problem not described here, you can look into the program's log files, which are automatically generated during every run and saved into the directory from which you executed the tool, unless you specify a different directory using the [option]`--logfile` option. The log files will be different based on the options you used - for example, `virt-install.log` will not be generated when you use the [option]`--no-virt` option (instead, you will get log files from [application]*Anaconda*, located in the `anaconda/` directory). Other files, namely `livemedia.log` and `program.log`, are generated every time.
+
+Another way to find and solve problems is using the [option]`--image-only` option when running the utility. This option will stop the program after the first stage, so only a disk image file will be generated instead of the final bootable ISO. You can then mount the disk image file and examine its contents without having to wait for the second stage to finish. Alternatively, you can use the [option]`--keep-image` option, which will execute both stages, but keep the temporary disk image for later analysis.
+
+Using the [option]`--vnc` option is recommended when testing changes to the Kickstart file. This option will allow you to use a VNC client to connect to the virtual machine and watch the installation progress. See <<chap-vnc-installations>> for details.
+
+[[sect-livemedia-trouble-hang]]
+===== Stuck Virtual Machine Installation
+
+If the installation program stops for any reason during the first stage of a virtual installation, [application]*livemedia-creator* will stop as well, waiting for the installation to finish. You can either interrupt the program directly, or you can solve this problem by stopping the temporary virtual machine. [application]*Livemedia-creator* will detect that the guest operating system has been stopped, delete all temporary files and exit.
+
+To stop the temporary virtual machine, follow this procedure:
+
+.Stopping the Temporary Virtual Machine
+. Use [application]*virsh* to list all virtual machines (guests) currently available on the system. The output will be similar to the following:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] virsh list --all
+	Id    Name                           State
+	----------------------------------------------------
+	93    LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 running
+	-     RHEL7                      shut off
+
+....
++
+Identify the temporary virtual machine. Its name will always start with `LiveOS`, followed by a string of random numbers and characters.
+
+. Once you have identified the temporary virtual machine, stop it using the [command]`virsh destroy _name_pass:attributes[{blank}]` command, where _name_ is the virtual machine's name:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] virsh destroy LiveOS-2a198971-ba97-454e-a056-799f453e1bd7
+Domain LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 destroyed
+
+....
+
+[[sect-livemedia-trouble-interrupt]]
+===== Failed installation using a Virtual Machine
+
+If you were performing a virtual installation and the process was interrupted for any reason (such as hardware failure, power outage or a keyboard interrupt) during the first stage, virt-install will not be able to start again until the previously created temporary disk image and virtual machine have been removed. The following procedure explains how to do this.
+
+Not all steps might be necessary every time. For example, if you are recovering after a system crash, you will not have to stop the temporary virtual machine, instead you can just use the [command]`virsh undefine _name_pass:attributes[{blank}]` command. You can also use steps 4 and 5 if you only want to clean up temporary files created by [application]*livemedia-creator* and nothing else.
+
+.Removing Temporary Guests And Disk Image Files
+. Use [application]*virsh* to list all virtual machines (guests) currently available on the system. The output will be similar to the following:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] virsh list --all
+Id    Name                           State
+----------------------------------------------------
+93    LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 running
+-     RHEL7                      shut off
+
+....
++
+Identify the temporary virtual machine. Its name will always start with `LiveOS`, followed by a string of random numbers and characters.
+
+. Once you have identified the temporary virtual machine, stop it using the [command]`virsh destroy _name_pass:attributes[{blank}]` command, where _name_ is the virtual machine's name:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] virsh destroy LiveOS-2a198971-ba97-454e-a056-799f453e1bd7
+Domain LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 destroyed
+
+....
+
+. Delete the temporary virtual machine using [command]`virsh undefine _name_pass:attributes[{blank}]`, using the same _name_ as in the previous step.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] virsh undefine LiveOS-2a198971-ba97-454e-a056-799f453e1bd7
+Domain LiveOS-2a198971-ba97-454e-a056-799f453e1bd7 has been undefined
+
+....
+
+. Find the temporary file system's mount. It will be targeted to the `/var/tmp/` directory and its name will be `lorax.imgutils` followed by six random numbers or characters.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] findmnt -T /var/tmp/lorax.imgutils*
+TARGET                         SOURCE     FSTYPE  OPTIONS
+/var/tmp/lorax.imgutils.bg6iPJ /dev/loop1 iso9660 ro,relatime
+
+....
++
+Then, unmount it using the [command]`umount` command:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] umount /var/tmp/lorax.imgutils.bg6iPJ
+....
+
+. Find the temporary disk image created by virt-install in the `/var/tmp/` directory. The name of this file is printed to command line at the beginning of the installation process and is randomly generated, unless you specify a name using the [option]`--image-name` option. For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+
+2013-10-30 09:53:03,161: disk_size = 5GB
+2013-10-30 09:53:03,161: disk_img = /var/tmp/diskQBkzRz.img
+2013-10-30 09:53:03,161: install_log = /home/pbokoc/lorax/virt-install.log
+mount: /dev/loop1 is write-protected, mounting read-only
+
+....
++
+In the above example, the temporary disk image is `/var/tmp/diskQBkzRz.img`.
++
+If you cannot find the initial messages, you can identify the temporary files manually. List all contents of the `/var/tmp/` directory using the [command]`ls` command and filter the output for files containing `disk` in their names:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+pass:quotes[`#`] ls /var/tmp/ | grep disk
+diskQBkzRz.img
+
+....
++
+Then, delete the temporary disk image:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] rm -f /var/tmp/diskQBkzRz.img
+....
+
+If you followed all steps in this procedure, you are now able to start a new installation with virt-install.
+
+[[sect-livemedia-trouble-novirt]]
+===== Failed Installation Using Anaconda
+
+Recovery from an interrupted installation using [application]*Anaconda* image install feature (the [option]`--no-virt` option) can be achieved by executing the `anaconda-cleanup` script, which is installed along with the [package]*anaconda* package. This script is located in the `/usr/bin/` directory.
+
+Use the following command to execute the cleanup script. You will need root privileges to do this.
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] anaconda-cleanup
+....

@@ -1,0 +1,231 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-uninstall]]
+== Uninstalling {PRODUCT}
+
+[[sect-uninstall-x86]]
+=== Removing {PRODUCT} from 64-bit AMD, Intel, and ARM Systems
+
+The method for removing {PRODUCT} from your computer varies, depending on whether {PRODUCT} is the only operating system installed on the computer.
+
+Before proceeding be sure you have considered the following information:
+
+* In certain situations you need the install media for any non-{PRODUCT} operating system you are going to be using on the system after you complete this process.
+
+* If you have multiple operating systems installed, ensure that you can boot each one separately and have all administrator passwords, including any passwords that might have been set automatically by your computer manufacturer or the manufacturer of the operating system.
+
+* If you want to retain any data from the installation of {PRODUCT} that you are going to remove, it will need to be backed up to a different location. If you are deleting an installation that contains sensitive data, ensure that you destroy the data according to your security policy. Ensure that any backup medium is readable on the operating system where you will restore the data. For example, without extra third-party software, Microsoft Windows cannot read an external hard drive that you have formatted with {PRODUCT} to use the ext2, ext3, ext4 or XFS file system.
++
+[WARNING]
+====
+
+As a precaution, back up all data from any operating systems, including {PRODUCT}, that are installed on the same computer. Unforeseen circumstances can result in loss of all your data.
+
+====
+
+* If you are only uninstalling {PRODUCT} and not reinstalling the entire computer, you should familiarize yourself with your partition layout. In particular, the output of the [application]*mount* command can be helpful. It can also be helpful to note which `menuitem` is used to boot your {PRODUCT} installation in `grub.cfg`.
+
+In general, to uninstall {PRODUCT} from your system, you perform two steps:
+
+. Remove the {PRODUCT} boot loader information from your master boot record (MBR).
+
+. Remove any partitions that contain the {PRODUCT} operating system.
+
+These instructions cannot cover every possible computer configuration, common configurations are listed here.
+
+* only {PRODUCT}
++
+See <<sect-uninstall-single-x86>>.
+
+* {PRODUCT} and different Linux Distribution
++
+See <<sect-uninstall-dual-linux-x86>>.
+
+* {PRODUCT} and Windows 2000, Windows Server 2000, Windows XP, Windows Vista, Windows Server 2003 and Windows Server 2008
++
+See <<sect-uninstall-dual-windows-x86>>.
+
+If your configuration is not listed or has a highly-customized partition scheme, use the following sections as a general guide. In these situations, you will also need to learn to configure your chosen boot loader. See link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide] for more information on the [application]*GRUB2* boot loader.
+
+To keep neither {PRODUCT} nor the other operating system, follow the steps described for a computer with only {PRODUCT} installed.
+
+[[sect-uninstall-single-x86]]
+==== Only {PRODUCT} is Installed
+
+The following procedure shows how to remove {PRODUCT} on systems where it is the only operating system installed. You will use the installation media for the replacement operating system to remove {PRODUCT}. Examples of installation media include the Windows XP installation CD, Windows Vista installation DVD, or the installation CD, CDs, or DVD of another Linux distribution.
+
+Note that some manufacturers of factory-built computers pre-installed with Microsoft Windows do not supply the Windows installation CD or DVD with the computer. In this case the manufacturer usually supplied their own "system restore disc" instead, or have included software with the computer that allowed you to create your own "system restore disc" when you first started the computer. In some cases, the system restore software is stored on a separate partition on the system's hard drive. If you cannot identify the installation media for an operating system that was pre-installed on your computer, consult the documentation supplied with the machine, or contact the manufacturer.
+
+When you have located the installation media for your chosen operating system:
+
+. Back up any data that you want to keep.
+
+. Shut down the computer.
+
+. Boot your computer with the installation disc for the replacement operating system.
+
+. Follow the prompts presented during the installation process. Windows, OS X, and most Linux installation discs allow you to manually partition your hard drive during the installation process, or will offer you the option to remove all partitions and start with a fresh partition scheme. At this point, remove any existing partitions that the installation software detects or allow the installation program to remove the partitions automatically. "System restore" media for computers pre-installed with Microsoft Windows might create a default partition layout automatically without input from you.
++
+[WARNING]
+====
+
+If your computer has system restore software stored on a partition on a hard drive, take care when removing partitions while installing an operating system from other media. Under these circumstances, you could destroy the partition holding the system restore software.
+
+====
+
+[[sect-uninstall-dual-linux-x86]]
+==== {PRODUCT} installed with a Different Linux Distribution
+
+The following procedure shows how to remove {PRODUCT} on systems also installed with another Linux distribution. You can use the other Linux distribution to remove the boot loader entry (or entries) and to remove any {PRODUCT} partitions.
+
+Because of the differences between the many different Linux distributions, these instructions are a general guide only. Specific details vary according to the configuration of your particular system and the Linux distribution that dual-boots with {PRODUCT}.
+
+[IMPORTANT]
+====
+
+These instructions assume that your system uses the [application]*GRUB2* boot loader. If you use a different boot loader (such as [application]*LILO*), consult the documentation for that software to identify and remove {PRODUCT} entries from its list of boot targets and to ensure that your default operating system is correctly specified.
+
+====
+
+. Remove {PRODUCT} Entries from Your Boot Loader
++
+.. Boot the Linux Distribution you are keeping on your computer, not {PRODUCT}.
++
+.. At the command line, type [command]`su{nbsp}-` and press kbd:[Enter]. When the system prompts you for the root password, type the password and press kbd:[Enter].
++
+.. Use a text editor such as [application]*vim* to open the `/boot/grub2/grub.cfg` configuration file. In this file, find the entry of the system you are removing. A typical {PRODUCT} entry in the `grub.cfg` file looks similar to the following example:
++
+.A {PRODUCT} Entry in `grub.cfg`
+====
+
+[literal,subs="+quotes,attributes,verbatim"]
+....
+
+menuentry '{PRODUCT} (3.10.0-57.el7.x86_64) {PRODVER} (Maipo)' --class red --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-3.10.0-53.el7.x86_64-advanced-9eecdce6-58ce-439b-bfa4-76a9ea6b0906' {
+  load_video
+  set gfxpayload=keep
+  insmod gzio
+  insmod part_msdos
+  insmod xfs
+  set root='hd0,msdos1'
+  if [x$feature_platform_search_hint = xy ]; then
+    search --no-floppy --fs-uuid --set=root --hint='hd0,msdos1' 0c70bc74-7675-4989-9dc8-bbcf5418ddf1
+  else
+    search --no-floppy --fs-uuid --set=root 0c70bc74-7675-4989-9dc8-bbcf5418ddf1
+  fi
+  linux16 /vmlinuz-3.10.0-57.el7.x86_64 root=/dev/mapper/centos-root ro rd.lvm.lv=centos/root vconsole.font=latarcyrheb-sun16 rd.lvm.lv=centos/swap crashkernel=auto vconsole.keymap=us rhgb quiet LANG=en_US.UTF-8
+  initrd16 /initramfs-3.10.0-57.el7.x86_64.img
+}
+
+....
+
+====
++
+.. Delete the entire entry, starting with the _menuentry_ keyword and ending with _}_.
++
+Depending on the configuration of your system, there might be multiple {PRODUCT} entries in `grub.cfg`, each corresponding to a different version of the Linux kernel. Delete each of the {PRODUCT} entries from the file.
++
+.. Save the updated `grub.cfg` file and close [application]*vim*
+
+. Remove {PRODUCT} partitions on multi-boot environments:
++
+[NOTE]
+====
+
+Be careful not to remove partitions that are still in use by the other installations.
+
+====
++
+.. Boot the Linux Distribution you are keeping on your computer, not {PRODUCT}.
++
+.. Remove any unwanted and unnecessary partitions, for example, using:, for example, with [application]*fdisk* for standard partitions, or [application]*lvremove* and [application]*vgremove* to remove logical volumes and volume groups. Additional information on these utilities can be found in their respective man pages, or the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
++
+*** [application]*fdisk* for standard partitions. For details, see link:++https://access.redhat.com/articles/7058++[How do you use fdisk to delete a partition?]
++
+*** [application]*lvremove* and [application]*vgremove* to remove logical volumes and volume groups. For details, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/index.html++[Red{nbsp}Hat Storage Administration Guide].
+
+[[sect-uninstall-dual-windows-x86]]
+==== {PRODUCT} installed with a Microsoft Windows Operating System
+
+The following procedure shows how to remove {PRODUCT} on systems also installed with Windows 2000, Windows Server 2000, Windows XP, Windows Server 2003, Windows Vista or Windows Server 2008. You can use the Microsoft Windows installation and its installation media to remove the boot loader and to remove any {PRODUCT} partitions.
+
+The removal of {PRODUCT} on systems also installed with MS-DOS or versions of Microsoft Windows prior to Windows XP (except Windows 2000) is not covered in this document. These operating systems do not have robust partition management and cannot remove Linux partitions.
+
+Because of the differences between each version of Microsoft Windows, these instructions need to be reviewed completely before being followed. It can be helpful to consult the documentation for your Microsoft Windows operating system as only utilities from that operating system are used in this procedure.
+
+[WARNING]
+====
+
+This procedure relies on the [application]*Windows Recovery Console* or the [application]*Windows Recovery Environment* that loads from the Windows installation disk, therefore, you will not be able to complete the procedure without access to this disk. If you start this procedure and do not complete it, you could leave your computer in a condition where you cannot boot it. The "system restore disk" supplied with some factory-built computers that are sold with Windows pre-installed on them might not include the [application]*Windows Recovery Console* or [application]*Windows Recovery Environment*.
+
+Users of Windows 2000, Windows Server 2000, Windows XP, and Windows Server 2003 following this procedure will be prompted for the Administrator password for their Windows system. Do not follow these instructions unless you know the Administrator password for your system or are certain that an Administrator password has never been created, even by the computer manufacturer.
+
+====
+
+. Remove the {PRODUCT} partitions
++
+.. Boot your computer into your Microsoft Windows environment.
++
+.. Click `Start`pass:attributes[{blank}]>pass:attributes[{blank}]`Run`, type [command]`diskmgmt.msc` and press kbd:[Enter]. The [application]*Disk Management* tool opens.
++
+The tool displays a graphical representation of your disk, with bars representing each partition. The first partition is usually labeled `NTFS` and corresponds to your `C:` drive. At least two {PRODUCT} partitions will be visible. Windows will not display a file system type for these partitions, but can allocate drive letters to some of them.
++
+.. Right-click on one of the {PRODUCT} partitions, then click `Delete Partition` and click `Yes` to confirm the deletion. Repeat this process for the other {PRODUCT} partitions on your system. As you delete partitions, Windows labels the space on the hard drive previously occupied by those partitions as `unallocated`.
++
+You can add this unallocated space to an existing Windows partition or to use this space in some other way. Directions for doing this can be found in the manuals for your non-{PRODUCT} operating system.
+
+. Restore the Windows boot loader
++
+.. On Windows 2000, Windows Server 2000, Windows XP, and Windows Server 2003:
++
+... Insert the Windows installation disk and restart your computer. As your computer starts, the following message will appear on the screen for a few seconds:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`Press any key to boot from CD`
+....
++
+Press any key while the message is still showing and the Windows installation software will load.
++
+... When the `Welcome to Setup` screen appears, you can start the [application]*Windows Recovery Console*. The procedure is slightly different on different versions of Windows:
++
+.... On Windows 2000 and Windows Server 2000, press the kbd:[R] key, then the kbd:[C] key.
++
+.... On Windows XP and Windows Server 2003, press the kbd:[R] key.
++
+... The [application]*Windows Recovery Console* scans your hard drives for Windows installations, and assigns a number to each one. It displays a list of Windows installations and prompts you to select one. Type the number corresponding to the Windows installation that you want to restore.
++
+... The [application]*Windows Recovery Console* prompts you for the Administrator password for your Windows installation. Type the Administrator password and press the kbd:[Enter] key. If there is no administrator password for this system, press only the kbd:[Enter] key.
++
+... At the prompt, type the command [command]`fixmbr` and press the kbd:[Enter]. The [application]*fixmbr* tool now restores the Master Boot Record for the system.
++
+... When the prompt reappears, type [command]`exit` and press the kbd:[Enter] key.
++
+... Your computer will restart and boot your Windows operating system.
++
+.. On Windows Vista and Windows Server 2008:
++
+... Insert the Windows installation disk and restart your computer. As your computer starts, the following message will appear on the screen for a few seconds:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`Press any key to boot from CD or DVD`
+....
++
+Press any key while the message is still showing and the Windows installation software will load.
++
+... In the `Install Windows` dialog, select a language, time and currency format, and keyboard type. Click `Next`
++
+... Click `Repair your computer`.
++
+... The [application]*Windows Recovery Environment* (WRE) shows you the Windows installations that it can detect on your system. Select the installation that you want to restore, then click `Next`.
++
+... Click `Command prompt`. A command window will open.
++
+... Type [command]`bootrec /fixmbr` and press kbd:[Enter].
++
+... When the prompt reappears, close the command window, then click `Restart`.
++
+... Your computer will restart and boot your Windows operating system.

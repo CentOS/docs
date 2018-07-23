@@ -1,0 +1,254 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-basic-system-recovery]]
+== Basic System Recovery
+
+When things go wrong, there are ways to fix problems. However, these methods require that you understand the system well. This chapter contains information on common problems you might face and it also describes _installation program rescue mode_, which can be used to fix these problems.
+
+[[sect-rescue-mode-common-problems]]
+=== Common Problems
+
+You might need to boot into installation program rescue mode for any of the following reasons:
+
+* You are unable to boot into {PRODUCT} normally.
+
+* You are having hardware or software problems, and you want to recover data from your system's hard drive.
+
+* You forgot the root password.
+
+[[sect-rescue-mode-no-boot]]
+==== Unable to Boot into {PRODUCT}
+
+This problem is often caused by the installation of another operating system after you have installed {PRODUCT}. Some other operating systems assume that you have no other operating system(s) on your computer. They overwrite the Master Boot Record (MBR) that originally contained the GRUB2 boot loader. If the boot loader is overwritten in this manner, you cannot boot {PRODUCT} unless you can boot into installation program rescue mode and reconfigure the boot loader.
+
+Another common problem occurs when using a partitioning tool to resize a partition or create a new partition from free space after installation, and it changes the order of your partitions. If the partition number of your `/` partition changes, the boot loader might not be able to find it to mount the partition. To fix this problem, you will need to reinstall the boot loader. See <<sect-rescue-reinstall-grub2>> for instructions on how to do this.
+
+[[sect-rescue-mode-hardware-issues]]
+==== Hardware and Software Problems
+
+This category includes a wide variety of different situations. Two examples include failing hard drives and specifying an invalid root device or kernel in the boot loader configuration file. If either of these occur, you might not be able to reboot into {PRODUCT}. However, if you boot into installation program rescue mode, you might be able to resolve the problem or at least get copies of your most important files.
+
+[[sect-rescue-mode-reset-root-password]]
+==== Resetting the Root Password
+
+See the corresponding section in the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/sec-Terminal_Menu_Editing_During_Boot.html#sec-Changing_and_Resetting_the_Root_Password++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide]_.
+
+[[sect-rescue-mode]]
+=== Anaconda Rescue Mode
+
+The [application]*Anaconda* installation program's rescue mode is a minimal Linux environment that can be booted from the {PRODUCT} 7 DVD or other boot media. It contains command-line utilities for repairing a wide variety of issues. This rescue mode can be accessed from the Troubleshooting submenu of the boot menu. In this mode, you can mount file systems as read-only or even to not mount them at all, blacklist or add a driver provided on a driver disc, install or upgrade system packages, or manage partitions.
+
+[NOTE]
+====
+
+[application]*Anaconda* rescue mode is different from _rescue mode_ (an equivalent to _single-user mode_) and _emergency mode_, which are provided as parts of the [application]*systemd* system and service manager. For more information about these modes, see link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
+
+====
+
+To boot into [application]*Anaconda* rescue mode, you must be able to boot the system using one {PRODUCT} boot media, such as a minimal boot disc or USB drive, or a full installation DVD.
+
+For detailed information about booting the system using media provided by {PRODUCT}, see the appropriate chapters:
+
+* <<chap-booting-installer-x86>> for 64-bit AMD, Intel, and ARM systems
+
+* <<chap-booting-installer-ppc>> for IBM Power{nbsp}Systems servers
+
+[IMPORTANT]
+====
+
+Advanced storage, such as iSCSI or zFCP devices, must be configured using `dracut` boot options such as [option]`rd.zfcp=` or [option]`root=iscsi:pass:attributes[{blank}]_options_pass:attributes[{blank}]`. It is not possible to configure these storage devices interactively after booting into rescue mode.
+
+For information about `dracut` boot options, see the `dracut.cmdline(7)` man page.
+
+====
+
+[[proc-booting-into-installer-rescue-mode]]
+.Booting into Anaconda Rescue Mode
+. Boot the system from either minimal boot media, or a full installation DVD or USB drive, and wait for the boot menu to appear.
+
+. From the boot menu, either select the Rescue a {PRODUCT} system option from the Troubleshooting submenu, or append the [option]`inst.rescue` option to the boot command line. To enter the boot command line, press the kbd:[Tab] key on BIOS-based systems or the kbd:[e] key on the UEFI-based systems.
+
+. If your system requires a third-party driver provided on a _driver disc_ to boot, append the [option]`inst.dd=pass:attributes[{blank}]_driver_name_pass:attributes[{blank}]` to the boot command line:
++
+[literal,subs="+quotes,verbatim"]
+....
+inst.rescue inst.dd=driver_name
+....
++
+For more information on using a driver disc at boot time, see <<sect-driver-updates-manual-x86>> for AMD64 and Intel{nbsp}64 systems or <<sect-driver-updates-manual-ppc>> for IBM Power{nbsp}Systems servers.
+
+. If a driver that is part of the {PRODUCT}{nbsp}7 distribution prevents the system from booting, append the [option]`modprobe.blacklist=` option to the boot command line:
++
+[literal,subs="+quotes,verbatim"]
+....
+inst.rescue modprobe.blacklist=driver_name
+....
++
+For more information about blacklisting drivers, see <<sect-blacklisting-a-driver-x86>>.
+
+. When ready, press kbd:[Enter] (BIOS-based systems) or kbd:[Ctrl + X] (UEFI-based systems) to boot the modified option. Then wait until the following message is displayed:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+The rescue environment will now attempt to find your Linux installation and mount it under the `/mnt/sysimage/` directory. You can then make any changes required to your system. If you want to proceed with this step choose 'Continue'. You can also choose to mount your file systems read-only instead of read-write by choosing 'Read-only'. If for some reason this process fails you can choose 'Skip' and this step will be skipped and you will go directly to a command line.
+
+....
++
+If you select btn:[Continue], it attempts to mount your file system under the directory `/mnt/sysimage/`. If it fails to mount a partition, you will be notified. If you select btn:[Read-Only], it attempts to mount your file system under the directory `/mnt/sysimage/`, but in read-only mode. If you select btn:[Skip], your file system is not mounted. Choose btn:[Skip] if you think your file system is corrupted.
+
+. Once you have your system in rescue mode, a prompt appears on VC (virtual console) 1 and VC 2 (use the kbd:[Ctrl + Alt + F1] key combination to access VC 1 and kbd:[Ctrl + Alt + F2] to access VC 2):
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`]
+....
+
+Even if your file system is mounted, the default root partition while in [application]*Anaconda* rescue mode is a temporary root partition, not the root partition of the file system used during normal user mode (`multi-user.target` or `graphical.target`). If you selected to mount your file system and it mounted successfully, you can change the root partition of the [application]*Anaconda* rescue mode environment to the root partition of your file system by executing the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] chroot /mnt/sysimage
+....
+
+This is useful if you need to run commands, such as [command]`rpm`, that require your root partition to be mounted as `/`. To exit the [command]`chroot` environment, type [command]`exit` to return to the prompt.
+
+If you selected btn:[Skip], you can still try to mount a partition or LVM2 logical volume manually inside [application]*Anaconda* rescue mode by creating a directory, such as `pass:attributes[{blank}]_/directory/_pass:attributes[{blank}]`, and typing the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] mount -t xfs /dev/mapper/VolGroup00-LogVol02 /directory
+....
+
+In the above command, `pass:attributes[{blank}]_/directory/_pass:attributes[{blank}]` is a directory that you have created and [command]`pass:attributes[{blank}]_/dev/mapper/VolGroup00-LogVol02_pass:attributes[{blank}]` is the LVM2 logical volume you want to mount. If the partition is a different type than XFS, replace the _xfs_ string with the correct type (such as `ext4`).
+
+If you do not know the names of all physical partitions, use the following command to list them:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] fdisk -l
+....
+
+If you do not know the names of all LVM2 physical volumes, volume groups, or logical volumes, use the [command]`pvdisplay`, [command]`vgdisplay` or [command]`lvdisplay` commands, respectively.
+
+From the prompt, you can run many useful commands, such as:
+
+* [command]`ssh`, [command]`scp`, and [command]`ping` if the network is started
++
+For details, see the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/s1-ssh-clients.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide]_.
+
+* [command]`dump` and [command]`restore` for users with tape drives
++
+For details, see the [application]*link:++https://access.redhat.com/labs/rbra/++[RHEL Backup and Restore Assistant]*.
+
+* [command]`parted` and [command]`fdisk` for managing partitions
++
+For details, see the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/ch-partitions.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Storage Administration Guide]_.
+
+* [command]`rpm` for installing or upgrading software
++
+For details, see the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/ch-RPM.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Administrator's Guide]_
+
+[[sect-rescue-reinstall-grub2]]
+==== Reinstalling the Boot Loader
+
+In some cases, the GRUB2 boot loader can mistakenly be deleted, corrupted, or replaced by other operating systems. The following steps detail the process on how GRUB is reinstalled on the master boot record:
+
+[[proc-rescue-reinstalling-GRUB2]]
+.Reinstalling the GRUB2 Boot Loader
+. Follow instructions in <<proc-booting-into-installer-rescue-mode>> to boot into [application]*Anaconda* rescue mode. Ensure that you mount the installed system's `/` (root) partition in read-write mode.
+
+. Change the root partition:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] chroot /mnt/sysimage/
+....
+
+. Use the following command to reinstall the GRUB2 boot loader, where _install_device_ is the boot device (typically, /dev/sda):
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] /sbin/grub2-install install_device
+....
+
+. Reboot the system.
+
+[[sect-rescue-driver-add-remove-replace]]
+==== Using RPM to Add, Remove, or Replace a Driver
+
+Missing or malfunctioning drivers can cause problems when booting the system. [application]*Anaconda* rescue mode provides an environment in which you can add, remove, or replace a driver even when the system fails to boot. Wherever possible, we recommend that you use the [application]*RPM* package manager to remove malfunctioning drivers or to add updated or missing drivers.
+
+[NOTE]
+====
+
+When you install a driver from a driver disc, the driver disc updates all initramfs images on the system to use this driver. If a problem with a driver prevents a system from booting, you cannot rely on booting the system from another initramfs image.
+
+====
+
+[[proc-rescue-remove-drivers]]
+.Using RPM to Remove a Driver
+. Boot the system into [application]*Anaconda* rescue mode. Follow the instructions in <<proc-booting-into-installer-rescue-mode>>. Ensure that you mount the installed system in read-write mode.
+
+. Change the root directory to `/mnt/sysimage/`:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] chroot /mnt/sysimage/
+....
+
+. Use the [command]`rpm -e` command to remove the driver package. For example, to remove the [package]*xorg-x11-drv-wacom* driver package, run:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] rpm -e xorg-x11-drv-wacom
+....
+
+. Exit the chroot environment:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] exit
+....
+
+If you cannot remove a malfunctioning driver for some reason, you can instead _blacklist_ the driver so that it does not load at boot time. See <<sect-blacklisting-a-driver-x86>> and <<chap-anaconda-boot-options>> for more information about blacklisting drivers.
+
+Installing a driver is a similar process but the RPM package must be available on the system:
+
+[[proc-installing-a-driver-from-an-RPM-package]]
+.Installing a Driver from an RPM package
+. Boot the system into [application]*Anaconda* rescue mode. Follow the instructions in <<proc-booting-into-installer-rescue-mode>>. Do _not_ choose to mount the installed system as read only.
+
+. Make the RPM package that contains the driver available. For example, mount a CD or USB flash drive and copy the RPM package to a location of your choice under `/mnt/sysimage/`, for example: `/mnt/sysimage/root/drivers/`
+
+. Change the root directory to `/mnt/sysimage/`:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] chroot /mnt/sysimage/
+....
+
+. Use the [command]`rpm -ivh` command to install the driver package. For example, to install the [package]*xorg-x11-drv-wacom* driver package from `/root/drivers/`, run:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] rpm -­ivh /root/drivers/xorg-x11-drv-wacom-0.23.0-6.el7.x86_64.rpm
+....
++
+[NOTE]
+====
+
+The `/root/drivers/` directory in this chroot environment is the `/mnt/sysimage/root/drivers/` directory in the original rescue environment.
+
+====
+
+. Exit the chroot environment:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`sh-4.2#`] exit
+....
+
+When you have finished removing and installing drivers, reboot the system.
