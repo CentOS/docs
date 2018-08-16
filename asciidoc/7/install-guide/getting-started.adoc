@@ -36,6 +36,6 @@ You can use the graphical interface remotely to install {PRODUCT}. For headless 
 
 In most situations, you can simply follow the procedure outlined in <<sect-simple-install-kickstart>> to create and configure a [application]*Kickstart* file, which can be used to perform an arbitrary number of non-interactive installations of {PRODUCT}.
 
-[application]*Kickstart* files can be automatically created based on choices made using the graphical interface, through the online [citetitle]_link:++https://access.redhat.com/labsinfo/kickstartconfig++[Kickstart Generator]_ tool, or written from scratch using any text editor. For more information, see <<sect-kickstart-file-create>>.
+[application]*Kickstart* files can be automatically created based on choices made using the graphical or text mode interface, or written from scratch using any text editor. For more information, see <<sect-kickstart-file-create>>.
 
 [application]*Kickstart* files can be easily maintained and updated using various utilities in {PRODUCT}. For more information, see <<sect-kickstart-maintain>>.
