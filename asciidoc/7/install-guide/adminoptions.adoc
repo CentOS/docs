@@ -625,15 +625,6 @@ Select network device to be used at early stage of installation. Different value
 |[option]`ksdevice=pass:attributes[{blank}]_MAC_pass:attributes[{blank}]`|Replaced with [option]`BOOTIF=pass:attributes[{blank}]_MAC_pass:attributes[{blank}]`
 |[option]`ksdevice=pass:attributes[{blank}]_device_pass:attributes[{blank}]`|Replaced by specifying the device name using the [option]`ip=` [application]*dracut* option.
 |===
-+
-[IMPORTANT]
-====
-
-When performing a Kickstart installation, booting from local media and having the Kickstart file on local media as well, the network will not be initialized. This means that any other Kickstart options requiring network access, such as pre-installation or post-installation scripts accessing a network location, will cause the installation to fail. This is a known issue; see BZ#link:++https://bugzilla.redhat.com/show_bug.cgi?id=1085310++[1085310] for details.
-
-To work around this issue, either use the [option]`ksdevice=link` boot option, or add the [option]`--device=link` option to the [command]`network` command in your Kickstart file.
-
-====
 
 [option]`blacklist=`::
 +
