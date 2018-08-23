@@ -18,8 +18,6 @@ Logical Volume Management (LVM) provides administrators with a range of faciliti
 Remote Displays::
 +
 {PRODUCT} and [application]*Anaconda* include VNC (Virtual Network Computing) software to enable remote access to graphical displays. For more information about VNC, see the TigerVNC chapter in the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/ch-TigerVNC.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide]_.
-+
-You can also use the link:++https://access.redhat.com/labs/vncconfig/++[VNC Configurator] application on the Red{nbsp}Hat Customer Portal to guide you through VNC server and client setup.
 
 Remote System Access::
 +

@@ -140,8 +140,6 @@ From the prompt, you can run many useful commands, such as:
 For details, see the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/s1-ssh-clients.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide]_.
 
 * [command]`dump` and [command]`restore` for users with tape drives
-+
-For details, see the [application]*link:++https://access.redhat.com/labs/rbra/++[RHEL Backup and Restore Assistant]*.
 
 * [command]`parted` and [command]`fdisk` for managing partitions
 +

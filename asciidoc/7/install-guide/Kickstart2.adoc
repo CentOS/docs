@@ -2343,7 +2343,7 @@ Do not use this command in a Kickstart file that does not install the [applicati
 [IMPORTANT]
 ====
 
-It is currently not possible to specify [application]*KDE* as your default desktop environment using this option. This is a known issue. See link:++https://access.redhat.com/solutions/1125833++[] for a workaround. The workaround can be used as a Kickstart post-installation script as described in <<sect-kickstart-postinstall>>.
+It is currently not possible to specify [application]*KDE* as your default desktop environment using this option. This is a known issue.
 
 ====
 +
