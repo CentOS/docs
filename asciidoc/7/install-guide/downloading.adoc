@@ -16,7 +16,7 @@ Contains the installer and all packages available for {PRODUCT}. This ISO image 
 Minimal ISO::
 Contains the installer and a minimal set of packages which can be used to install a very basic {PRODUCT} system. You can then use [application]*Yum* to download additional packages from update repositories.
 
-The images listed on the page linked above are for the AMD64/Intel:nbsp:64 (`x86_64`) architecture, which is the {PRODUCT} basic distribution. Images for additional architectures such as 64-bit ARM (`aarch64`) or IBM Power Systems (`ppc64`), as well as cloud and container images, network install media (only the installer, requires a local package mirror) and live images, are available for download from the link:++https://wiki.centos.org/Download++[CentOS Wiki download page].
+The images listed on the page linked above are for the AMD64/Intel&nbsp;64 (`x86_64`) architecture, which is the {PRODUCT} basic distribution. Images for additional architectures such as 64-bit ARM (`aarch64`) or IBM Power Systems (`ppc64`), as well as cloud and container images, network install media (only the installer, requires a local package mirror) and live images, are available for download from the link:++https://wiki.centos.org/Download++[CentOS Wiki download page].
 
 . Optionally, you can use a checksum utility such as [application]*sha256sum* to verify the integrity of the image file after the download finishes. All downloads are provided with their checksums for reference:
 +
