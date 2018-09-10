@@ -1,0 +1,41 @@
+
+:experimental:
+include::entities.adoc[]
+
+[[chap-download]]
+== Downloading {PRODUCT}
+
+Before you start installing {PRODUCT}, you must download an installation ISO image. Images are available from the {PRODUCT} website at link:++https://www.centos.org/download/++[]. The following basic types of media are available:
+
+DVD ISO::
+This image contains the installer as well as a set of all packages that can be installed during an interactive installation. This is the recommended download for most users.
+
+Everything ISO::
+Contains the installer and all packages available for {PRODUCT}. This ISO image can be used to install the system with extra packages (using a Kickstart file and specifying extra packages in the [command]`%packages` section); it can also be used to set up a local mirror for downloading packages. Note that this image is very large and requires an at least 16 GB flash drive or other storage.
+
+Minimal ISO::
+Contains the installer and a minimal set of packages which can be used to install a very basic {PRODUCT} system. You can then use [application]*Yum* to download additional packages from update repositories.
+
+The images listed on the page linked above are for the AMD64/Intel&nbsp;64 (`x86_64`) architecture, which is the {PRODUCT} basic distribution. Images for additional architectures such as 64-bit ARM (`aarch64`) or IBM Power Systems (`ppc64`), as well as cloud and container images, network install media (only the installer, requires a local package mirror) and live images, are available for download from the link:++https://wiki.centos.org/Download++[CentOS Wiki download page].
+
+. Optionally, you can use a checksum utility such as [application]*sha256sum* to verify the integrity of the image file after the download finishes. All downloads are provided with their checksums for reference:
++
+[literal,subs="+quotes,attributes,verbatim,macros"]
+....
+$ sha256sum {PRODUCT}-server-{PRODVER}-x86_64-dvd.iso
+`85a...46c  {PRODUCT}-server-{PRODVER}-x86_64-dvd.iso`
+....
++
+Similar tools are available for link:++http://www.labtestproject.com/files/win/sha256sum/sha256sum.exe++[Microsoft Windows] and link:++https://itunes.apple.com/us/app/hashtab/id517065482++[Mac OS X]. You can also use the installation program to verify the media when starting the installation; see <<sect-boot-options-mediacheck>> for details.
+
+After you have downloaded an ISO image file from the Customer Portal, you can:
+
+* Burn it to a CD or DVD as described in <<sect-making-cd-dvd-media>>.
+
+* Use it to create a bootable USB drive; see <<sect-making-usb-media>>.
+
+* Place it on a server to prepare for a network installation. For specific directions, see <<sect-making-media-sources-network>>.
+
+* Place it on a hard drive to use the drive as an installation source. For specific instructions, see <<sect-making-media-sources-hdd>>.
+
+* Use it to prepare a _Preboot Execution Environment_ (PXE) server, which allows you to boot the installation system over a network. See <<chap-installation-server-setup>> for instructions.
