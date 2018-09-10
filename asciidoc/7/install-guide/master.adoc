@@ -7,7 +7,7 @@ include::Book_Info.adoc[]
 
 include::getting-started.adoc[]
 
-include::Obtaining_RHEL.adoc[]
+include::downloading.adoc[]
 
 include::Making_Media.adoc[]
 
