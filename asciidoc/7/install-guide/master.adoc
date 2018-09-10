@@ -112,5 +112,3 @@ include::techref.adoc[]
 include::ext4_to_xfs_command_reference_table.adoc[]
 
 include::data_size_appendix.adoc[]
-
-include::Revision_History.adoc[]
