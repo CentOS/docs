@@ -1,0 +1,25 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[appe-ext4-to-xfs-command-reference]]
+= Reference Table for ext4 and XFS Commands
+
+XFS replaces ext4 as the default file system in {PRODUCT}{nbsp}7. This table serves as a cross reference listing common file system manipulation tasks and any changes in these commands between ext4 and XFS.
+
+[[tabl-xt4-to-xfs-command-reference]]
+.Reference Table for ext4 and XFS Commands
+
+[options="header"]
+|===
+|Task|ext4|XFS
+|Creating a file system|[command]`mkfs.ext4`|[command]`mkfs.xfs`
+|Mounting a file system|[command]`mount`|[command]`mount`
+|Resizing a file system|[command]`resize2fs`|[command]`xfs_growfs`
+            footnote:[The size of XFS file systems cannot be reduced; the command is used only to increase the size.]
+|Repairing a file system|[command]`e2fsck`|[command]`xfs_repair`
+|Changing the label on a file system|[command]`e2label`|[command]`xfs_admin -L`
+|Reporting on disk space and file usage|[command]`quota`|[command]`quota`
+|Debugging a file system|[command]`debugfs`|[command]`xfs_db`
+|Saving critical file system metadata to a file|[command]`e2image`|[command]`xfs_metadump`
+|===

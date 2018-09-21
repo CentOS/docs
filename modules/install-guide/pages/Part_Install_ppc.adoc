@@ -1,0 +1,8 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[part-installation-ibm-power]]
+= IBM Power Systems - Installation and Booting
+
+This part of the {PRODUCT} Installation Guide includes information about installation and basic post-installation troubleshooting for IBM Power Systems servers. IBM Power Systems servers include IBM PowerLinux servers and POWER7, POWER8, and POWER9 Power Systems servers running Linux. For advanced installation options, see xref:Part_Install_Advanced.adoc#part-advanced-installation-options[Advanced Installation Options].

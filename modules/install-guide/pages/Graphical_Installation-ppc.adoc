@@ -1,0 +1,25 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[chap-installing-using-anaconda-ppc]]
+= Installing Using Anaconda
+
+This chapter provides step-by-step instructions for installing {PRODUCT} using the [application]*Anaconda* installer. The bulk of this chapter describes installation using the graphical user interface. A text mode is also available for systems with no graphical display, but this mode is limited in certain aspects (for example, custom partitioning is not possible in text mode).
+
+If your system does not have the ability to use the graphical mode, you can:
+
+* Use Kickstart to automate the installation as described in xref:Kickstart2.adoc#chap-kickstart-installations[Kickstart Installations]
+
+* Perform the graphical installation remotely by connecting to the installation system from another computer with a graphical display using the _VNC_ (Virtual Network Computing) protocol - see xref:vnc-installations.adoc#chap-vnc-installations[Using VNC]
+
+[[sect-installation-new-users-ppc]]
+== Introduction to Anaconda
+
+The {PRODUCT} installer, [application]*Anaconda*, is different from most other operating system installation programs due to its parallel nature. Most installers follow a fixed path: you must choose your language first, then you configure network, then installation type, then partitioning, and so on. There is usually only one way to proceed at any given time.
+
+In [application]*Anaconda* you are only required to select your language and locale first, and then you are presented with a central screen, where you can configure most aspects of the installation in any order you like. This does not apply to all parts of the installation process, however - for example, when installing from a network location, you must configure the network before you can select which packages to install.
+
+Some screens will be automatically configured depending on your hardware and the type of media you used to start the installation. You can still change the detected settings in any screen. Screens which have not been automatically configured, and therefore require your attention before you begin the installation, are marked by an exclamation mark. You cannot start the actual installation process before you finish configuring these settings.
+
+Additional differences appear in certain screens; notably the custom partitioning process is very different from other Linux distributions. These differences are described in each screen's subsection.

@@ -1,0 +1,40 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[sect-making-usb-media-windows]]
+=== Making Installation USB Media on Windows
+
+The procedure of creating bootable USB media on Windows depends on which tool you use. There are many different utilities which allow you to write an ISO image to a USB drive. {PRODUCT} recommends using the [application]*Fedora Media Writer*, available for download at link:++https://github.com/MartinBriza/MediaWriter/releases++[].
+
+[IMPORTANT]
+====
+
+Transferring the ISO image file to the USB drive using Windows Explorer or a similar file manager will not work - you will not be able to boot from the device.
+
+====
+
+[[proc-making-usb-media-windows]]
+.Making USB Media on Windows
+. Download and install [application]*Fedora Media Writer*.
+
+. Download the {PRODUCT} ISO image you want to use to create the media. (See xref:downloading.adoc#chap-download[Downloading {PRODUCT}] for instructions on obtaining ISO images.)
+
+. Plug in the USB drive you will be using to create bootable media.
+
+. Open [application]*Fedora Media Writer*.
+
+. In the main window, click `Custom Image` and select the downloaded {PRODUCT} ISO image.
+
+. From the drop-down menu, select the drive you want to use. If the drive does not appear, verify that the USB drive is connected and restart [application]*Fedora Media Writer*.
+
+. Click `Write to disk`. The boot media creation process will begin. Do not unplug the drive until the operation completes. Depending on the size of the ISO image and the write speed of the USB drive, writing the image can take several minutes.
++
+[[fedora-liveusb-creator]]
+.Fedora Media Writer
++
+image::{imagesdir}/media/fedora-live-usb-creator.png[Fedora Media Writer main window showing the Complete! message]
+
+. When the creation process finishes and the `Complete!` message appears, unmount the USB drive using the `Safely remove hardware` icon in the system's notification area.
+
+The USB drive is now ready to be used as a boot device. You can continue with xref:Boot_x86.adoc#chap-booting-installer-x86[Booting the Installation on 64-bit AMD, Intel, and ARM systems] on AMD, Intel, and ARM systems, or xref:Boot_ppc.adoc#chap-booting-installer-ppc[Booting the Installation on IBM Power{nbsp}Systems] on IBM Power{nbsp}Systems servers.

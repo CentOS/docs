@@ -1,0 +1,96 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[sect-making-usb-media-linux]]
+= Making Installation USB Media on Linux
+
+The following procedure assumes you are using a Linux system and that you have downloaded an appropriate ISO image as described in xref:downloading.adoc#chap-download[Downloading {PRODUCT}]. On most Linux distributions, it will work without the need for installing any additional packages.
+
+[WARNING]
+====
+
+This procedure is destructive. Any data on the USB flash drive will be destroyed with no warning. Make sure that you specify the correct drive, and make sure that this drive does not contain any data you want to preserve.
+
+====
+
+Many Linux distributions provide their own tools for creating live USB media, for example, [package]*usb-creator* on Ubuntu. Describing these tools is beyond the scope of this book; the following procedure will work on most Linux systems.
+
+[[proc-making-usb-media-linux]]
+.Making USB Media on Linux
+. Connect a USB flash drive to the system and execute the [command]`dmesg` command. A log detailing all recent events will be displayed. At the bottom of this log, you will see a set of messages caused by the USB flash drive you just connected. It will look like a set of lines similar to the following:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`[  170.171135] sd 5:0:0:0: [sdb] Attached SCSI removable disk`
+....
++
+Note the name of the connected device - in the above example, it is `sdb`.
+
+. Log in as `root`:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`su -`
+....
++
+Provide your root password when prompted.
+
+. Make sure that the device is not mounted. First, use the [command]`findmnt _device_` command and the device name you found in the earlier steps. For example, if the device name is `sdb`, use the following command:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`# findmnt /dev/sdb`
+....
++
+If the command displays no output, you can proceed with the next step. However, if the command does provide output, it means that the device was automatically mounted and you must unmount it before proceeding. A sample output will look similar to the following:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+`# findmnt /dev/sdb`
+TARGET   SOURCE   FSTYPE  OPTIONS
+/mnt/iso /dev/sdb iso9660 ro,relatime
+
+....
++
+Note the `TARGET` column. Next, use the [command]`umount _target_` command to unmount the device:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`# umount /mnt/iso`
+....
+
+. Use the [command]`dd` command to write the installation ISO image directly to the USB device:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`# dd if=/image_directory/image.iso of=/dev/device bs=blocksize`
+....
++
+Replace _/image_directory/image.iso_ with the full path to the ISO image file you downloaded, _device_ with the device name as reported by the [command]`dmesg` command earlier, and _blocksize_ with a reasonable block size (for example, `512k`) to speed up the writing process. The [option]`bs` parameter is optional, but it can speed up the process considerably.
++
+[IMPORTANT]
+====
+
+Make sure to specify the output as the device name (for example, `/dev/sda`), not as a name of a _partition_ on the device (for example, `/dev/sda1`).
+
+====
++
+For example, if the ISO image is located in `/home/testuser/Downloads/{PRODUCT}-server-x86_64-boot.iso` and the detected device name is `sdb`, the command will look like the following:
++
+[literal,subs="+quotes,attributes,verbatim,macros"]
+....
+`# dd if=/home/testuser/Downloads/{PRODUCT}-server-x86_64-boot.iso of=/dev/sdb bs=512k`
+....
+
+. Wait for [command]`dd` to finish writing the image to the device. Note that no progress bar is displayed; the data transfer is finished when the `#` prompt appears again. After the prompt is displayed, log out from the `root` account and unplug the USB drive.
+
+The USB drive is now ready to be used as a boot device. You can continue with xref:Boot_x86.adoc#chap-booting-installer-x86[Booting the Installation on 64-bit AMD, Intel, and ARM systems] on AMD, Intel, and ARM systems, or xref:Boot_ppc.adoc#chap-booting-installer-ppc[Booting the Installation on IBM Power{nbsp}Systems] on IBM Power{nbsp}Systems servers.
+
+[NOTE]
+====
+
+Non-virtualized installations (known as "bare metal" installations) on IBM Power Systems servers require that the [option]`inst.stage2=` boot option is specified. Refer to xref:adminoptions.adoc#sect-boot-options-installer[Configuring the Installation System at the Boot Menu] for information about the [option]`inst.stage2=` boot option.
+
+====

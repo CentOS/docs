@@ -1,0 +1,15 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[chap-making-media]]
+= Making Media
+
+This chapter describes how to use ISO image files obtained by following the steps in xref:downloading.adoc#chap-download[Downloading {PRODUCT}] to create bootable physical media, such as a DVD or a USB flash drive. You can then use these media to boot the installation program and start the installation. These steps only apply if you plan to install {PRODUCT} on a 64-bit AMD, Intel, or ARM system, or an IBM Power{nbsp}Systems server using physical boot media. For instructions on how to set up a _Preboot Execution Environment_ (PXE) server to perform a PXE-based installation over a network, see xref:pxe-server.adoc#chap-installation-server-setup[Preparing for a Network Installation].
+
+[NOTE]
+====
+
+By default, the [option]`inst.stage2=` boot option is used on the installation media and set to a specific label (for example, [option]`inst.stage2=hd:LABEL={PRODUCT}\x20Server.x86_64`). If you modify the default label of the file system containing the runtime image, or if using a customized procedure to boot the installation system, you must ensure this option is set to the correct value. See xref:adminoptions.adoc#list-boot-options-sources[Specifying the Installation Source] for details.
+
+====

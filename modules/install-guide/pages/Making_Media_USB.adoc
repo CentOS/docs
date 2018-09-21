@@ -1,0 +1,8 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[sect-making-usb-media]]
+== Making Installation USB Media
+
+You can use a USB drive or an SD card instead of a CD or DVD to create bootable media for installing {PRODUCT} on 64-bit AMD, Intel, or ARM systems. The exact procedure varies depending on whether you want to perform it on a Linux or Windows system. You can create minimal boot media and full installation media using the same procedure; the only limitation is the capacity of the USB drive - it must have enough space to fit the entire image, which means roughly 450{nbsp}MB for minimal boot media and 4.8{nbsp}GB for full installation media.

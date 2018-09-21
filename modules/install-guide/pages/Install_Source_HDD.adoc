@@ -1,0 +1,21 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[sect-making-media-sources-hdd]]
+= Installation Source on a Hard Drive
+
+Hard drive installations use an ISO image of the binary installation DVD. To use a hard drive as the installation source, transfer the binary DVD ISO image to the drive and connect it to the installation system. Then, boot the [application]*Anaconda* installation program.
+
+You can use any type of hard drive accessible to the installation program, including USB flash drives. The binary ISO image can be in any directory of the hard drive, and it can have any name; however, if the ISO image is not in the top-level directory of the drive, or if there is more than one image in the top-level directory of the drive, you will be required to specify the image to be used. This can be done using a boot option, an entry in a Kickstart file, or manually in the `Installation Source` screen during a graphical installation.
+
+A limitation of using a hard drive as the installation source is that the binary DVD ISO image on the hard drive must be on a partition with a file system which [application]*Anaconda* can mount. These file systems are `xfs`, `ext2`, `ext3`, `ext4`, and `vfat` (`FAT32`). Note that on Microsoft Windows systems, the default file system used when formatting hard drives is `NTFS`, and the `exFAT` file system is also available; however, neither of these file systems can be mounted during the installation. If you are creating a hard drive or a USB drive to be used as an installation source on Microsoft Windows, make sure to format the drive as `FAT32`.
+
+[IMPORTANT]
+====
+
+The `FAT32` file system does not support files larger than 4 GiB. Some {PRODUCT}{nbsp}7 installation media can be larger than that, which means you cannot copy them to a drive with this file system.
+
+====
+
+When using a hard drive or a USB flash drive as an installation source, make sure it is connected to the system when the installation begins. The installation program is not able to detect media inserted after the installation begins.

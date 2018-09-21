@@ -1,0 +1,139 @@
+
+:experimental:
+:toc:
+include::{partialsdir}/entities.adoc[]
+
+[[chap-initial-setup]]
+= Initial Setup
+
+After you started a new {PRODUCT} system the first time, the [application]*Initial Setup* application launches, if you installed the server:
+
+* Using the `Server with GUI` base environment in the {PRODUCT} setup.
+
+* Using a Kickstart file that contains one of the following entries in the `%packages` section:
++
+** the [package]*initial-setup-gui* package for graphical mode
++
+** the [package]*initial-setup* package for text mode
++
+** the [package]*x11* group
++
+** the [package]*gnome-desktop* group
++
+** the [package]*kde-desktop* group
+
+[discrete]
+== Options in the Initial Setup
+The [application]*Initial Setup* application can display the following options:
+
+[options="header"]
+|===
+|Option|Graphical User Interface|Text User Interface
+|License agreement
+						footnote:[This option is only displayed if you did not previously agreed to the license.]|Yes|Yes
+|Language settings
+						footnote:[This option is only displayed if you did not previously set it.]|No|Yes
+|Date & time|Yes|Yes
+						footnote:[This option is only available if you run [application]*Initial Setup* in reconfiguration mode]
+|Network & host name|Yes|No
+|Root password|Yes|Yes
+|User creation|Yes|Yes
+|===
+
+[IMPORTANT]
+====
+
+Options set during the setup are not displayed in the [application]*Initial Setup*. To display all options in [application]*Initial Setup*, you must install {PRODUCT} using a Kickstart file that contains the following command:
+
+[literal,subs="+quotes,verbatim"]
+....
+firstboot --enable --reconfig
+....
+
+The [option]`--reconfig` option specifies that all options should be displayed. For further details about Kickstart installations, see xref:Kickstart2.adoc#chap-kickstart-installations[Kickstart Installations].
+
+====
+
+[[initial-setup_GUI]]
+== Graphical Mode
+
+In graphical mode, the [application]*Initial Setup* displays the following screen:
+
+.Main Initial Setup Screen
+
+image::{imagesdir}/initial-setup/is-firstscreen.png[Initial Setup Screen]
+
+The `License Agreement` screen displays the overall licensing terms for {PRODUCT}.
+
+.License Information Screen
+
+image::{imagesdir}/initial-setup/is-license.png[License Information Screen in Initial Setup]
+
+In order to continue with the configuration process, the license agreement must be accepted. Exiting [application]*Initial Setup* without completing this step will cause the system to restart, and once the system finishes rebooting, you will be prompted to accept the agreement again.
+
+Review the license agreement. Then, select `I accept the license agreement.` and click btn:[Done] to continue.
+
+The `User Creation` screen is the same as the one used when creating an account during the installation. See xref:UserSpoke-x86.adoc#sect-account-configuration-user-x86[Create a User Account (x86)] for detailed information.
+
+Similarly, the `Network & Host Name` screen is the same as the one used when setting up network. See xref:NetworkSpoke-x86.adoc#sect-network-hostname-configuration-x86[Network & Hostname (x86)] for information.
+
+Once ready, click the btn:[FINISH CONFIGURATION] button to exit [application]*Initial Setup*.
+
+To start the [application]*Initial Setup* again, see xref:InitialSetupHub-common.adoc#starting_initial_setup_manually[Starting Initial Setup Manually.
+
+[[sect-initial-setup-text]]
+== Text Mode
+
+If you installed {PRODUCT} without the [application]*X Window System*, the [application]*Initial Setup* starts in text mode:
+
+.[application]*Initial Setup* in text mode
+
+image::{imagesdir}/initial-setup/is-tui.png[]
+
+To configure an entry, enter the menu number and press kbd:[Enter]. Additionally, you can press the following keys:
+
+* kbd:[q] to close the application. Until you accepted the license agreement, closing the application causes the system to reboot.
+
+* kbd:[c] to continue. Pressing this key in a submenu returns you to the main menu. In the main menu, pressing the kbd:[c] key stores the settings and closes the application. Note that you cannot continue without accepting the license agreement.
+
+* kbd:[r] to refresh the menu.
+
+Menu entries can have different statuses:
+
+* [option]`[x]`: This setting is already configured. However, you can change the setting.
+
+* [option]`[!]`: This setting is mandatory but not yet set.
+
+* [option]`[{nbsp}]`: This setting is optional and not yet set.
+
+To start the [application]*Initial Setup* again, see xref:InitialSetupHub-common.adoc#starting_initial_setup_manually[Starting Initial Setup Manually.
+
+[[starting_initial_setup_manually]]
+== Starting Initial Setup Manually
+
+Once you once finished the [application]*Initial Setup*, the application does not start again when you boot the system. To manually start the [application]*Initial Setup* on system boot:
+
+. Enable the service:
++
+[literal,subs="+quotes,verbatim"]
+....
+# systemctl enable initial-setup.service
+....
+
+. Optionally, to display all menu options, including the ones previously set, create an empty `/.unconfigured` file to start [application]*Initial Setup* in reconfiguration mode:
++
+[literal,subs="+quotes,verbatim"]
+....
+# touch /.unconfigured
+....
++
+Note that, regardless of this setting, the license agreement entry is not displayed again if you previously accepted it.
+
+. Reboot the system.
+
+[NOTE]
+====
+
+The [package]*initial-setup-gui* (graphical mode) or [package]*initial-setup* (text mode) packages must be installed for to run [application]*Initial Setup*.
+
+====
