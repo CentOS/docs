@@ -7,7 +7,7 @@ content:
      branches: HEAD
 ui:
   bundle:
-    url: https://asamalik.fedorapeople.org/ui-bundle.zip
+    url: ui-bundle.zip
     snapshot: true
   default_layout: with_menu
 output:
