@@ -1,0 +1,2944 @@
+
+:experimental:
+:toc:
+include::{partialsdir}/entities.adoc[]
+
+[[chap-kickstart-installations]]
+= Kickstart Installations
+
+[[sect-kickstart-introduction]]
+== What are Kickstart Installations?
+
+Kickstart installations offer a means to automate the installation process, either partially or fully. Kickstart files contain answers to all questions normally asked by the installation program, such as what time zone you want the system to use, how the drives should be partitioned, or which packages should be installed. Providing a prepared Kickstart file when the installation begins therefore allows you to perform the installation automatically, without need for any intervention from the user. This is especially useful when deploying {PRODUCT} on a large number of systems at once.
+
+Kickstart files can be kept on a single server system and read by individual computers during the installation. This installation method can support the use of a single Kickstart file to install {PRODUCT} on multiple machines, making it ideal for network and system administrators.
+
+All Kickstart scripts and the log files of their execution are stored in the `/tmp` directory to assist with debugging installation failures.
+
+[NOTE]
+====
+
+In previous versions of {PRODUCT}, Kickstart allowed for upgrading the system as well. In {PRODUCT}{nbsp}7, this functionality has been removed.
+
+====
+
+[[sect-kickstart-howto]]
+== How Do You Perform a Kickstart Installation?
+
+Kickstart installations can be performed using a local DVD, a local hard drive, NFS, FTP, HTTP, or HTTPS.
+
+To use Kickstart, you must:
+
+. Create a Kickstart file.
+
+. Make the Kickstart file available on removable media, a hard drive or a network location.
+
+. Create boot media, which will be used to begin the installation.
+
+. Make the installation source available.
+
+. Start the Kickstart installation.
+
+This chapter explains these steps in detail.
+
+[[sect-kickstart-file-create]]
+=== Creating a Kickstart File
+
+The Kickstart file itself is a plain text file, containing keywords listed in xref:Kickstart2.adoc#sect-kickstart-syntax[Kickstart Syntax Reference], which serve as directions for the installation. Any text editor able to save files as ASCII text, such as [application]*Gedit* or [application]*vim* on Linux systems or [application]*Notepad* on Windows systems, can be used to create and edit Kickstart files. The file name of your Kickstart configuration does not matter; however, it is recommended to use a simple name as you will need to specify this name later in other configuration files or dialogs.
+
+The recommended approach to creating Kickstart files is to perform a manual installation on one system first. After the installation completes, all choices made during the installation are saved into a file named `anaconda-ks.cfg`, located in the `/root/` directory on the installed system. You can then copy this file, make any changes you need, and use the resulting configuration file in further installations.
+
+[IMPORTANT]
+====
+
+If you have a Red{nbsp}Hat Customer{nbsp}Portal account, you can use the [application]*Kickstart Configuration Tool* available at link:++https://access.redhat.com/labs/kickstartconfig/++[] in the Customer Portal Labs. This tool will walk you through basic configuration and allows you to download the resulting Kickstart file. However, the tool currently does not supported any advanced partitioning.
+
+[application]*Kickstart Configurator*, the graphical tool for creating Kickstart files, is still available. However, it is no longer being updated and it does not reflect changes in Kickstart syntax between {PRODUCT}{nbsp}6 and 7.
+
+====
+
+When creating a Kickstart file, keep in mind the following:
+
+* Sections must be specified _in order_. Items within the sections do not have to be in a specific order unless otherwise specified. The section order is:
++
+** Command section - See xref:Kickstart2.adoc#sect-kickstart-commands[Kickstart Commands and Options] for a list of Kickstart options. You must include the required options.
++
+Add-ons for [application]*Anaconda* which expand the functionality of the installer can also be used in the command section by using the [command]`%addon _addon_name_pass:attributes[{blank}]` command. See xref:Kickstart2.adoc#sect-kickstart-addon[Kickstart Add-ons] for details.
++
+** The [command]`%packages` section - See xref:Kickstart2.adoc#sect-kickstart-packages[Package Selection] for details.
++
+** The [command]`%pre` and [command]`%post` sections, and the [command]`%onerror` section - these sections can be in any order and are not required. See xref:Kickstart2.adoc#sect-kickstart-preinstall[Pre-installation Script], xref:Kickstart2.adoc#sect-kickstart-postinstall[Post-installation Script] and xref:Kickstart2.adoc#sect-kickstart-onerror[Kickstart Error Handling] for details.
++
+[IMPORTANT]
+====
+
+Sections [command]`%addon`, [command]`%packages`, [command]`%onerror`, [command]`%pre` and [command]`%post` must end with [command]`%end`, otherwise the installation program will refuse the Kickstart file.
+
+====
+
+* Items that are not required can be omitted.
+
+* Omitting any required item results in the installation program prompting the user for an answer to the related item, just as the user would be prompted during a typical installation. Once the answer is given, the installation continues unattended (unless it finds another missing item).
+
+* Lines starting with a pound (also known as number) sign (`#`) are treated as comments and are ignored.
+
+[[sect-kickstart-verify]]
+==== Verifying the Kickstart File
+
+When creating or customizing your Kickstart file, it is useful to verify that it is valid before attempting to use it in an installation. {PRODUCT}{nbsp}7 includes the [application]*ksvalidator* command line utility which can be used to do this. This tool is a part of the [package]*pykickstart* package. To install this package, execute the following command as `root`:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] yum install pykickstart
+....
+
+After installing the package, you can validate a Kickstart file using the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`ksvalidator _/path/to/kickstart.ks_pass:attributes[{blank}]`
+....
+
+Replace _/path/to/kickstart.ks_ with the path to the Kickstart file you want to verify.
+
+For more information about this tool, see the `ksvalidator(1)` man page.
+
+[IMPORTANT]
+====
+
+Keep in mind that the validation tool has its limitations. The Kickstart file can be very complicated; [application]*ksvalidator* can make sure the syntax is correct and that the file does not include deprecated options, but it cannot guarantee the installation will be successful. It also does not attempt to validate the [command]`%pre`, [command]`%post` and [command]`%packages` sections of the Kickstart file.
+
+====
+
+[[sect-kickstart-syntax-changes]]
+==== Changes in Kickstart Syntax
+
+While the general principles of Kickstart installations tend to stay the same, the commands and options can change between major releases of {PRODUCT}. You can use the [command]`ksverdiff` command to display the differences between two versions of the Kickstart syntax. This is useful when updating an existing Kickstart file to be used with a new release. To display a list of changes in syntax between {PRODUCT} 6 and 7, use the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`ksverdiff -f RHEL6 -t RHEL7`
+....
+
+The [option]`-f` option specifies the release to start the comparison with, and the [option]`-t` option to specify the release to end with. For additional information, see the `ksverdiff(1)` man page.
+
+[[sect-kickstart-making-available]]
+=== Making the Kickstart File Available
+
+A Kickstart file must be placed in one of the following locations:
+
+* On _removable media_, such as a DVD or USB flash drive
+
+* On a _hard drive_ connected to the installation system
+
+* On a _network share_ reachable from the installation system
+
+Normally, a Kickstart file is copied to removable media or a hard drive, or made available on the network. Placing the file in a network location complements the usual approach to Kickstart installations, which is also network-based: the system is booted using a PXE server, the Kickstart file is downloaded from a network share, and software packages specified in the file are downloaded from remote repositories.
+
+Making the Kickstart file available and reachable from the installation system is exactly the same as making the installation source available, only with the Kickstart file instead of the installation ISO image or tree. For full procedures, see xref:Preparing_Install_Sources.adoc#sect-making-media-additional-sources[Preparing Installation Sources].
+
+[[sect-kickstart-installation-tree]]
+=== Making the Installation Source Available
+
+The Kickstart installation must access an installation source in order to install the packages needed by your system. The source can be either the full {PRODUCT} installation DVD ISO image, or an _installation tree_. An installation tree is a copy of the binary {PRODUCT} DVD with the same directory structure.
+
+If you are performing a DVD-based installation, insert the {PRODUCT} installation DVD into the computer before starting the Kickstart installation. See xref:Install_Source_DVD.adoc#sect-making-media-sources-dvd[Installation Source on a DVD] for information about using a {PRODUCT} DVD as the installation source.
+
+If you are performing a hard drive installation (using either a hard drive or an USB flash drive), make sure the ISO images of the binary {PRODUCT} DVD are on a hard drive in the computer. See xref:Install_Source_HDD.adoc#sect-making-media-sources-hdd[Installation Source on a Hard Drive] for details about using a hard drive as the installation source.
+
+If you are performing a network-based (NFS, FTP or HTTP) installation, you must make the installation tree or the binary DVD ISO image (depending on the protocol used) available over the network. See xref:Install_Source_Network.adoc#sect-making-media-sources-network[Installation Source on a Network] for details.
+
+[[sect-kickstart-installation-starting]]
+=== Starting the Kickstart Installation
+
+[NOTE]
+====
+
+To load your Kickstart file automatically without having to specify the [option]`inst.ks=` boot option, name the file `ks.cfg` and place it on a storage volume labeled `OEMDRV`.
+
+====
+
+To start a Kickstart installation, use the boot option [option]`inst.ks=pass:attributes[{blank}]_location_pass:attributes[{blank}]` when booting the installation system, replacing _location_ with the location of your Kickstart file. The exact way to specify the boot option depends on your system's architecture - see xref:adminoptions.adoc#chap-anaconda-boot-options[Boot Options] for details.
+
+64-bit AMD, Intel and ARM systems and IBM Power{nbsp}Systems servers have the ability to boot using a PXE server. When you configure the PXE server, you can add the boot option into the boot loader configuration file, which in turn allows you to start the installation automatically. Using this approach, it is possible to automate the installation completely, including the boot process. For information about setting up a PXE server, see xref:pxe-server.adoc#chap-installation-server-setup[Preparing for a Network Installation].
+
+Procedures in this section assume that you already have a Kickstart file ready in a location accessible from the installation system, as well as boot media or a PXE server which can be used to boot the system and begin the installation. The procedures are intended as a general reference; some steps differ based on your system's architecture, and not all options are available on all architectures.
+
+[[sect-kickstart-installation-starting-manual]]
+==== Starting the Kickstart Installation Manually
+
+This section explains how to start a Kickstart installation manually, which means some user interaction (adding boot options at the `boot:` prompt) will be required.
+
+[[proc-kickstart-installation-starting-manual]]
+.Starting the Kickstart Installation Using a Boot Option
+. Boot the system using either local media (a CD, DVD, or a USB flash drive). For architecture-specific instructions, see:
++
+** xref:Boot_x86.adoc#chap-booting-installer-x86[Booting the Installation on 64-bit AMD, Intel, and ARM systems] for 64-bit AMD, Intel, and ARM systems
++
+** xref:Boot_ppc.adoc#chap-booting-installer-ppc[Booting the Installation on IBM Power{nbsp}Systems] for IBM Power{nbsp}Systems servers
+
+. At the boot prompt, specify the [option]`inst.ks=` boot option and the location of the Kickstart file. If the Kickstart file is in a network location, you must also configure the network using the [option]`ip=` option. In some cases, the [option]`inst.repo=` option is also necessary in order to access a software source from which necessary packages will be installed.
++
+For details about boot options and valid syntax, see xref:adminoptions.adoc#chap-anaconda-boot-options[Boot Options].
+
+. Start the installation by confirming your added boot options.
+
+The installation begins now, using the options specified in the Kickstart file. If the Kickstart file is valid and contains all required commands, the installation is completely automated from this point forward.
+
+[[sect-kickstart-installation-starting-automatic]]
+==== Starting the Kickstart Installation Automatically
+
+The following procedure explains how to completely automate the Kickstart installation, using a network boot (PXE) server and a properly configured boot loader. If you follow this procedure, you only need to turn on the system; no other interaction will be required from that moment until the installation finishes.
+
+[[proc-kickstart-installation-starting-network]]
+.Starting the Kickstart Installation by Editing Boot Loader Configuration
+. Open the boot loader configuration file on your PXE server, and add the [option]`inst.ks=` boot option to the appropriate line. The name of the file and its syntax depends on your system's architecture and hardware:
++
+** On AMD64 and Intel{nbsp}64 systems with _BIOS_, the file name can be either `default` or based on your system's IP address. In this case, add the [option]`inst.ks=` option to the `append` line in the installation entry. A sample `append` line in the configuration file looks similar to the following:
++
+[literal,subs="+quotes,attributes,verbatim"]
+....
+append initrd=initrd.img inst.ks=http://10.32.5.1/mnt/archive/{PRODUCT}/{PRODVER}/Server/x86_64/kickstarts/ks.cfg
+....
++
+** On systems using the [application]*GRUB2* boot loader (64-bit AMD, Intel, and ARM systems with UEFI firmware and IBM Power{nbsp}Systems servers), the file name will be `grub.cfg`. In this file, append the [option]`inst.ks=` option to the `kernel` line in the installation entry. A sample `kernel` line in the configuration file will look similar to the following:
++
+[literal,subs="+quotes,attributes,verbatim"]
+....
+kernel vmlinuz inst.ks=http://10.32.5.1/mnt/archive/{PRODUCT}/{PRODVER}/Server/x86_64/kickstarts/ks.cfg
+....
+
+. Boot the installation from the network server. For architecture-specific instructions, see:
++
+** xref:Boot_x86.adoc#sect-booting-from-pxe-x86[Booting from the Network Using PXE (x86)] for 64-bit AMD, Intel, and ARM systems
++
+** xref:Boot_ppc.adoc#sect-booting-from-pxe-ppc[Booting from the Network Using PXE (ppc)] for IBM Power{nbsp}Systems servers
+
+The installation begins now, using the installation options specified in the Kickstart file. If the Kickstart file is valid and contains all required commands, the installation is completely automated.
+
+[[sect-kickstart-syntax]]
+== Kickstart Syntax Reference
+
+[[sect-kickstart-commands]]
+=== Kickstart Commands and Options
+
+[NOTE]
+====
+
+If an option is followed by an equals mark (`=`), a value must be specified after it. In the example commands, options in square brackets (`[ ]`) are optional arguments for the command.
+
+====
+
+[command]`auth` or [command]`authconfig` (optional)::
++
+Sets up the authentication options for the system using the [command]`authconfig` command, which can also be run on the command line after the installation finishes. See the `authconfig(8)` manual page and the [command]`authconfig --help` command for more details. Passwords are shadowed by default.
++
+[WARNING]
+====
+
+When using OpenLDAP with the `SSL` protocol for security, make sure that the `SSLv2` and `SSLv3` protocols are disabled in the server configuration. This is due to the POODLE SSL vulnerability (CVE-2014-3566). See link:++https://access.redhat.com/solutions/1234843++[] for details.
+
+====
++
+** [option]`--enablenis` - Turns on NIS support. By default, [option]`--enablenis` uses whatever domain it finds on the network. A domain should almost always be set by hand with the [option]`--nisdomain=` option.
++
+** [option]`--nisdomain=` - NIS domain name to use for NIS services.
++
+** [option]`--nisserver=` - Server to use for NIS services (broadcasts by default).
++
+** [option]`--useshadow` or [option]`--enableshadow` - Use shadow passwords.
++
+** [option]`--enableldap` - Turns on LDAP support in `/etc/nsswitch.conf`, allowing your system to retrieve information about users (for example, their UIDs, home directories, and shells) from an LDAP directory. To use this option, you must install the [package]*nss-pam-ldapd* package. You must also specify a server and a base _DN_ (distinguished name) with [option]`--ldapserver=` and [option]`--ldapbasedn=`.
++
+** [option]`--enableldapauth` - Use LDAP as an authentication method. This enables the `pam_ldap` module for authentication and changing passwords, using an LDAP directory. To use this option, you must have the [package]*nss-pam-ldapd* package installed. You must also specify a server and a base DN with [option]`--ldapserver=` and [option]`--ldapbasedn=`. If your environment does not use _TLS_ (Transport Layer Security), use the [option]`--disableldaptls` switch to ensure that the resulting configuration file works.
++
+** [option]`--ldapserver=` - If you specified either [option]`--enableldap` or [option]`--enableldapauth`, use this option to specify the name of the LDAP server to use. This option is set in the `/etc/ldap.conf` file.
++
+** [option]`--ldapbasedn=` - If you specified either [option]`--enableldap` or [option]`--enableldapauth`, use this option to specify the DN in your LDAP directory tree under which user information is stored. This option is set in the `/etc/ldap.conf` file.
++
+** [option]`--enableldaptls` - Use TLS (Transport Layer Security) lookups. This option allows LDAP to send encrypted user names and passwords to an LDAP server before authentication.
++
+** [option]`--disableldaptls` - Do not use TLS (Transport Layer Security) lookups in an environment that uses LDAP for authentication.
++
+** [option]`--enablekrb5` - Use Kerberos 5 for authenticating users. Kerberos itself does not know about home directories, UIDs, or shells. If you enable Kerberos, you must make users' accounts known to this workstation by enabling LDAP, NIS, or Hesiod or by using the [command]`useradd` command. If you use this option, you must have the [package]*pam_krb5* package installed.
++
+** [option]`--krb5realm=` - The Kerberos 5 realm to which your workstation belongs.
++
+** [option]`--krb5kdc=` - The KDC (or KDCs) that serve requests for the realm. If you have multiple KDCs in your realm, use a comma-separated list without spaces.
++
+** [option]`--krb5adminserver=` - The KDC in your realm that is also running kadmind. This server handles password changing and other administrative requests. This server must be run on the master KDC if you have more than one KDC.
++
+** [option]`--enablehesiod` - Enables Hesiod support for looking up user home directories, UIDs, and shells. More information on setting up and using Hesiod on your network is in `/usr/share/doc/glibc-2.x.x/README.hesiod`, which is included in the [package]*glibc* package. Hesiod is an extension of DNS that uses DNS records to store information about users, groups, and various other items.
++
+** [option]`--hesiodlhs` and [option]`--hesiodrhs` - The `Hesiod` LHS (left-hand side) and RHS (right-hand side) values, set in `/etc/hesiod.conf`. The `Hesiod` library uses these values to search DNS for a name, similar to the way that `LDAP` uses a base DN.
++
+To look up user information for the user name `jim`, the Hesiod library looks up `jim.passwdpass:attributes[{blank}]_LHS_pass:attributes[{blank}]pass:attributes[{blank}]_RHS_pass:attributes[{blank}]`, which should resolve to a TXT record that contains a string identical to an entry for that user in the `passwd` file: `jim:*:1001:1001:Jungle Jim:/home/jim:/bin/bash`. To look up groups, the Hesiod library looks up `jim.grouppass:attributes[{blank}]_LHS_pass:attributes[{blank}]pass:attributes[{blank}]_RHS_pass:attributes[{blank}]` instead.
++
+To look up users and groups by number, make `1001.uid` a CNAME for `jim.passwd`, and `1001.gid` a CNAME for `jim.group`. Note that the library does not place a period (`.`) in front of the LHS and RHS values when performing a search. Therefore, if the LHS and RHS values need to have a period placed in front of them, you must include the period in the values you set for [option]`--hesiodlhs` and [option]`--hesiodrhs`.
++
+** [option]`--enablesmbauth` - Enables authentication of users against an SMB server (typically a Samba or Windows server). SMB authentication support does not know about home directories, UIDs, or shells. If you enable SMB, you must make users' accounts known to theworkstation by enabling LDAP, NIS, or Hesiod or by using the [command]`useradd` command.
++
+** [option]`--smbservers=` - The name of the servers to use for SMB authentication. To specify more than one server, separate the names with commas (`,`).
++
+** [option]`--smbworkgroup=` - The name of the workgroup for the SMB servers.
++
+** [option]`--enablecache` - Enables the `nscd` service. The `nscd` service caches information about users, groups, and various other types of information. Caching is especially helpful if you choose to distribute information about users and groups over your network using `NIS`, `LDAP`, or `Hesiod`.
++
+** [option]`--passalgo=` - Specify [option]`sha256` to set up the SHA-256 hashing algorithm or [option]`sha512` to set up the SHA-512 hashing algorithm.
+
+[command]`autopart` (optional)::
++
+Automatically creates partitions: a root (`/`) partition (1 GB or larger), a `swap` partition, and an appropriate `/boot` partition for the architecture. On large enough drives (50{nbsp}GB and larger), this also creates a `/home` partition.
++
+[IMPORTANT]
+====
+
+The [command]`autopart` option cannot be used together with the [command]`part/partition`, [command]`raid`, [command]`logvol`, or [command]`volgroup` options in the same Kickstart file.
+
+====
++
+** [option]`--type=` - Selects one of the predefined automatic partitioning schemes you want to use. Accepts the following values:
++
+*** `lvm`: The LVM partitioning scheme.
++
+*** `btrfs`: The Btrfs partitioning scheme.
++
+*** `plain`: Regular partitions with no LVM or Btrfs.
++
+*** `thinp`: The LVM Thin Provisioning partitioning scheme.
++
+For a description of the available partition schemes, see xref:CustomSpoke-x86.adoc#sect-file-system-types-x86[File System Types (x86)].
++
+** [option]`--fstype=` - Selects one of the available file system types. The available values are `ext2`, `ext3`, `ext4`, `xfs`, and `vfat`. The default file system is `xfs`. For information about these file systems, see xref:CustomSpoke-x86.adoc#sect-file-system-types-x86[File System Types (x86)].
++
+** [option]`--nohome` - Disables automatic creation of the `/home` partition.
++
+** [option]`--nolvm` - Do not use LVM or Btrfs for automatic partitioning. This option is equal to [option]`--type=plain`.
++
+** [option]`--encrypted` - Encrypts all partitions. This is equivalent to checking the `Encrypt partitions` check box on the initial partitioning screen during a manual graphical installation.
++
+[NOTE]
+====
+
+When encrypting one or more partitions, [application]*Anaconda* attempts to gather 256 bits of entropy to ensure the partitions are encrypted securely. Gathering entropy can take some time - the process will stop after a maximum of 10 minutes, regardless of whether sufficient entropy has been gathered.
+
+The process can be sped up by interacting with the installation system (typing on the keyboard or moving the mouse). If you are installing in a virtual machine, you can also attach a virtio-rng device (a virtual random number generator) to the guest as described in the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Virtualization_Deployment_and_Administration_Guide/sect-Guest_virtual_machine_device_configuration-Random_number_generator_device.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Virtualization Deployment and Administration Guide].
+
+====
++
+** [option]`--passphrase=` - Provides a default system-wide passphrase for all encrypted devices.
++
+** [option]`--escrowcert=pass:attributes[{blank}]_URL_of_X.509_certificate_pass:attributes[{blank}]` - Stores data encryption keys of all encrypted volumes as files in `/root`, encrypted using the X.509 certificate from the URL specified with _URL_of_X.509_certificate_. The keys are stored as a separate file for each encrypted volume. This option is only meaningful if [option]`--encrypted` is specified.
++
+** [option]`--backuppassphrase` - Adds a randomly-generated passphrase to each encrypted volume. Store these passphrases in separate files in `/root`, encrypted using the X.509 certificate specified with [option]`--escrowcert`. This option is only meaningful if [option]`--escrowcert` is specified.
++
+** [option]`--cipher=` - Specifies the type of encryption to use if the [application]*Anaconda* default `aes-xts-plain64` is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either `aes-xts-plain64` or `aes-cbc-essiv:sha256`.
++
+[NOTE]
+====
+
+It is recommended to use the [option]`autopart --nohome` Kickstart option when installing on a single FBA DASD of the CMS type. This ensures that the installer does not create a separate `/home` partition. The installation then proceeds successfully.
+
+====
+
+[command]`autostep` (optional)::
++
+Normally, Kickstart installations skip unnecessary screens. This option makes the installation program step through every screen, displaying each briefly. This option should not be used when deploying a system because it can disrupt package installation.
++
+** [option]`--autoscreenshot` - Take a screenshot at every step during installation. These screenshots are stored in `/tmp/anaconda-screenshots/` during the installation, and after the installation finishes you can find them in `/root/anaconda-screenshots`.
++
+Each screen is only captured right before the installer switches to the next one. This is important, because if you do not use all required Kickstart options and the installation therefore does not begin automatically, you can go to the screens which were not automatically configured, perform any configuration you want. Then, when you click `Done` to continue, the screen is captured including the configuration you just provided.
+
+[command]`bootloader` (required)::
++
+Specifies how the boot loader should be installed.
++
+[IMPORTANT]
+====
+
+{PRODUCT} recommends setting up a boot loader password on every system. An unprotected boot loader can allow a potential attacker to modify the system's boot options and gain unauthorized access to the system.
+
+====
++
+[IMPORTANT]
+====
+
+Device names in the `sdpass:attributes[{blank}]_X_pass:attributes[{blank}]` (or `/dev/sdpass:attributes[{blank}]_X_pass:attributes[{blank}]`) format are not guaranteed to be consistent across reboots, which can complicate usage of some Kickstart commands. When a command calls for a device node name, you can instead use any item from `/dev/disk`. For example, instead of:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=sda1`
+....
+
+You could use an entry similar to one of the following:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=/dev/disk/by-path/pci-0000:00:05.0-scsi-0:0:0:0-part1`
+....
+
+[literal,subs="+quotes,verbatim"]
+....
+part / --fstype=xfs --onpart=/dev/disk/by-id/ata-ST3160815AS_6RA0C882-part1
+....
+
+This way the command will always target the same storage device. This is especially useful in large storage environments. See the chapter about persistent storage device naming in the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/persistent_naming.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Storage Administration Guide]_ for more in-depth information about different ways to consistently refer to storage devices.
+
+====
++
+[NOTE]
+====
+
+In some cases, a special partition is required to install the boot loader on 64-bit AMD, Intel, and ARM systems. The type and size of this partition depends on whether the disk you are installing the boot loader to uses the _Master Boot Record_ (MBR) or a _GUID Partition Table_ (GPT) schema. For more information, see xref:StorageSpoke-x86.adoc#sect-bootloader-x86[Boot Loader Installation (x86)].
+
+====
++
+** [option]`--append=` - Specifies additional kernel parameters. To specify multiple parameters, separate them with spaces. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`bootloader --location=mbr --append="hdd=ide-scsi ide=nodma"`
+....
++
+The [option]`rhgb` and [option]`quiet` parameters are always used, even if you do not specify them here or do not use the [option]`--append=` command at all.
++
+This option is useful for disabling mechanisms which were implemented to mitigate the Meltdown and Spectre speculative execution vulnerabilities found in most modern processors (CVE-2017-5754, CVE-2017-5753, and CVE-2017-5715). In some cases, these mechanisms may be unnecessary, and keeping them enabled causes decreased performance with no improvement in security. To disable these mechanisms, add the options to do so into your Kickstart file - for example, [command]`bootloader --append="nopti noibrs noibpb"` on AMD64/Intel 64 systems.
++
+[WARNING]
+====
+
+Ensure your system is not at risk of attack before disabling any of the vulnerability mitigation mechanisms. See the link:++https://access.redhat.com/security/vulnerabilities/speculativeexecution++[Red Hat vulnerability response article] for information about the Meltdown and Spectre vulnerabilities.
+
+====
++
+** [option]`--boot-drive=` - Specifies which drive the boot loader should be written to, and therefore which drive the computer will boot from. If you use a multipath device as the boot drive, specify only one member of the device.
++
+** [option]`--leavebootorder` - The installer will add {PRODUCT} 7 to the top of the list of installed systems in the boot loader, and preserve all existing entries as well as their order.
++
+** [option]`--driveorder=` - Specifies which drive is first in the BIOS boot order. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`bootloader --driveorder=sda,hda`
+....
++
+** [option]`--location=` - Specifies where the boot record is written. Valid values are the following:
++
+*** `mbr` - The default option. Depends on whether the drive uses the Master Boot Record (MBR) or GUID Partition Table (GPT) scheme:
++
+**** On a GPT-formatted disk, this option installs stage 1.5 of the boot loader into the BIOS boot partition.
++
+**** On an MBR-formatted disk, stage 1.5 is installed into the empty space between the MBR and the first partition.
++
+*** `partition` - Install the boot loader on the first sector of the partition containing the kernel.
++
+*** `none` - Do not install the boot loader.
++
+In most cases, this option does not need to be specified.
++
+** [option]`--password=` - If using [application]*GRUB2*, sets the boot loader password to the one specified with this option. This should be used to restrict access to the [application]*GRUB2* shell, where arbitrary kernel options can be passed.
++
+If a password is specified, [application]*GRUB2* also asks for a user name. The user name is always `root`.
++
+** [option]`--iscrypted` - Normally, when you specify a boot loader password using the [option]`--password=` option, it is stored in the Kickstart file in plain text. If you want to encrypt the password, use this option and an encrypted password.
++
+To generate an encrypted password, use the [command]`grub2-mkpasswd-pbkdf2` command, enter the password you want to use, and copy the command's output (the hash starting with `grub.pbkdf2`) into the Kickstart file. An example [command]`bootloader` Kickstart entry with an encrypted password looks similar to the following:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`bootloader --iscrypted --password=grub.pbkdf2.sha512.10000.5520C6C9832F3AC3D149AC0B24BE69E2D4FB0DBEEDBD29CA1D30A044DE2645C4C7A291E585D4DC43F8A4D82479F8B95CA4BA4381F8550510B75E8E0BB2938990.C688B6F0EF935701FF9BD1A8EC7FE5BD2333799C98F28420C5CC8F1A2A233DE22C83705BB614EA17F3FDFDF4AC2161CEA3384E56EB38A2E39102F5334C47405E`
+....
++
+** [option]`--timeout=` - Specifies the amount of time the boot loader waits before booting the default option (in seconds).
++
+** [option]`--default=` - Sets the default boot image in the boot loader configuration.
++
+** [option]`--extlinux` - Use the [application]*extlinux* boot loader instead of [application]*GRUB2*. This option only works on systems supported by [application]*extlinux*.
++
+** [option]`--disabled` &mdash; This option is a stronger version of [option]`--location=none`. While [option]`--location=none` simply disables boot loader installation, [option]`--disabled` disables boot loader installation and also disables installation of the package containing the boot loader, thus saving space.
+
+[command]`btrfs` (optional)::
++
+Create a Btrfs volume or subvolume. For a volume, the syntax is:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`btrfs _mntpoint_ --data=pass:attributes[{blank}]_level_ --metadata=pass:attributes[{blank}]_level_ --label=pass:attributes[{blank}]_label_ _partitions_pass:attributes[{blank}]`
+....
++
+One or more partitions can be specified in _partitions_. When specifying more than one partitions, the entries must be separated by a single space. See xref:Kickstart2.adoc#exam-kickstart-create-btrfs[Creating Btrfs Volumes and Subvolumes] for a demonstration.
++
+For a subvolume, the syntax is:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`btrfs _mntpoint_ --subvol --name=pass:attributes[{blank}]_path_ _parent_pass:attributes[{blank}]`
+....
++
+_parent_ should be the identifier of the subvolume's parent volume and _mntpoint_ is the location where the file system is mounted.
++
+** [option]`--data=` - RAID level to use for file system data (such as 0, 1, or 10). This parameter is optional, has no meaning for subvolumes, and requires more than one physical disk.
++
+** [option]`--metadata=` - RAID level to use for file system/volume metadata (such as `0`, `1`, or `10`). Optional. This option has no meaning for subvolumes and requires more than one physical disk.
++
+** [option]`--label=` - Specify a label for the Btrfs file system. If the given label is already in use by another file system, a new label is created. This option has no meaning for subvolumes.
++
+** [option]`--noformat` or [option]`--useexisting` - Use an existing Btrfs volume (or subvolume) and do not reformat the file system.
++
+** [option]`--mkfsoptions=` - Specifies additional parameters to be passed to the program that makes a filesystem on this partition. No processing is done on the list of arguments, so they must be supplied in a format that can be passed directly to the [application]*mkfs* program. This means multiple options should be comma-separated or surrounded by double quotes, depending on the filesystem.
++
+The following example shows how to create a Btrfs volume from member partitions on three disks with subvolumes for `/` and `/home`. The main volume is not mounted or used directly in this example.
++
+[[exam-kickstart-create-btrfs]]
+.Creating Btrfs Volumes and Subvolumes
+====
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`part btrfs.01 --size=6000 --ondisk=sda`
+[command]`part btrfs.02 --size=6000 --ondisk=sdb`
+[command]`part btrfs.03 --size=6000 --ondisk=sdc`
+
+[command]`btrfs none --data=0 --metadata=1 --label=centos7 btrfs.01 btrfs.02 btrfs.03`
+[command]`btrfs / --subvol --name=root LABEL=centos7`
+[command]`btrfs /home --subvol --name=home centos7`
+
+....
+
+====
+
+[command]`clearpart` (optional)::
++
+Removes partitions from the system, prior to creation of new partitions. By default, no partitions are removed.
++
+[IMPORTANT]
+====
+
+Device names in the `sdpass:attributes[{blank}]_X_pass:attributes[{blank}]` (or `/dev/sdpass:attributes[{blank}]_X_pass:attributes[{blank}]`) format are not guaranteed to be consistent across reboots, which can complicate usage of some Kickstart commands. When a command calls for a device node name, you can instead use any item from `/dev/disk`. For example, instead of:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=sda1`
+....
+
+You could use an entry similar to one of the following:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=/dev/disk/by-path/pci-0000:00:05.0-scsi-0:0:0:0-part1`
+....
+
+[literal,subs="+quotes,verbatim"]
+....
+part / --fstype=xfs --onpart=/dev/disk/by-id/ata-ST3160815AS_6RA0C882-part1
+....
+
+This way the command will always target the same storage device. This is especially useful in large storage environments. See the chapter about persistent storage device naming in the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/persistent_naming.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Storage Administration Guide]_ for more in-depth information about different ways to consistently refer to storage devices.
+
+====
++
+[NOTE]
+====
+
+If the [command]`clearpart` command is used, then the [command]`part --onpart` command cannot be used on a logical partition.
+
+====
++
+For a detailed example of partitioning including the [command]`clearpart` command, see xref:Kickstart2.adoc#sect-kickstart-partitioning-example[Advanced Partitioning Example].
++
+** [option]`--all` - Erases all partitions from the system.
++
+[WARNING]
+====
+
+This option will erase all disks which can be reached by the installer, including any attached network storage. Use this option with caution.
+
+You can prevent [command]`clearpart` from wiping storage you want to preserve by using the [option]`--drives=` option and specifying only the drives you want to clear, by attaching network storage later (for example, in the [command]`%post` section of the Kickstart file), or by blacklisting the kernel modules used to access network storage.
+
+====
++
+** [option]`--drives=` - Specifies which drives to clear partitions from. For example, the following clears all the partitions on the first two drives on the primary IDE controller:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`clearpart --drives=hda,hdb --all`
+....
++
+To clear a multipath device, use the format `disk/by-id/scsi-_WWID_pass:attributes[{blank}]`, where _WWID_ is the _world-wide identifier_ for the device. For example, to clear a disk with WWID `58095BEC5510947BE8C0360F604351918`, use:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`clearpart --drives=disk/by-id/scsi-58095BEC5510947BE8C0360F604351918`
+....
++
+This format is preferable for all multipath devices, but if errors arise, multipath devices that do not use _logical volume management_ (LVM) can also be cleared using the format `disk/by-id/dm-uuid-mpath-_WWID_pass:attributes[{blank}]`, where _WWID_ is the _world-wide identifier_ for the device. For example, to clear a disk with WWID `2416CD96995134CA5D787F00A5AA11017`, use:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`clearpart --drives=disk/by-id/dm-uuid-mpath-2416CD96995134CA5D787F00A5AA11017`
+....
++
+[WARNING]
+====
+
+Never specify multipath devices by device names like `mpatha`. Device names such as this are not specific to a particular disk. The disk named `/dev/mpatha` during installation might not be the one that you expect it to be. Therefore, the [command]`clearpart` command could target the wrong disk.
+
+====
++
+** [option]`--list=` - Specifies which partitions to clear. This option overrides the [option]`--all` and [option]`--linux` options if used. Can be used across different drives. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`clearpart --list=sda2,sda3,sdb1`
+....
++
+** [option]`--linux` - Erases all Linux partitions.
++
+** [option]`--none` (default) - Do not remove any partitions.
++
+[NOTE]
+====
+
+Using the [command]`clearpart --all` command in a Kickstart file to remove all existing partitions during the installation can cause [application]*Anaconda* to pause and prompt you for a confirmation in certain cases. If you need to perform the installation automatically with no interaction, add the [command]`zerombr` command to your Kickstart file.
+
+====
+
+[command]`cmdline` (optional)::
++
+Perform the installation in a completely non-interactive command line mode. Any prompt for interaction halts the installation.
++
+[IMPORTANT]
+====
+
+For a fully automatic installation, you must either specify one of the available modes ([command]`graphical`, [command]`text`, or [command]`cmdline`) in the Kickstart file, or you must use the [option]`console=` boot option as described in xref:adminoptions.adoc#list-boot-options-display[Console, Environment and Display Options]. If no mode is specified, the system will prompt you to choose one before continuing.
+
+====
+
+[command]`device` (optional)::
++
+On most PCI systems, the installation program automatically detects Ethernet and SCSI cards. However, on older systems and some PCI systems, Kickstart requires a hint to find the proper devices. The [command]`device` command, which tells the installation program to install extra modules, uses the following format:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`device _moduleName_ --opts=pass:attributes[{blank}]_options_pass:attributes[{blank}]`
+....
++
+** _moduleName_ - Replace with the name of the kernel module which should be installed.
++
+** [option]`--opts=` - Options to pass to the kernel module. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`device --opts="aic152x=0x340 io=11"`
+....
+
+[command]`driverdisk` (optional)::
++
+Driver disks can be used during Kickstart installations to provide additional drivers not included by default. You must copy the driver disks's contents to the root directory of a partition on the system's hard drive. Then, you must use the [command]`driverdisk` command to specify that the installation program should look for a driver disk and its location.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`driverdisk [pass:attributes[{blank}]_partition_|--source=pass:attributes[{blank}]_url_|--biospart=pass:attributes[{blank}]_biospart_pass:attributes[{blank}]]`
+....
++
+Alternatively, a network location can be specified for the driver disk:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`driverdisk --source=ftp://path/to/dd.img`
+[command]`driverdisk --source=http://path/to/dd.img`
+[command]`driverdisk --source=nfs:host:/path/to/img`
+
+....
++
+** _partition_ - Partition containing the driver disk. Note that the partition must be specified as a full path (for example, `/dev/sdb1`), _not_ just the partition name (for example, `sdb1`).
++
+** [option]`--source=` - URL for the driver disk. NFS locations can be given in the form of `nfs:pass:attributes[{blank}]_host_:/pass:attributes[{blank}]_path/to/img_pass:attributes[{blank}]`.
++
+** [option]`--biospart=` - BIOS partition containing the driver disk (for example, `82p2`).
++
+Driver disks can also be loaded from a hard disk drive or a similar device instead of being loaded over the network or from `initrd`. Follow this procedure:
++
+[[loading-driver-disk-from-HDD]]
++
+.. Load the driver disk on a hard disk drive, a USB or any similar device.
++
+.. Set the label, for example, _DD_, to this device.
++
+.. Add the following line to your Kickstart file:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+driverdisk _LABEL_pass:attributes[{blank}]=pass:attributes[{blank}]_DD_:/e1000.rpm
+....
++
+Replace _DD_ with a specific label and replace _dd.rpm_ with a specific name. Use anything supported by the [command]`inst.repo` command instead of _LABEL_ to specify your hard disk drive.
+
+[command]`eula` (optional)::
++
+Use this option to accept the _End User License Agreement_ (EULA) without user interaction. Specifying this option prevents [application]*Initial Setup* from prompting you to accept the license agreement after you finish the installation and reboot the system for the first time. See xref:InitialSetupHub-common.adoc#chap-initial-setup[Initial Setup] for more information.
++
+** [option]`--agreed` (required) - Accept the EULA. This option must always be used, otherwise the [command]`eula` command is meaningless.
+
+[command]`fcoe` (optional)::
++
+Specify which FCoE devices should be activated automatically in addition to those discovered by _Enhanced Disk Drive Services_ (EDD).
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`fcoe --nic=pass:attributes[{blank}]_name_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+** [option]`--nic=` (required) - The name of the device to be activated.
++
+** [option]`--dcb=` - Establish _Data Center Bridging_ (DCB) settings.
++
+** [option]`--autovlan` - Discover VLANs automatically.
+
+[command]`firewall` (optional)::
++
+Specify the firewall configuration for the installed system.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`firewall --enabled|--disabled _device_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+** [option]`--enabled` or [option]`--enable` - Reject incoming connections that are not in response to outbound requests, such as DNS replies or DHCP requests. If access to services running on this machine is needed, you can choose to allow specific services through the firewall.
++
+** [option]`--disabled` or [option]`--disable` - Do not configure any iptables rules.
++
+** [option]`--trust=` - Listing a device here, such as em1, allows all traffic coming to and from that device to go through the firewall. To list more than one device, use [option]`--trust em1 --trust em2`. Do NOT use a comma-separated format such as [option]`--trust em1, em2`.
++
+** _incoming_ - Replace with one or more of the following to allow the specified services through the firewall.
++
+*** [option]`--ssh`
++
+*** [option]`--smtp`
++
+*** [option]`--http`
++
+*** [option]`--ftp`
++
+** [option]`--port=` - You can specify that ports be allowed through the firewall using the port:protocol format. For example, to allow IMAP access through your firewall, specify `imap:tcp`. Numeric ports can also be specified explicitly; for example, to allow UDP packets on port 1234 through, specify `1234:udp`. To specify multiple ports, separate them by commas.
++
+** [option]`--service=` - This option provides a higher-level way to allow services through the firewall. Some services (like `cups`, `avahi`, and so on.) require multiple ports to be open or other special configuration in order for the service to work. You can specify each individual port with the [option]`--port` option, or specify [command]`--service=` and open them all at once.
++
+Valid options are anything recognized by the [application]*firewall-offline-cmd* program in the [package]*firewalld* package. If `firewalld` is running, [command]`firewall-cmd --get-services` provides a list of known service names.
+
+[command]`firstboot` (optional)::
++
+Determine whether the [application]*Initial Setup* application starts the first time the system is booted. If enabled, the [package]*initial-setup* package must be installed. If not specified, this option is disabled by default.
++
+** [option]`--enable` or [option]`--enabled` - [application]*Initial Setup* is started the first time the system boots.
++
+** [option]`--disable` or [option]`--disabled` - [application]*Initial Setup* is not started the first time the system boots.
++
+** [option]`--reconfig` - Enable the [application]*Initial Setup* to start at boot time in reconfiguration mode. This mode enables the language, mouse, keyboard, root password, security level, time zone and networking configuration options in addition to the default ones.
+
+[command]`group` (optional)::
++
+Creates a new user group on the system. If a group with the given name or GID already exists, this command fails. In addition, the [command]`user` command can be used to create a new group for the newly created user.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`group --name=pass:attributes[{blank}]_name_ [--gid=pass:attributes[{blank}]_gid_pass:attributes[{blank}]]`
+....
++
+** [option]`--name=` - Provides the name of the group.
++
+** [option]`--gid=` - The group's GID. If not provided, defaults to the next available non-system GID.
+
+[command]`graphical` (optional)::
++
+Perform the installation in graphical mode. This is the default.
++
+[IMPORTANT]
+====
+
+For a fully automatic installation, you must either specify one of the available modes ([command]`graphical`, [command]`text`, or [command]`cmdline`) in the Kickstart file, or you must use the [option]`console=` boot option as described in xref:adminoptions.adoc#list-boot-options-display[Console, Environment and Display Options]. If no mode is specified, the system will prompt you to choose one before continuing.
+
+====
+
+[command]`halt` (optional)::
++
+Halt the system after the installation has successfully completed. This is similar to a manual installation, where [application]*Anaconda* displays a message and waits for the user to press a key before rebooting. During a Kickstart installation, if no completion method is specified, this option is used as the default.
++
+The [command]`halt` command is equivalent to the [command]`shutdown -h` command.
++
+For other completion methods, see the [command]`poweroff`, [command]`reboot`, and [command]`shutdown` commands.
+
+[command]`ignoredisk` (optional)::
++
+Causes the installation program to ignore the specified disks. This is useful if you use automatic partitioning and want to be sure that some disks are ignored. For example, without [command]`ignoredisk`, attempting to deploy on a SAN-cluster the Kickstart would fail, as the installation program detects passive paths to the SAN that return no partition table.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`ignoredisk --drives=pass:attributes[{blank}]_drive1,drive2_,...`
+....
++
+where _driveN_ is one of `sda`, `sdb`,..., `hda`,... and so on.
++
+[IMPORTANT]
+====
+
+Device names in the `sdpass:attributes[{blank}]_X_pass:attributes[{blank}]` (or `/dev/sdpass:attributes[{blank}]_X_pass:attributes[{blank}]`) format are not guaranteed to be consistent across reboots, which can complicate usage of some Kickstart commands. When a command calls for a device node name, you can instead use any item from `/dev/disk`. For example, instead of:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=sda1`
+....
+
+You could use an entry similar to one of the following:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=/dev/disk/by-path/pci-0000:00:05.0-scsi-0:0:0:0-part1`
+....
+
+[literal,subs="+quotes,verbatim"]
+....
+part / --fstype=xfs --onpart=/dev/disk/by-id/ata-ST3160815AS_6RA0C882-part1
+....
+
+This way the command will always target the same storage device. This is especially useful in large storage environments. See the chapter about persistent storage device naming in the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/persistent_naming.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Storage Administration Guide]_ for more in-depth information about different ways to consistently refer to storage devices.
+
+====
++
+To ignore a multipath device that does not use _logical volume management_ (LVM), use the format `disk/by-id/dm-uuid-mpath-_WWID_pass:attributes[{blank}]`, where _WWID_ is the _world-wide identifier_ for the device. For example, to ignore a disk with WWID `2416CD96995134CA5D787F00A5AA11017`, use:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`ignoredisk --drives=disk/by-id/dm-uuid-mpath-2416CD96995134CA5D787F00A5AA11017`
+....
++
+Multipath devices that use LVM are not assembled until after [application]*Anaconda* has parsed the Kickstart file. Therefore, you cannot specify these devices in the format `dm-uuid-mpath`. Instead, to ignore a multipath device that uses LVM, use the format `disk/by-id/scsi-_WWID_pass:attributes[{blank}]`, where _WWID_ is the _world-wide identifier_ for the device. For example, to ignore a disk with WWID `58095BEC5510947BE8C0360F604351918`, use:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`ignoredisk --drives=disk/by-id/scsi-58095BEC5510947BE8C0360F604351918`
+....
++
+[WARNING]
+====
+
+Never specify multipath devices by device names like `mpatha`. Device names such as this are not specific to a particular disk. The disk named `/dev/mpatha` during installation might not be the one that you expect it to be. Therefore, the [command]`clearpart` command could target the wrong disk.
+
+====
++
+** [option]`--only-use` - Specifies a list of disks for the installation program to use. All other disks are ignored. For example, to use disk `sda` during installation and ignore all other disks:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`ignoredisk --only-use=sda`
+....
++
+To include a multipath device that does not use LVM:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`ignoredisk --only-use=disk/by-id/dm-uuid-mpath-2416CD96995134CA5D787F00A5AA11017`
+....
++
+To include a multipath device that uses LVM:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`ignoredisk --only-use=disk/by-id/scsi-58095BEC5510947BE8C0360F604351918`
+....
++
+** [option]`--interactive` - Allows you to manually navigate the advanced storage screen.
+
+[command]`install` (optional)::
++
+The default installation mode. You must specify the type of installation from `cdrom`, `harddrive`, `nfs`, `liveimg`, or `url` (for FTP, HTTP, or HTTPS installations). The [command]`install` command and the installation method command must be on separate lines. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`install`
+[command]`liveimg --url=file:///images/install/squashfs.img --noverifyssl`
+
+....
++
+** [command]`cdrom` - Install from the first optical drive on the system.
++
+** [command]`harddrive` - Install from a {PRODUCT} installation tree or full installation ISO image on a local drive. The drive must contain a file system the installation program can mount: `ext2`, `ext3`, `ext4`, `vfat`, or `xfs`.
++
+*** [option]`--biospart=` - BIOS partition to install from (such as `82`).
++
+*** [option]`--partition=` - Partition to install from (such as `sdb2`).
++
+*** [option]`--dir=` - Directory containing the `pass:attributes[{blank}]_variant_pass:attributes[{blank}]` directory of the installation tree, or the ISO image of the full installation DVD.
++
+For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`harddrive --partition=hdb2 --dir=/tmp/install-tree`
+
+....
++
+** [command]`liveimg` - Install from a disk image instead of packages. The image can be the `squashfs.img` file from a live ISO image, a compressed tar file (`.tar`, `.tbz`, `.tgz`, `.txz`, `.tar.bz2`, `.tar.gz`, or `.tar.xz`.), or any file system that the installation media can mount. Supported file systems are `ext2`, `ext3`, `ext4`, `vfat`, and `xfs`.
++
+[NOTE]
+====
+
+When using the `liveimg` installation mode with a driver disk, drivers on the disk will not automatically be included in the installed system. If necessary, these drivers should be installed manually, or in the `%post` section of a kickstart script.
+
+====
++
+*** [option]`--url=` - The location to install from. Supported protocols are `HTTP`, `HTTPS`, `FTP`, and `file`.
++
+*** [option]`--proxy=` - Specify an `HTTP`, `HTTPS` or `FTP` proxy to use while performing the installation.
++
+*** [option]`--checksum=` - An optional argument with the `SHA256` checksum of the image file, used for verification.
++
+*** [option]`--noverifyssl` - Disable SSL verification when connecting to an `HTTPS` server.
++
+For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`liveimg --url=file:///images/install/squashfs.img --checksum=03825f567f17705100de3308a20354b4d81ac9d8bed4bb4692b2381045e56197 --noverifyssl`
+....
++
+** [command]`nfs` - Install from the NFS server specified.
++
+*** [option]`--server=` - Server from which to install (host name or IP).
++
+*** [option]`--dir=` - Directory containing the `pass:attributes[{blank}]_variant_pass:attributes[{blank}]` directory of the installation tree.
++
+*** [option]`--opts=` - Mount options to use for mounting the NFS export. (optional)
++
+For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`nfs --server=nfsserver.example.com --dir=/tmp/install-tree`
+....
++
+** [command]`url` - Install from an installation tree on a remote server using FTP, HTTP, or HTTPS.
++
+*** [option]`--url=` - The location to install from. Supported protocols are `HTTP`, `HTTPS`, `FTP`, and `file`.
++
+*** [option]`--mirrorlist=` - The mirror URL to install from.
++
+*** [option]`--proxy=` - Specify an `HTTP`, `HTTPS` or `FTP` proxy to use while performing the installation.
++
+*** [option]`--noverifyssl` - Disable SSL verification when connecting to an `HTTPS` server.
++
+For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`url --url http://pass:attributes[{blank}]_server_pass:attributes[{blank}]/pass:attributes[{blank}]_path_pass:attributes[{blank}]`
+....
++
+or:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`url --url ftp://pass:attributes[{blank}]_username_:pass:attributes[{blank}]_password_pass:attributes[{blank}]@pass:attributes[{blank}]_server_pass:attributes[{blank}]/pass:attributes[{blank}]_path_pass:attributes[{blank}]`
+....
+
+[command]`iscsi` (optional)::
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`iscsi --ipaddr=pass:attributes[{blank}]_address_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+Specifies additional iSCSI storage to be attached during installation. If you use the [command]`iscsi` command, you must also assign a name to the iSCSI node, using the [command]`iscsiname` command. The [command]`iscsiname` command must appear before the [command]`iscsi` command in the Kickstart file.
++
+We recommend that wherever possible you configure iSCSI storage in the system BIOS or firmware (iBFT for Intel systems) rather than use the [command]`iscsi` command. [application]*Anaconda* automatically detects and uses disks configured in BIOS or firmware and no special configuration is necessary in the Kickstart file.
++
+If you must use the [command]`iscsi` command, ensure that networking is activated at the beginning of the installation, and that the [command]`iscsi` command appears in the Kickstart file _before_ you refer to iSCSI disks with commands such as [command]`clearpart` or [command]`ignoredisk`.
++
+** [option]`--ipaddr=` (required) - the IP address of the target to connect to.
++
+** [option]`--port=` (required) - the port number (typically, [option]`--port=3260`)
++
+** [option]`--target=` - the target _IQN_ (iSCSI Qualified Name).
++
+** [option]`--iface=` - bind the connection to a specific network interface instead of using the default one determined by the network layer. Once used, it must be specified in all instances of the [command]`iscsi` command in the entire Kickstart file.
++
+** [option]`--user=` - the user name required to authenticate with the target
++
+** [option]`--password=` - the password that corresponds with the user name specified for the target
++
+** [option]`--reverse-user=` - the user name required to authenticate with the initiator from a target that uses reverse CHAP authentication
++
+** [option]`--reverse-password=` - the password that corresponds with the user name specified for the initiator
+
+[command]`iscsiname` (optional)::
++
+Assigns a name to an iSCSI node specified by the iscsi parameter. If you use the `iscsi` parameter in your Kickstart file, you must specify [command]`iscsiname` _earlier_ in the Kickstart file.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`iscsiname` _iqn_
+....
+
+[command]`%addon com_redhat_kdump` (optional)::
++
+This command configures the [application]*kdump* kernel crash dumping mechanism.
++
+[NOTE]
+====
+
+The syntax for this command is unusual because it is an add-on rather than a built-in Kickstart command. For more information about add-ons, see xref:Kickstart2.adoc#sect-kickstart-addon[Kickstart Add-ons].
+
+====
++
+[application]*Kdump* is a kernel crash dumping mechanism that allows you to save the contents of the system's memory for later analysis. It relies on [application]*kexec*, which can be used to boot a Linux kernel from the context of another kernel without rebooting the system, and preserve the contents of the first kernel's memory that would otherwise be lost.
++
+In case of a system crash, [application]*kexec* boots into a second kernel (a _capture kernel_). This capture kernel resides in a reserved part of the system memory that is inaccessible to the first kernel. [application]*Kdump* then captures the contents of the crashed kernel's memory (a _crash dump_) and saves it to a specified location. The location cannot be configured using this Kickstart command; it must be configured after the installation by editing the `/etc/kdump.conf` configuration file.
++
+For more information about [application]*Kdump*, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Kernel_Crash_Dump_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Kernel Crash Dump Guide].
++
+Available options are:
++
+** [option]`--enable` - Enable kdump on the installed system.
++
+** [option]`--disable` - Disable kdump on the installed system.
++
+** [option]`--reserve-mb=` - The amount of memory you want to reserve for kdump, in MiB. For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+
+%addon com_redhat_kdump --enable --reserve-mb=128
+%end
+
+....
++
+You can also specify `auto` instead of a numeric value. In that case, the installer will determine the amount of memory automatically based on the criteria described in the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Kernel_Crash_Dump_Guide/appe-supported-kdump-configurations-and-targets.html#sect-kdump-memory-requirements++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Kernel Crash Dump Guide].
++
+If you enable [application]*kdump* and do not specify a [option]`--reserve-mb=` option, the value `auto` will be used.
++
+** [option]`--enablefadump` - Enable firmware-assisted dumping on systems which allow it (notably, IBM Power{nbsp}Systems servers).
+
+[command]`keyboard` (required)::
++
+Sets one or more available keyboard layouts for the system.
++
+** [option]`--vckeymap=` - Specify a `VConsole` keymap which should be used. Valid names correspond to the list of files in the `/usr/lib/kbd/keymaps/` directory, without the `.map.gz` extension.
++
+** [option]`--xlayouts=` - Specify a list of [application]*X* layouts that should be used as a comma-separated list without spaces. Accepts values in the same format as `setxkbmap(1)`, either in the `pass:attributes[{blank}]_layout_pass:attributes[{blank}]` format (such as `cz`), or in the `pass:attributes[{blank}]_layout_ (_variant_)` format (such as `cz (qwerty)`).
++
+All available layouts can be viewed on the `xkeyboard-config(7)` man page under `Layouts`.
++
+** [option]`--switch=` - Specify a list of layout-switching options (shortcuts for switching between multiple keyboard layouts). Multiple options must be separated by commas without spaces. Accepts values in the same format as `setxkbmap(1)`.
++
+Available switching options can be viewed on the `xkeyboard-config(7)` man page under `Options`.
++
+The following example sets up two keyboard layouts (`English (US)` and `Czech (qwerty)`) using the [option]`--xlayouts=` option, and allows to switch between them using kbd:[Alt + Shift]:
++
+[literal,subs="+quotes,verbatim"]
+....
+keyboard --xlayouts=us,'cz (qwerty)' --switch=grp:alt_shift_toggle
+....
++
+[IMPORTANT]
+====
+
+Either the [option]`--vckeymap=` or the [option]`--xlayouts=` option must be used.
+
+====
+
+[command]`lang` (required)::
++
+Sets the language to use during installation and the default language to use on the installed system. For example, to set the language to English, the Kickstart file should contain the following line:
++
+[literal,subs="+quotes,verbatim"]
+....
+lang en_US
+....
++
+The file `/usr/share/system-config-language/locale-list` provides a list of the valid language codes in the first column of each line and is part of the [package]*system-config-language* package.
++
+Certain languages (for example, Chinese, Japanese, Korean, and Indic languages) are not supported during text-mode installation. If you specify one of these languages with the [command]`lang` command, the installation process continues in English, but the installed system uses your selection as its default language.
++
+** [option]`--addsupport=` - Add support for additional languages. Takes the form of comma-separated list without spaces. For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+lang en_US --addsupport=cs_CZ,de_DE,en_UK
+....
+
+[command]`logging` (optional)::
++
+Controls the error logging of [application]*Anaconda* during installation. It has no effect on the installed system.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`logging [--host=pass:attributes[{blank}]_host_pass:attributes[{blank}]] [--port=pass:attributes[{blank}]_port_pass:attributes[{blank}]] [--level=debug|info|error|critical]`
+....
++
+** [option]`--host=` - Send logging information to the given remote host, which must be running a syslogd process configured to accept remote logging.
++
+** [option]`--port=` - If the remote syslogd process uses a port other than the default, set it using this option.
++
+** [option]`--level=` - Specify the minimum level of messages that appear on tty3. All messages are still sent to the log file regardless of this level, however. Possible values are `debug`, `info`, `warning`, `error`, or `critical`.
+
+[command]`logvol` (optional)::
++
+Create a logical volume for Logical Volume Management (LVM). For more information regarding LVM, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Logical_Volume_Manager_Administration/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Logical Volume Manager Administration] guide. This command uses the following syntax:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`logvol _mntpoint_ --vgname=pass:attributes[{blank}]_name_ --name=pass:attributes[{blank}]_name_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+[NOTE]
+====
+
+Do not use the dash (`-`) character in logical volume and volume group names when installing {PRODUCT} using Kickstart. If this character is used, the installation finishes normally, but the `/dev/mapper/` directory will list these volumes and volume groups with every dash doubled. For example, a volume group named `volgrp-01` containing a logical volume named `logvol-01` will be listed as `/dev/mapper/volgrp--01-logvol--01`.
+
+This limitation only applies to newly created logical volume and volume group names. If you are reusing existing ones using the [option]`--noformat` option, their names will not be changed.
+
+====
++
+For a detailed example of [command]`logvol` in action, see xref:Kickstart2.adoc#sect-kickstart-partitioning-example[Advanced Partitioning Example].
++
+** The _mntpoint_ is where the partition is mounted and must be of one of the following forms:
++
+*** `/pass:attributes[{blank}]_path_pass:attributes[{blank}]`
++
+For example, `/` or `/home`
++
+*** `swap`
++
+The partition is used as swap space.
++
+To determine the size of the swap partition automatically, use the [option]`--recommended` option:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`swap --recommended`
+....
++
+To determine the size of the swap partition automatically and also allow extra space for your system to hibernate, use the [option]`--hibernation` option:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`swap --hibernation`
+....
++
+The size assigned will be equivalent to the swap space assigned by [option]`--recommended` plus the amount of RAM on your system.
++
+For the swap sizes assigned by these commands, see xref:CustomSpoke-x86.adoc#sect-recommended-partitioning-scheme-x86[Recommended Partitioning Scheme (x86)] for 64-bit AMD, Intel, and ARM systems, and xref:CustomSpoke-ppc64.adoc#sect-recommended-partitioning-scheme-ppc[Recommended Partitioning Scheme (ppc)] for IBM Power{nbsp}Systems servers.
++
+The options are as follows:
++
+** [option]`--noformat` - Use an existing logical volume and do not format it.
++
+** [option]`--useexisting` - Use an existing logical volume and reformat it.
++
+** [option]`--fstype=` - Sets the file system type for the logical volume. Valid values are `xfs`, `ext2`, `ext3`, `ext4`, `swap`, and `vfat`.
++
+** [option]`--fsoptions=` - Specifies a free form string of options to be used when mounting the filesystem. This string will be copied into the `/etc/fstab` file of the installed system and should be enclosed in quotes.
++
+** [option]`--mkfsoptions=` - Specifies additional parameters to be passed to the program that makes a filesystem on this partition. No processing is done on the list of arguments, so they must be supplied in a format that can be passed directly to the [application]*mkfs* program. This means multiple options should be comma-separated or surrounded by double quotes, depending on the filesystem.
++
+** [option]`--label=` - Sets a label for the logical volume.
++
+** [option]`--grow` - Tells the logical volume to grow to fill available space (if any), or up to the maximum size setting, if one is specified. A minimum size must be given, using either the [option]`--percent=` option or the [option]`--size=` option.
++
+** [option]`--size=` - The size of the logical volume in MiB. This option cannot be used together with the [option]`--percent=` option.
++
+** [option]`--percent=` - The size of the logical volume, as a percentage of the free space in the volume group after any statically-sized logical volumes are taken into account. This option cannot be used together with the [option]`--size=` option.
++
+[IMPORTANT]
+====
+
+When creating a new logical volume, you must either specify its size statically using the [option]`--size=` option, or as a percentage of remaining free space using the [option]`--percent=` option. You cannot use both of these options on the same logical volume.
+
+Note that this behavior is only applies to {PRODUCT}{nbsp}7.1 and later. In {PRODUCT}{nbsp}7.0, these two options interacted differently.
+
+====
++
+** [option]`--maxsize=` - The maximum size in MiB when the logical volume is set to grow. Specify an integer value here such as `500` (do not include the unit).
++
+** [option]`--recommended` - Use this option when creating a `swap` logical volume to determine the size of this volume automatically, based on your system's hardware. For details about the recommended scheme, see xref:CustomSpoke-x86.adoc#sect-recommended-partitioning-scheme-x86[Recommended Partitioning Scheme (x86)] for 64-bit AMD, Intel, and ARM systems, and xref:CustomSpoke-ppc64.adoc#sect-recommended-partitioning-scheme-ppc[Recommended Partitioning Scheme (ppc)] for IBM Power{nbsp}Systems.
++
+** [option]`--resize` - Resize a logical volume. If you use this option, you must also specify [option]`--useexisting` and [option]`--size`.
++
+** [option]`--encrypted` - Specifies that this logical volume should be encrypted, using the passphrase provided in the [option]`--passphrase=` option. If you do not specify a passphrase, the installation program uses the default, system-wide passphrase set with the [command]`autopart --passphrase` command, or stops the installation and prompts you to provide a passphrase if no default is set.
++
+[NOTE]
+====
+
+When encrypting one or more partitions, [application]*Anaconda* attempts to gather 256 bits of entropy to ensure the partitions are encrypted securely. Gathering entropy can take some time - the process will stop after a maximum of 10 minutes, regardless of whether sufficient entropy has been gathered.
+
+The process can be sped up by interacting with the installation system (typing on the keyboard or moving the mouse). If you are installing in a virtual machine, you can also attach a virtio-rng device (a virtual random number generator) to the guest as described in the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Virtualization_Deployment_and_Administration_Guide/sect-Guest_virtual_machine_device_configuration-Random_number_generator_device.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Virtualization Deployment and Administration Guide].
+
+====
++
+** [option]`--passphrase=` - Specifies the passphrase to use when encrypting this logical volume. You must use this option together with the [option]`--encrypted` option; it has no effect by itself.
++
+** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default aes-xts-plain64 is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either aes-xts-plain64 or aes-cbc-essiv:sha256.
++
+** [option]`--escrowcert=pass:attributes[{blank}]_URL_of_X.509_certificate_pass:attributes[{blank}]` - Store data encryption keys of all encrypted volumes as files in `/root`, encrypted using the X.509 certificate from the URL specified with _URL_of_X.509_certificate_. The keys are stored as a separate file for each encrypted volume. This option is only meaningful if [option]`--encrypted` is specified.
++
+** [option]`--backuppassphrase` - Add a randomly-generated passphrase to each encrypted volume. Store these passphrases in separate files in `/root`, encrypted using the X.509 certificate specified with [option]`--escrowcert`. This option is only meaningful if [option]`--escrowcert` is specified.
++
+** [option]`--thinpool` - Creates a thin pool logical volume. (Use a mount point of `none`)
++
+** [option]`--metadatasize=pass:attributes[{blank}]_size_pass:attributes[{blank}]` - Specify the metadata area size (in MiB) for a new thin pool device.
++
+** [option]`--chunksize=pass:attributes[{blank}]_size_pass:attributes[{blank}]` - Specify the chunk size (in KiB) for a new thin pool device.
++
+** [option]`--thin` - Create a thin logical volume. (Requires use of [option]`--poolname`)
++
+** [option]`--poolname=pass:attributes[{blank}]_name_pass:attributes[{blank}]` - Specify the name of the thin pool in which to create a thin logical volume. Requires the [option]`--thin` option.
++
+** [option]`--profile=pass:attributes[{blank}]_name_pass:attributes[{blank}]` - Specify the configuration profile name to use with thin logical volumes. If used, the name will also be included in the metadata for the given logical volume. By default, the available profiles are `default` and `thin-performance` and are defined in the `/etc/lvm/profile/` directory. See the `lvm(8)` man page for additional information.
++
+** [option]`--cachepvs=` - A comma-separated list of physical volumes which should be used as a cache for this volume.
++
+** [option]`--cachemode=` - Specify which mode should be used to cache this logical volume - either `writeback` or `writethrough`.
++
+[NOTE]
+====
+
+For more information about cached logical volumes and their modes, see the `lvmcache(7)` man page.
+
+====
++
+** [option]`--cachesize=` - Size of cache attached to the logical volume, specified in MiB. This option requires the [option]`--cachepvs=` option.
++
+Create the partition first, create the logical volume group, and then create the logical volume. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`part pv.01 --size 3000`
+[command]`volgroup myvg pv.01`
+[command]`logvol / --vgname=myvg --size=2000 --name=rootvol`
+
+....
++
+Create the partition first, create the logical volume group, and then create the logical volume to occupy 90% of the remaining space in the volume group. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`part pv.01 --size 1 --grow`
+[command]`volgroup myvg pv.01`
+[command]`logvol / --vgname=myvg --name=rootvol --percent=90`
+
+....
+
+[command]`mediacheck` (optional)::
++
+If given, this command forces the installation program to perform a media check ([option]`rd.live.check`) before starting the installation. This command requires that installations be attended, so it is disabled by default.
+
+[command]`mount` (optional)::
++
+Assigns a mount point to an existing block device, and optionally reformats it to a given format.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+mount [--reformat [REFORMAT]] [--mkfsoptions MKFS_OPTS] [--mountoptions MOUNT_OPTS] pass:quotes[_device_] pass:quotes[_mntpoint_]
+....
++
+Unlike most other storage configuration commands in Kickstart, [command]`mount` does not require you to describe the entire storage configuration in the Kickstart file. You only need to ensure that the described block device exists on the system. However, if you want to _create_ the storage stack with all the devices mounted, you must use other commands such as [command]`part` to do so.
++
+[IMPORTANT]
+====
+
+You can not use [command]`mount` together with other storage-related commands such as [command]`part`, [command]`logvol`, or [command]`autopart` in the same Kickstart file.
+
+====
++
+Mandatory arguments:
++
+** [option]`pass:attributes[{blank}]_device_pass:attributes[{blank}]` - The block device to mount.
++
+** [option]`pass:attributes[{blank}]_mntpoint_pass:attributes[{blank}]` - Where to mount the [option]`pass:attributes[{blank}]_device_pass:attributes[{blank}]`. It must be a valid mount point, such as `/` or `/usr`, or `none` if the device is unmountable (for example `swap`).
++
+Optional arguments:
++
+** [option]`--reformat=` - Specifies a new format (such as `ext4`) to which the device should be reformatted.
++
+** [option]`--mkfsoptions=` - Specifies additional argument to be passed to the command which creates the new file system specified in [option]`--reformat=`. The list of arguments provided here is not processed, so they must be specified in a format that can be passed directly to the [command]`mkfs` program. The list of options should be either comma-separated or surrounded by double quotes, depending on the file system. Check the `mkfs` man page for the file system you want to create (for example `mkfs.ext4(8)` or `mkfs.xfs(8)`) for specific details.
++
+** [option]`--mountoptions=` - Specifies a free form string that contains options to be used when mounting the file system. The string will be copied to the `/etc/fstab` file on the installed system and should be enclosed in double quotes. See the `mount(8)` man page for a full list of mount options, and `fstab(5)` for basics.
+
+[command]`network` (optional)::
++
+Configures network information for the target system and activates network devices in the installation environment. The device specified in the first [command]`network` command is activated automatically. Activation of the device can be also explicitly required by the [option]`--activate` option.
++
+[NOTE]
+====
+
+There are several types of network device naming standards used to identify network devices with persistent names such as `em1` or `wl3sp0`. For information about these standards, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/ch-Consistent_Network_Device_Naming.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Networking Guide].
+
+====
++
+** [option]`--activate` - activate this device in the installation environment.
++
+If you use the [option]`--activate` option on a device that has already been activated (for example, an interface you configured with boot options so that the system could retrieve the Kickstart file) the device is reactivated to use the details specified in the Kickstart file.
++
+Use the [option]`--nodefroute` option to prevent the device from using the default route.
++
+** [option]`--bootproto=` - One of `dhcp`, `bootp`, `ibft`, or `static`. The default option is `dhcp`pass:attributes[{blank}]; the `dhcp` and `bootp` options are treated the same. To disable `ipv4` configuration of the device, use [option]`--noipv4` option.
++
+[NOTE]
+====
+
+This option configures ipv4 configuration of the device. For ipv6 configuration use --ipv6 and --ipv6gateway options.
+
+====
++
+The DHCP method uses a DHCP server system to obtain its networking configuration. The BOOTP method is similar, requiring a BOOTP server to supply the networking configuration. To direct a system to use DHCP:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --bootproto=dhcp`
+....
++
+To direct a machine to use BOOTP to obtain its networking configuration, use the following line in the Kickstart file:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --bootproto=bootp`
+....
++
+To direct a machine to use the configuration specified in iBFT, use:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --bootproto=ibft`
+....
++
+The `static` method requires that you specify at least the IP address and netmask in the Kickstart file. This information is static and is used during and after the installation.
++
+All static networking configuration information must be specified on _one_ line; you cannot wrap lines using a backslash (`\`) as you can on a command line.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --bootproto=static --ip=10.0.2.15 --netmask=255.255.255.0 --gateway=10.0.2.254 --nameserver=10.0.2.1`
+....
++
+You can also configure multiple nameservers at the same time. To do so, use the [option]`--nameserver=` option once, and specify each of their IP addresses, separated by commas.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --bootproto=static --ip=10.0.2.15 --netmask=255.255.255.0 --gateway=10.0.2.254 --nameserver=192.168.2.1,192.168.3.1`
+....
++
+** [option]`--device=` - specifies the device to be configured (and eventually activated in [application]*Anaconda*) with the [command]`network` command.
++
+If the [option]`--device=` option is missing on the _first_ use of the [command]`network` command, the value of the [option]`ksdevice=` [application]*Anaconda* boot option is used, if available. Note that this is considered deprecated behavior; in most cases, you should always specify a [option]`--device=` for every [command]`network` command.
++
+The behavior of any subsequent [command]`network` command in the same Kickstart file is unspecified if its [option]`--device=` option is missing. Make sure you specify this option for any [command]`network` command beyond the first.
++
+You can specify a device to be activated in any of the following ways:
++
+*** the device name of the interface, for example, `em1`
++
+*** the MAC address of the interface, for example, `01:23:45:67:89:ab`
++
+*** the keyword `link`, which specifies the first interface with its link in the `up` state
++
+*** the keyword `bootif`, which uses the MAC address that [application]*pxelinux* set in the `BOOTIF` variable. Set `IPAPPEND 2` in your `pxelinux.cfg` file to have [application]*pxelinux* set the `BOOTIF` variable.
++
+For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --bootproto=dhcp --device=em1`
+....
++
+** [option]`--ip=` - IP address of the device.
++
+** [option]`--ipv6=` - IPv6 address of the device, in the form of _address_pass:attributes[{blank}][/pass:attributes[{blank}]_prefix_ _length_pass:attributes[{blank}]] - for example, `3ffe:ffff:0:1::1/128` . If _prefix_ is omitted, `64` is used. You can also use `auto` for automatic configuration, or `dhcp` for DHCPv6-only configuration (no router advertisements).
++
+** [option]`--gateway=` - Default gateway as a single IPv4 address.
++
+** [option]`--ipv6gateway=` - Default gateway as a single IPv6 address.
++
+** [option]`--nodefroute` - Prevents the interface being set as the default route. Use this option when you activate additional devices with the [option]`--activate=` option, for example, a NIC on a separate subnet for an iSCSI target.
++
+** [option]`--nameserver=` - DNS name server, as an IP address. To specify more than one name server, use this option once, and separate each IP address with a comma.
++
+** [option]`--nodns` - Do not configure any DNS server.
++
+** [option]`--netmask=` - Network mask for the installed system.
++
+** [option]`--hostname=` - The host name for the installed system. The host name can either be a _fully-qualified domain name_ (FQDN) in the format `pass:attributes[{blank}]_host_name_._domainname_pass:attributes[{blank}]`, or a short host name with no domain. Many networks have a _Dynamic Host Configuration Protocol_ (DHCP) service which automatically supplies connected systems with a domain name; to allow DHCP to assign the domain name, only specify a short host name.
++
+[IMPORTANT]
+====
+
+If your network does _not_ provide a DHCP service, always use the FQDN as the system's host name.
+
+====
++
+** [option]`--ethtool=` - Specifies additional low-level settings for the network device which will be passed to the [application]*ethtool* program.
++
+** [option]`--essid=` - The network ID for wireless networks.
++
+** [option]`--wepkey=` - The WEP encryption key for wireless networks.
++
+** [option]`--wpakey=` - The WPA encryption key for wireless networks.
++
+** [option]`--onboot=` - Whether or not to enable the device at boot time.
++
+** [option]`--dhcpclass=` - The DHCP class.
++
+** [option]`--mtu=` - The MTU of the device.
++
+** [option]`--noipv4` - Disable IPv4 on this device.
++
+** [option]`--noipv6` - Disable IPv6 on this device.
++
+** [option]`--bondslaves=` - When this option is used, the network device specified in the [option]`--device=` option is created using slaves defined in the [option]`--bondslaves=` option. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --device=mynetwork --bondslaves=em1,em2`
+....
++
+The above command creates a bond device named `mynetwork` using the `em1` and `em2` interfaces as its slaves.
++
+** [command]`--bondopts=` - a list of optional parameters for a bonded interface, which is specified using the [command]`--bondslaves=` and [command]`--device=` options. Options in this list must be separated by commas ("pass:attributes[{blank}]`,`pass:attributes[{blank}]") or semicolons ("pass:attributes[{blank}]`;`pass:attributes[{blank}]"). If an option itself contains a comma, use a semicolon to separate the options. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --bondopts=mode=active-backup,balance-rr;primary=eth1`
+....
++
+Available optional parameters are listed in the [citetitle]_Working with Kernel Modules_ chapter of the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
++
+[IMPORTANT]
+====
+
+The [option]`--bondopts=mode=` parameter only supports full mode names such as `balance-rr` or `broadcast`, not their numerical representations such as `0` or `3`.
+
+====
++
+** [option]`--vlanid=` - Specifies virtual LAN (VLAN) ID number (802.1q tag) for the device created using the device specified in [option]`--device=` as a parent. For example, [command]`network --device=em1 --vlanid=171` creates a virtual LAN device `em1.171`.
++
+** [option]`--interfacename=` - Specify a custom interface name for a virtual LAN device. This option should be used when the default name generated by the [option]`--vlanid=` option is not desirable. This option must be used along with [option]`--vlanid=`. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --device=em1 --vlanid=171 --interfacename=vlan171`
+....
++
+The above command creates a virtual LAN interface named `vlan171` on the `em1` device with an ID of `171`.
++
+The interface name can be arbitrary (for example, `my-vlan`), but in specific cases, the following conventions must be followed:
++
+*** If the name contains a dot (`.`), it must take the form of `pass:attributes[{blank}]_NAME_._ID_pass:attributes[{blank}]`. The _NAME_ is arbitrary, but the _ID_ must be the VLAN ID. For example: `em1.171` or `my-vlan.171`.
++
+*** Names starting with `vlan` must take the form of `vlanpass:attributes[{blank}]_ID_pass:attributes[{blank}]` - for example, `vlan171`.
++
+** [option]`--teamslaves=` - Team device specified by the [option]`--device=` option will be created using slaves specified in this option. Slaves are separated by commas. A slave can be followed by its configuration, which is a single-quoted JSON string with double quotes escaped by the `\` character. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --teamslaves="p3p1'{\"prio\": -10, \"sticky\": true}',p3p2'{\"prio\": 100}'"`
+....
++
+See also the [option]`--teamconfig=` option.
++
+** [option]`--teamconfig=` - Double-quoted team device configuration which is a single-quoted JSON string with double quotes escaped by the `\` character. The device name is specified by [option]`--device=` option and its slaves and their configuration by [option]`--teamslaves=` option. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --device team0 --activate --bootproto static --ip=10.34.102.222 --netmask=255.255.255.0 --gateway=10.34.102.254 --nameserver=10.34.39.2 --teamslaves="p3p1'{\"prio\": -10, \"sticky\": true}',p3p2'{\"prio\": 100}'" --teamconfig="{\"runner\": {\"name\": \"activebackup\"}}"`
+....
++
+** [option]`--bridgeslaves=` - When this option is used, the network bridge with device name specified using the [option]`--device=` option will be created and devices defined in the [option]`--bridgeslaves=` option will be added to the bridge. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`network --device=bridge0 --bridgeslaves=em1`
+....
++
+** [option]`--bridgeopts=` - An optional comma-separated list of parameters for the bridged interface. Available values are `stp`, `priority`, `forward-delay`, `hello-time`, `max-age`, and `ageing-time`. For information about these parameters, see the [citetitle]_bridge setting_ table in the `nm-settings(5)` man page or at link:++https://developer.gnome.org/NetworkManager/0.9/ref-settings.html++[].
++
+Also see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Networking_Guide/index.html++[
+Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Networking Guide] for general information about network bridging.
++
+** [option]`--bindto=mac` - Bind the device configuration (`ifcfg`) file on the installed system to the device MAC address (`HWADDR`) instead of the default binding to the interface name (`DEVICE`). Note that this option is independent of the [option]`--device=` option - [option]`--bindto=mac` will be applied even if the same [command]`network` command also specifies a device name, `link`, or `bootif`.
+
+[command]`%addon org_fedora_oscap` (optional)::
++
+The OpenSCAP installer add-on is used to apply SCAP (Security Content Automation Protocol) content - security policies - on the installed system. This add-on has been enabled by default since {PRODUCT}{nbsp}7.2. When enabled, the packages necessary to provide this functionality will automatically be installed. However, by default, no policies are enforced, meaning that no checks are performed during or after installation unless specifically configured.
++
+[IMPORTANT]
+====
+
+Applying a security policy is not necessary on all systems. This screen should only be used when a specific policy is mandated by your organization rules or government regulations.
+
+====
++
+Unlike most other commands, this add-on does not accept regular options, but uses key-value pairs in the body of the [command]`%addon` definition instead. These pairs are whitespace-agnostic. Values can be optionally enclosed in single quotes (`'`) or double quotes (`"`).
++
+The following keys are recognized by the add-on:
++
+** `content-type` - Type of the security content. Possible values are `datastream`, `archive`, `rpm`, and `scap-security-guide`.
++
+If the `content-type` is `scap-security-guide`, the add-on will use content provided by the [package]*scap-security-guide* package, which is present on the boot media. This means that all other keys except `profile` will have no effect.
++
+** `content-url` - Location of the security content. The content must be accessible using HTTP, HTTPS, or FTP; local storage is currently not supported. A network connection must be available to reach content definitions in a remote location.
++
+** `datastream-id` - ID of the data stream referenced in the `content-url` value. Used only if `content-type` is `datastream`.
++
+** `xccdf-id` - ID of the benchmark you want to use.
++
+** `xccdf-path` - Path to the XCCDF file which should be used; given as a relative path in the archive.
++
+** `profile` - ID of the profile to be applied. Use `default` to apply the default profile.
++
+** `fingerprint` - A MD5, SHA1 or SHA2 checksum of the content referenced by `content-url`.
++
+** `tailoring-path` - Path to a tailoring file which should be used, given as a relative path in the archive.
++
+The following is an example [command]`%addon org_fedora_oscap` section which uses content from the [package]*scap-security-guide* on the installation media:
++
+[[exam-org-fedora-oscap-ssg]]
+.Sample OpenSCAP Add-on Definition Using SCAP Security Guide
+====
+
+[literal,subs="+quotes,verbatim"]
+....
+
+%addon org_fedora_oscap
+content-type = scap-security-guide
+profile = pci-dss
+%end
+
+....
+
+====
++
+The following is a more complex example which loads a custom profile from a web server:
++
+[[exam-org-fedora-oscap-datastream]]
+.Sample OpenSCAP Add-on Definition Using a Datastream
+====
+
+[literal,subs="+quotes,verbatim"]
+....
+
+%addon org_fedora_oscap
+content-type = datastream
+content-url = http://www.example.com/scap/testing_ds.xml
+datastream-id = scap_example.com_datastream_testing
+xccdf-id = scap_example.com_cref_xccdf.xml
+profile =  xccdf_example.com_profile_my_profile
+fingerprint = 240f2f18222faa98856c3b4fc50c4195
+%end
+
+....
+
+====
++
+Additional information about the OpenSCAP installer add-on is available at link:++https://www.open-scap.org/tools/oscap-anaconda-addon/++[]. For more information about the profiles available in the SCAP Security Guide and what they do, see the link:++http://www.open-scap.org/security-policies/choosing-policy/++[OpenSCAP Portal].
+
+[command]`part` or [command]`partition` (required)::
++
+Creates a partition on the system.
++
+[WARNING]
+====
+
+All partitions created are formatted as part of the installation process unless [option]`--noformat` and [option]`--onpart` are used.
+
+====
++
+[IMPORTANT]
+====
+
+Device names in the `sdpass:attributes[{blank}]_X_pass:attributes[{blank}]` (or `/dev/sdpass:attributes[{blank}]_X_pass:attributes[{blank}]`) format are not guaranteed to be consistent across reboots, which can complicate usage of some Kickstart commands. When a command calls for a device node name, you can instead use any item from `/dev/disk`. For example, instead of:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=sda1`
+....
+
+You could use an entry similar to one of the following:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --onpart=/dev/disk/by-path/pci-0000:00:05.0-scsi-0:0:0:0-part1`
+....
+
+[literal,subs="+quotes,verbatim"]
+....
+part / --fstype=xfs --onpart=/dev/disk/by-id/ata-ST3160815AS_6RA0C882-part1
+....
+
+This way the command will always target the same storage device. This is especially useful in large storage environments. See the chapter about persistent storage device naming in the [citetitle]_link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/persistent_naming.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Storage Administration Guide]_ for more in-depth information about different ways to consistently refer to storage devices.
+
+====
++
+For a detailed example of [command]`part` in action, see xref:Kickstart2.adoc#sect-kickstart-partitioning-example[Advanced Partitioning Example].
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part|partition _mntpoint_ --name=pass:attributes[{blank}]_name_ --device=pass:attributes[{blank}]_device_ --rule=pass:attributes[{blank}]_rule_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+** _mntpoint_ - Where the partition is mounted. The value must be of one of the following forms:
++
+*** `/pass:attributes[{blank}]_path_pass:attributes[{blank}]`
++
+For example, `/`, `/usr`, `/home`
++
+*** `swap`
++
+The partition is used as swap space.
++
+To determine the size of the swap partition automatically, use the [option]`--recommended` option:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`swap --recommended`
+....
++
+The size assigned will be effective but not precisely calibrated for your system.
++
+To determine the size of the swap partition automatically but also allow extra space for your system to hibernate, use the [option]`--hibernation` option:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`swap --hibernation`
+....
++
+The size assigned will be equivalent to the swap space assigned by [option]`--recommended` plus the amount of RAM on your system.
++
+For the swap sizes assigned by these commands, see xref:CustomSpoke-x86.adoc#sect-recommended-partitioning-scheme-x86[Recommended Partitioning Scheme (x86)] for 64-bit AMD, Intel, and ARM systems, and xref:CustomSpoke-ppc64.adoc#sect-recommended-partitioning-scheme-ppc[Recommended Partitioning Scheme (ppc)] for IBM Power{nbsp}Systems servers.
++
+*** `raid._id_pass:attributes[{blank}]`
++
+The partition is used for software RAID (see [command]`raid`).
++
+*** `pv._id_pass:attributes[{blank}]`
++
+The partition is used for LVM (see [command]`logvol`).
++
+*** `biosboot`
++
+The partition will be used for a BIOS Boot partition. A 1 MiB BIOS boot partition is necessary on BIOS-based AMD64 and Intel{nbsp}64 systems using a _GUID Partition Table_ (GPT); the boot loader will be installed into it. It is not necessary on UEFI systems. See also the [command]`bootloader` command.
++
+*** `/boot/efi`
++
+An EFI System Partition. A 50 MiB EFI partition is necessary on UEFI-based AMD, Intel, and ARM; the recommended size is 200 MiB. It is not necessary on BIOS systems. See also the [command]`bootloader` command.
++
+** [option]`--size=` - The minimum partition size in MiB. Specify an integer value here such as `500` (do not include the unit).
++
+[IMPORTANT]
+====
+
+If the [option]`--size` value is too small, the installation fails. Set the [option]`--size` value as the minimum amount of space you require. For size recommendations, see xref:CustomSpoke-x86.adoc#sect-recommended-partitioning-scheme-x86[Recommended Partitioning Scheme (x86)].
+
+====
++
+** [option]`--grow` - Tells the logical volume to grow to fill available space (if any), or up to the maximum size setting, if one is specified.
++
+[NOTE]
+====
+
+If you use [option]`--grow=` without setting [option]`--maxsize=` on a swap partition, [application]*Anaconda* limits the maximum size of the swap partition. For systems that have less than 2{nbsp}GB of physical memory, the imposed limit is twice the amount of physical memory. For systems with more than 2{nbsp}GB, the imposed limit is the size of physical memory plus 2GB.
+
+====
++
+** [option]`--maxsize=` - The maximum partition size in MiB when the partition is set to grow. Specify an integer value here such as `500` (do not include the unit).
++
+** [option]`--noformat` - Specifies that the partition should not be formatted, for use with the [option]`--onpart` command.
++
+** [option]`--onpart=` or [option]`--usepart=` - Specifies the device on which to place the partition. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`partition /home --onpart=hda1`
+....
++
+puts `/home` on `/dev/hda1`.
++
+These options can also add a partition to a logical volume. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`partition pv.1 --onpart=hda2`
+....
++
+The device must already exist on the system; the [option]`--onpart` option will not create it.
++
+It is also possible to specify an entire drive, rather than a partition, in which case [application]*Anaconda* will format and use the drive without creating a partition table. Note, however, that installation of GRUB2 is not supported on a device formatted in this way, and must be placed on a drive with a partition table.
++
+** [option]`--ondisk=` or [option]`--ondrive=` - Forces the partition to be created on a particular disk. For example, [option]`--ondisk=sdb` puts the partition on the second SCSI disk on the system.
++
+To specify a multipath device that does not use _logical volume management_ (LVM), use the format `disk/by-id/dm-uuid-mpath-_WWID_pass:attributes[{blank}]`, where _WWID_ is the _world-wide identifier_ for the device. For example, to specify a disk with WWID `2416CD96995134CA5D787F00A5AA11017`, use:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --grow --asprimary --size=8192 --ondisk=disk/by-id/dm-uuid-mpath-2416CD96995134CA5D787F00A5AA11017`
+....
++
+Multipath devices that use LVM are not assembled until after [application]*Anaconda* has parsed the Kickstart file. Therefore, you cannot specify these devices in the format `dm-uuid-mpath`. Instead, to specify a multipath device that uses LVM, use the format `disk/by-id/scsi-_WWID_pass:attributes[{blank}]`, where _WWID_ is the _world-wide identifier_ for the device. For example, to specify a disk with WWID `58095BEC5510947BE8C0360F604351918`, use:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`part / --fstype=xfs --grow --asprimary --size=8192 --ondisk=disk/by-id/scsi-58095BEC5510947BE8C0360F604351918`
+....
++
+[WARNING]
+====
+
+Never specify multipath devices by device names like `mpatha`. Device names such as this are not specific to a particular disk. The disk named `/dev/mpatha` during installation might not be the one that you expect it to be. Therefore, the [command]`clearpart` command could target the wrong disk.
+
+====
++
+** Forces the partition to be allocated as a _primary_ partition. If the partition cannot be allocated as primary (usually due to too many primary partitions being already allocated), the partitioning process fails. This option only makes sense when the disk uses a Master Boot Record (MBR); for GUID Partition Table (GPT)-labeled disks this option has no meaning. For information about primary (and extended) partitions, see xref:Partitions-x86.adoc#sect-disk-partitions-basics[Partitions: Turning One Drive Into Many].
++
+** [option]`--fsprofile=` - Specifies a _usage type_ to be passed to the program that makes a filesystem on this partition. A usage type defines a variety of tuning parameters to be used when making a filesystem. For this option to work, the filesystem must support the concept of usage types and there must be a configuration file that lists valid types. For `ext2`, `ext3`, `ext4`, this configuration file is `/etc/mke2fs.conf`.
++
+** [option]`--mkfsoptions=` - Specifies additional parameters to be passed to the program that makes a filesystem on this partition. This is similar to [option]`--fsprofile` but works for all filesystems, not just the ones that support the profile concept. No processing is done on the list of arguments, so they must be supplied in a format that can be passed directly to the [application]*mkfs* program. This means multiple options should be comma-separated or surrounded by double quotes, depending on the filesystem.
++
+** [option]`--fstype=` - Sets the file system type for the partition. Valid values are `xfs`, `ext2`, `ext3`, `ext4`, `swap`, `vfat`, `efi` and `biosboot`.
++
+** [option]`--fsoptions` - Specifies a free form string of options to be used when mounting the filesystem. This string will be copied into the `/etc/fstab` file of the installed system and should be enclosed in quotes.
++
+** [option]`--label=` - assign a label to an individual partition.
++
+** [option]`--recommended` - Determine the size of the partition automatically. For details about the recommended scheme, see xref:CustomSpoke-x86.adoc#sect-recommended-partitioning-scheme-x86[Recommended Partitioning Scheme (x86)] for 64-bit AMD, Intel, and ARM, and xref:CustomSpoke-ppc64.adoc#sect-recommended-partitioning-scheme-ppc[Recommended Partitioning Scheme (ppc)] for IBM Power{nbsp}Systems.
++
+[IMPORTANT]
+====
+
+This option can only be used for partitions which result in a file system such as the `/boot` partition and `swap` space. It cannot be used to create LVM physical volumes or RAID members.
+
+====
++
+** [option]`--onbiosdisk` - Forces the partition to be created on a particular disk as discovered by the BIOS.
++
+** [option]`--encrypted` - Specifies that this partition should be encrypted, using the passphrase provided in the [option]`--passphrase` option. If you do not specify a passphrase, [application]*Anaconda* uses the default, system-wide passphrase set with the [command]`autopart --passphrase` command, or stops the installation and prompts you to provide a passphrase if no default is set.
++
+[NOTE]
+====
+
+When encrypting one or more partitions, [application]*Anaconda* attempts to gather 256 bits of entropy to ensure the partitions are encrypted securely. Gathering entropy can take some time - the process will stop after a maximum of 10 minutes, regardless of whether sufficient entropy has been gathered.
+
+The process can be sped up by interacting with the installation system (typing on the keyboard or moving the mouse). If you are installing in a virtual machine, you can also attach a virtio-rng device (a virtual random number generator) to the guest as described in the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Virtualization_Deployment_and_Administration_Guide/sect-Guest_virtual_machine_device_configuration-Random_number_generator_device.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Virtualization Deployment and Administration Guide].
+
+====
++
+** [option]`--passphrase=` - Specifies the passphrase to use when encrypting this partition. You must use this option together with the [option]`--encrypted` option; by itself it has no effect.
++
+** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default `aes-xts-plain64` is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either `aes-xts-plain64` or `aes-cbc-essiv:sha256`.
++
+** [option]`--escrowcert=pass:attributes[{blank}]_URL_of_X.509_certificate_pass:attributes[{blank}]` - Store data encryption keys of all encrypted partitions as files in `/root`, encrypted using the X.509 certificate from the URL specified with _URL_of_X.509_certificate_. The keys are stored as a separate file for each encrypted partition. This option is only meaningful if [option]`--encrypted` is specified.
++
+** [option]`--backuppassphrase` - Add a randomly-generated passphrase to each encrypted partition. Store these passphrases in separate files in `/root`, encrypted using the X.509 certificate specified with [option]`--escrowcert`. This option is only meaningful if [option]`--escrowcert` is specified.
++
+** [option]`--resize=` - Resize an existing partition. When using this option, specify the target size (in MiB) using the [option]`--size=` option and the target partition using the [option]`--onpart=` option.
++
+[NOTE]
+====
+
+If partitioning fails for any reason, diagnostic messages appear on virtual console 3.
+
+====
+
+[command]`pwpolicy` (optional)::
++
+This command can be used to enforce a custom password policy, which specifies requirements for passwords created during installation, based on factors such as password length and strength.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`pwpolicy _name_ [--minlen=pass:attributes[{blank}]_length_pass:attributes[{blank}]] [--minquality=pass:attributes[{blank}]_quality_pass:attributes[{blank}]] [--strict|--nostrict] [--emptyok|--noempty] [--changesok|--nochanges]`
+....
++
+Replace _name_ with either `root`, `user` or `luks` to enforce the policy for the `root` password, user passwords, or LUKS passphrase, respectively.
++
+The `libpwquality` library is used to check minimum password requirements (length and quality). You can use the [command]`pwscore` and [command]`pwmake` commands provided by the [package]*libpwquality* package to check the quality score of a password, or to create a random password with a given score. See the `pwscore(1)` and `pwmake(1)` man page for details about these commands.
++
+[IMPORTANT]
+====
+
+This command can only be used inside the [command]`%anaconda` section.
+
+====
++
+** [option]`--minlen=` - Sets the minimum allowed password length, in characters. The default is `6`.
++
+** [option]`--minquality=` - Sets the minimum allowed password quality as defined by the `libpwquality` library. The default value is `1`.
++
+** [option]`--strict` - Enables strict password enforcement. Passwords which do not meet the requirements specified in [option]`--minquality=` and [option]`--minlen=` will not be accepted. This option is disabled by default.
++
+** [option]`--notstrict` - Passwords which do _not_ meet the minimum quality requirements specified by the [option]`--minquality=` and [option]`-minlen=` options will be allowed, after `Done` is clicked twice.
++
+** [option]`--emptyok` - Allows the use of empty passwords. Enabled by default for user passwords.
++
+** [option]`--notempty` - Disallows the use of empty passwords. Enabled by default for the root password and the LUKS passphrase.
++
+** [option]`--changesok` - Allows changing the password in the user interface, even if the Kickstart file already specifies a password. Disabled by default.
++
+** [option]`--nochanges` - Disallows changing passwords which are already set in the Kickstart file. Enabled by default.
+
+[command]`poweroff` (optional)::
++
+Shut down and power off the system after the installation has successfully completed. Normally during a manual installation, [application]*Anaconda* displays a message and waits for the user to press a key before rebooting. During a Kickstart installation, if no completion method is specified, the [command]`halt` option is used as default.
++
+The [command]`poweroff` option is equivalent to the [command]`shutdown -p` command.
++
+[NOTE]
+====
+
+The [command]`poweroff` command is highly dependent on the system hardware in use. Specifically, certain hardware components such as the BIOS, APM (advanced power management), and ACPI (advanced configuration and power interface) must be able to interact with the system kernel. Consult your hardware documentation for more information on you system's APM/ACPI abilities.
+
+====
++
+For other completion methods, see the [command]`halt`, [command]`reboot`, and [command]`shutdown` Kickstart commands.
+
+[command]`raid` (optional)::
++
+Assembles a software RAID device. This command is of the form:
++
+[literal,subs="+quotes,verbatim"]
+....
+raid mntpoint --level=level --device=device-name partitions*
+....
++
+** _mntpoint_ - Location where the RAID file system is mounted. If it is `/`, the RAID level must be 1 unless a boot partition (`/boot`) is present. If a boot partition is present, the `/boot` partition must be level 1 and the root (`/`) partition can be any of the available types. The _partitions*_ (which denotes that multiple partitions can be listed) lists the RAID identifiers to add to the RAID array.
++
+[IMPORTANT]
+====
+
+On IBM Power{nbsp}Systems, if a RAID device has been prepared and has not been reformatted during the installation, ensure that the RAID metadata version is `0.90` if you intend to put the `/boot` and `PReP` partitions on the RAID device.
+
+The default {PRODUCT}{nbsp}7 [application]*mdadm* metadata version is not supported for the boot device.
+
+====
++
+For a detailed example of [command]`raid` in action, see xref:Kickstart2.adoc#sect-kickstart-partitioning-example[Advanced Partitioning Example].
++
+** [option]`--level=` - RAID level to use (0, 1, 4, 5, 6, or 10).
++
+** [option]`--device=` - Name of the RAID device to use - for example, [option]`--device=root`.
++
+[IMPORTANT]
+====
+
+Do not use `mdraid` names in the form of `md0` - these names are not guaranteed to be persistent. Instead, use meaningful names such as `root` or `swap`. Using meaningful names creates a symbolic link from `/dev/md/pass:attributes[{blank}]_name_pass:attributes[{blank}]` to whichever `/dev/mdpass:attributes[{blank}]_X_pass:attributes[{blank}]` node is assigned to the array.
+
+If you have an old (v0.90 metadata) array that you cannot assign a name to, you can specify the array by a filesystem label or UUID (for example, [option]`--device=centos7-root --label=centos7-root`).
+
+====
++
+** [option]`--chunksize=` - Sets the chunk size of a RAID storage in KiB. In certain situations, using a different chunk size than the default ([option]`512 Kib`) can improve the performance of the RAID.
++
+** [option]`--spares=` - Specifies the number of spare drives allocated for the RAID array. Spare drives are used to rebuild the array in case of drive failure.
++
+** [option]`--fsprofile=` - Specifies a _usage type_ to be passed to the program that makes a filesystem on this partition. A usage type defines a variety of tuning parameters to be used when making a filesystem. For this option to work, the filesystem must support the concept of usage types and there must be a configuration file that lists valid types. For ext2, ext3, and ext4, this configuration file is `/etc/mke2fs.conf`.
++
+** [option]`--fstype=` - Sets the file system type for the RAID array. Valid values are `xfs`, `ext2`, `ext3`, `ext4`, `swap`, and `vfat`.
++
+** [option]`--fsoptions=` - Specifies a free form string of options to be used when mounting the filesystem. This string will be copied into the `/etc/fstab` file of the installed system and should be enclosed in quotes.
++
+** [option]`--mkfsoptions=` - Specifies additional parameters to be passed to the program that makes a filesystem on this partition. No processing is done on the list of arguments, so they must be supplied in a format that can be passed directly to the [application]*mkfs* program. This means multiple options should be comma-separated or surrounded by double quotes, depending on the filesystem.
++
+** [option]`--label=` - Specify the label to give to the filesystem to be made. If the given label is already in use by another filesystem, a new label will be created.
++
+** [option]`--noformat` - Use an existing RAID device and do not format the RAID array.
++
+** [option]`--useexisting` - Use an existing RAID device and reformat it.
++
+** [option]`--encrypted` - Specifies that this RAID device should be encrypted, using the passphrase provided in the [option]`--passphrase` option. If you do not specify a passphrase, [application]*Anaconda* uses the default, system-wide passphrase set with the [command]`autopart --passphrase` command, or stops the installation and prompts you to provide a passphrase if no default is set.
++
+[NOTE]
+====
+
+When encrypting one or more partitions, [application]*Anaconda* attempts to gather 256 bits of entropy to ensure the partitions are encrypted securely. Gathering entropy can take some time - the process will stop after a maximum of 10 minutes, regardless of whether sufficient entropy has been gathered.
+
+The process can be sped up by interacting with the installation system (typing on the keyboard or moving the mouse). If you are installing in a virtual machine, you can also attach a virtio-rng device (a virtual random number generator) to the guest as described in the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Virtualization_Deployment_and_Administration_Guide/sect-Guest_virtual_machine_device_configuration-Random_number_generator_device.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Virtualization Deployment and Administration Guide].
+
+====
++
+** [option]`--cipher=` - Specifies which type of encryption will be used if the [application]*Anaconda* default aes-xts-plain64 is not satisfactory. You must use this option together with the [option]`--encrypted` option; by itself it has no effect. Available types of encryption are listed in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide], but {PRODUCT} strongly recommends using either aes-xts-plain64 or aes-cbc-essiv:sha256.
++
+** [option]`--passphrase=` - Specifies the passphrase to use when encrypting this RAID device. You must use this option together with the [option]`--encrypted` option; by itself it has no effect.
++
+** [option]`--escrowcert=pass:attributes[{blank}]_URL_of_X.509_certificate_pass:attributes[{blank}]` - Store the data encryption key for this device in a file in `/root`, encrypted using the X.509 certificate from the URL specified with _URL_of_X.509_certificate_. This option is only meaningful if [option]`--encrypted` is specified.
++
+** [option]`--backuppassphrase` - Add a randomly-generated passphrase to this device. Store the passphrase in a file in `/root`, encrypted using the X.509 certificate specified with [option]`--escrowcert`. This option is only meaningful if [option]`--escrowcert` is specified.
++
+The following example shows how to create a RAID level 1 partition for `/`, and a RAID level 5 for `/home`, assuming there are three SCSI disks on the system. It also creates three swap partitions, one on each drive.
++
+.Using the raid Kickstart command
+====
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`part raid.01 --size=6000 --ondisk=sda`
+[command]`part raid.02 --size=6000 --ondisk=sdb`
+[command]`part raid.03 --size=6000 --ondisk=sdc`
+
+[command]`part swap --size=512 --ondisk=sda`
+[command]`part swap --size=512 --ondisk=sdb`
+[command]`part swap --size=512 --ondisk=sdc`
+
+[command]`part raid.11 --size=1 --grow --ondisk=sda`
+[command]`part raid.12 --size=1 --grow --ondisk=sdb`
+[command]`part raid.13 --size=1 --grow --ondisk=sdc`
+
+[command]`raid / --level=1 --device=centos7-root --label=centos7-root raid.01 raid.02 raid.03`
+[command]`raid /home --level=5 --device=centos7-home --label=centos7-home raid.11 raid.12 raid.13`
+
+....
+
+====
+
+[command]`realm` (optional)::
++
+Join an Active Directory or IPA domain. For more information about this command, see the `join` section of the `realm(8)` man page.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`realm join [pass:attributes[{blank}]_options_pass:attributes[{blank}]] _domain_pass:attributes[{blank}]`
+....
++
+** [option]`--computer-ou=OU=` - Provide the distinguished name of an organizational unit in order to create the computer account. The exact format of the distinguished name depends on the client software and membership software. The root DSE portion of the distinguished name can usually be left out.
++
+** [option]`--no-password` - Join automatically without a password.
++
+** [option]`--one-time-password=` - Join using a one-time password. This is not possible with all types of realm.
++
+** [option]`--client-software=` - Only join realms which can run this client software. Valid values include `sssd` and `winbind`. Not all realms support all values. By default, the client software is chosen automatically.
++
+** [option]`--server-software=` - Only join realms which can run this server software. Possible values include `active-directory` or `freeipa`.
++
+** [option]`--membership-software=` - Use this software when joining the realm. Valid values include `samba` and `adcli`. Not all realms support all values. By default, the membership software is chosen automatically.
+
+[command]`reboot` (optional)::
++
+Reboot after the installation is successfully completed (no arguments). Normally, Kickstart displays a message and waits for the user to press a key before rebooting.
++
+The [command]`reboot` option is equivalent to the [command]`shutdown -r` command.
++
+For other completion methods, see the [command]`halt`, [command]`poweroff`, and [command]`shutdown` Kickstart options.
++
+The [command]`halt` option is the default completion method if no other methods are explicitly specified in the Kickstart file.
++
+[NOTE]
+====
+
+Use of the [command]`reboot` option _might_ result in an endless installation loop, depending on the installation media and method.
+
+====
++
+** [command]`--eject` - Attempt to eject the installation DVD (if installing from a DVD) before rebooting.
++
+** [command]`--kexec` - Uses the [application]*kexec* system call instead of performing a full reboot, which immediately loads the installed system into memory, bypassing the hardware initialization normally performed by the BIOS or firmware.
++
+[IMPORTANT]
+====
+
+Due to the complexities involved with booting systems using [application]*kexec*, it cannot be explicitly tested and guaranteed to function in every situation.
+
+When [application]*kexec* is used, device registers (which would normally be cleared during a full system reboot) might stay filled with data, which could potentially create issues for some device drivers.
+
+====
+
+[command]`repo` (optional)::
++
+Configures additional [application]*yum* repositories that can be used as sources for package installation. You can add multiple [command]`repo` lines.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`repo --name=pass:attributes[{blank}]_repoid_ [--baseurl=pass:attributes[{blank}]_<url>_|--mirrorlist=pass:attributes[{blank}]_url_pass:attributes[{blank}]] [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+** [option]`--name=` - The repository id. This option is required. If a repository has a name which conflicts with another previously added repository, it is ignored. Because the installation program uses a list of preset repositories, this means that you cannot add repositories with the same names as the preset ones.
++
+** [option]`--baseurl=` - The URL to the repository. The variables that can be used in yum repo config files are not supported here. This option cannot be used together with the [option]`--mirrorlist` option in the same repository definition.
++
+** [option]`--mirrorlist=` - The URL pointing at a list of mirrors for the repository. The variables that can be used in yum repository configuration files are not supported here. This option cannot be used together with the [option]`--baseurl` option in the same repository definition.
++
+** [option]`--install` - Save the provided repository configuration on the installed system in the `/etc/yum.repos.d/` directory. Without using this option, a repository configured in a Kickstart file will only be available during the installation process, not on the installed system.
++
+** [option]`--cost=` - An integer value to assign a cost to this repository. If multiple repositories provide the same packages, this number is used to prioritize which repository will be used before another. Repositories with a lower cost take priority over repositories with higher cost.
++
+** [option]`--excludepkgs=` - A comma-separated list of package names that must _not_ be pulled from this repository. This is useful if multiple repositories provide the same package and you want to make sure it comes from a particular repository. Both full package names (such as `publican`) and globs (such as `gnome-*`) are accepted.
++
+** [option]`--includepkgs=` - A comma-separated list of package names and globs that must be pulled from this repository. This is useful if multiple repositories provide the same package and you want to make sure it comes from this repository.
++
+** [option]`--proxy=[pass:attributes[{blank}]_protocol_://][pass:attributes[{blank}]_username_pass:attributes[{blank}][:pass:attributes[{blank}]_password_pass:attributes[{blank}]]@]pass:attributes[{blank}]_host_pass:attributes[{blank}][:pass:attributes[{blank}]_port_pass:attributes[{blank}]]` - Specify an HTTP/HTTPS/FTP proxy to use just for this repository. This setting does not affect any other repositories, nor how the `install.img` is fetched on HTTP installations.
++
+** [option]`--ignoregroups=true` - This option is used when composing installation trees and has no effect on the installation process itself. It tells the compose tools to not look at the package group information when mirroring trees so as to avoid mirroring large amounts of unnecessary data.
++
+** [option]`--noverifyssl` - Disable SSL verification when connecting to an `HTTPS` server.
++
+[IMPORTANT]
+====
+
+Repositories used for installation must be stable. The installation can fail if a repository is modified before the installation concludes.
+
+====
+
+[command]`rescue` (optional)::
++
+Automatically enters the installation program's rescue mode. This gives you a chance to repair the system in case of any problems.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`rescue [--nomount|--romount]`
+....
++
+** [option]`--nomount` or [option]`--romount` - Controls how the installed system is mounted in the rescue environment. By default, the installation program finds your system and mount it in read-write mode, telling you where it has performed this mount. You can optionally select to not mount anything (the [option]`--nomount` option) or mount in read-only mode (the [option]`--romount` option). Only one of these two options can be used.
+
+[command]`reqpart` (optional)::
++
+Automatically creates partitions required by your hardware platform. These include a `/boot/efi` partition for systems with UEFI firmware, a `biosboot` partition for systems with BIOS firmware and GPT, and a `PRePBoot` partition for IBM Power Systems.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`reqpart [--add-boot]`
+....
++
+** [option]`--add-boot` - Creates a separate `/boot` partition in addition to the platform-specific partition created by the base command.
++
+[NOTE]
+====
+
+This command cannot be used toegether with [command]`autopart`, because [command]`autopart` does everything the [command]`reqpart` command does and, in addition, creates other partitions or logical volumes such as `/` and `swap`. In contrast with [command]`autopart`, this command only creates platform-specific partitions and leaves the rest of the drive empty, allowing you to create a custom layout.
+
+====
+
+[command]`rootpw` (required)::
++
+Sets the system's root password to the _password_ argument.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`rootpw [--iscrypted|--plaintext] [--lock] _password_pass:attributes[{blank}]`
+....
++
+** [option]`--iscrypted` - If this option is present, the password argument is assumed to already be encrypted. This option is mutually exclusive with [option]`--plaintext`. To create an encrypted password, you can use [application]*python*:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`python -c 'import crypt,getpass;pw=getpass.getpass();print(crypt.crypt(pw) if (pw==getpass.getpass("Confirm: ")) else exit())'`
+....
++
+This generates a sha512 crypt-compatible hash of your password using a random salt.
++
+** [option]`--plaintext` - If this option is present, the password argument is assumed to be in plain text. This option is mutually exclusive with [option]`--iscrypted`.
++
+** [option]`--lock` - If this option is present, the root account is locked by default. This means that the root user will not be able to log in from the console. This option will also disable the `Root Password` screens in both the graphical and text-based manual installation.
+
+[command]`selinux` (optional)::
++
+Sets the state of SELinux on the installed system. The default SELinux policy is `enforcing`.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`selinux [--disabled|--enforcing|--permissive]`
+....
++
+** [option]`--enforcing` - Enables SELinux with the default targeted policy being `enforcing`.
++
+** [option]`--permissive` - Outputs warnings based on the SELinux policy, but does not actually enforce the policy.
++
+** [option]`--disabled` - Disables SELinux completely on the system.
++
+For more information regarding SELinux, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/SELinux_Users_and_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 SELinux User's and Administrator's Guide].
+
+[command]`services` (optional)::
++
+Modifies the default set of services that will run under the default [application]*systemd* target. The list of disabled services is processed before the list of enabled services. Therefore, if a service appears on both lists, it will be enabled.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`services [--disabled=pass:attributes[{blank}]_list_pass:attributes[{blank}]] [--enabled=pass:attributes[{blank}]_list_pass:attributes[{blank}]]`
+....
++
+** [option]`--disabled=` - Disable the services given in the comma separated list.
++
+** [option]`--enabled=` - Enable the services given in the comma separated list.
++
+[IMPORTANT]
+====
+
+Do not include spaces in the list of services. If you do, Kickstart will enable or disable only the services up to the first space. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`services --disabled=auditd, cups,smartd, nfslock`
+....
+
+disables only the `auditd` service. To disable all four services, this entry should include no spaces:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`services --disabled=auditd,cups,smartd,nfslock`
+....
+
+====
+
+[command]`shutdown` (optional)::
++
+Shut down the system after the installation has successfully completed. During a Kickstart installation, if no completion method is specified, the [command]`halt` command is used.
++
+The [command]`shutdown` Kickstart option is equivalent to the [command]`shutdown` command.
++
+For other completion methods, see the [command]`halt`, [command]`poweroff`, and [command]`reboot` Kickstart options.
+
+[command]`skipx` (optional)::
++
+If present, [application]*X* is not configured on the installed system.
++
+[IMPORTANT]
+====
+
+If you install a display manager among your package selection options, this package creates an [application]*X* configuration, and the installed system defaults to `graphical.target`. The effect of the [command]`skipx` option is overridden.
+
+====
+
+[command]`snapshot` (optional)::
++
+Using the [command]`snapshot` command, you can create LVM thin volume snapshots during the installation process. This enables you to back up a logical volume before or after the installation.
++
+To create multiple snapshots, add the [command]`snaphost` Kickstart command multiple times.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+snapshots pass:quotes[_vg_name/lv_name_] --name=pass:quotes[_snapshot_name_] --when=pass:quotes[_pre-install|post-install_]
+....
++
+** [option]`pass:attributes[{blank}]_vg_name_pass:attributes[{blank}]/pass:attributes[{blank}]_lv_name_pass:attributes[{blank}]` - Sets the name of the volume group and logical volume to create the snapshot from.
++
+** [option]`--name=pass:attributes[{blank}]_snapshot_name_pass:attributes[{blank}]` - Sets the name of the snapshot. This name must be unique within the volume group.
++
+** [option]`--when=pass:attributes[{blank}]_pre-install|post-install_pass:attributes[{blank}]` - Sets if the snapshot is created before the installation begins or after the installation is completed.
+
+[command]`sshpw` (optional)::
++
+During the installation, you can interact with the installation program and monitor its progress over an `SSH` connection. Use the [command]`sshpw` command to create temporary accounts through which to log on. Each instance of the command creates a separate account that exists only in the installation environment. These accounts are not transferred to the installed system.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`sshpw --username=pass:attributes[{blank}]_name_ _password_ [--iscrypted|--plaintext] [--lock]`
+....
++
+** [option]`--username` - Provides the name of the user. This option is required.
++
+** [option]`--iscrypted` - If this option is present, the password argument is assumed to already be encrypted. This option is mutually exclusive with [option]`--plaintext`. To create an encrypted password, you can use [application]*python*:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`python -c 'import crypt,getpass;pw=getpass.getpass();print(crypt.crypt(pw) if (pw==getpass.getpass("Confirm: ")) else exit())'`
+....
++
+This generates a sha512 crypt-compatible hash of your password using a random salt.
++
+** [option]`--plaintext` - If this option is present, the password argument is assumed to be in plain text. This option is mutually exclusive with [option]`--iscrypted`
++
+** [option]`--lock` - If this option is present, this account is locked by default. This means that the user will not be able to log in from the console.
++
+[IMPORTANT]
+====
+
+By default, the `ssh` server is not started during the installation. To make `ssh` available during the installation, boot the system with the kernel boot option [option]`inst.sshd`. See xref:adminoptions.adoc#list-boot-options-display[Console, Environment and Display Options] for details.
+
+====
++
+[NOTE]
+====
+
+If you want to disable root `ssh` access, while allowing another user `ssh` access, use the following:
+
+[literal,subs="+quotes,verbatim"]
+....
+sshpw --username=example_username example_password --plaintext
+sshpw --username=root example_password --lock
+....
+
+To simply disable root `ssh` access, use the following:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`sshpw --username=root --lock`
+....
+
+====
+
+[command]`text` (optional)::
++
+Perform the Kickstart installation in text mode. Kickstart installations are performed in graphical mode by default.
++
+[IMPORTANT]
+====
+
+For a fully automatic installation, you must either specify one of the available modes ([command]`graphical`, [command]`text`, or [command]`cmdline`) in the Kickstart file, or you must use the [option]`console=` boot option as described in xref:adminoptions.adoc#list-boot-options-display[Console, Environment and Display Options]. If no mode is specified, the system will prompt you to choose one before continuing.
+
+====
+
+[[varlist-kickstart-timezone]]
+[command]`timezone` (required)::
++
+Sets the system time zone to _timezone_.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`timezone _timezone_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+** [option]`--utc` - If present, the system assumes the hardware clock is set to UTC (Greenwich Mean) time.
++
+** [option]`--nontp` - Disable the NTP service automatic starting.
++
+** [option]`--ntpservers=` - Specify a list of NTP servers to be used as a comma-separated list without spaces.
++
+Starting with {PRODUCT}{nbsp}7.5, time zone names are validated using the `pytz.all_timezones` list, provided by the [package]*pytz* package. In previous releases, the names were validated against `pytz.common_timezones`, which is a subset of the currently used list. Note that the graphical and text mode interfaces still use the more restricted `pytz.common_timezones` list; you must use a Kickstart file to use additional time zone definitions.
+
+[command]`unsupported_hardware` (optional)::
++
+Tells the installation program to suppress the `Unsupported Hardware Detected` alert. If this command is not included and unsupported hardware is detected, the installation stalls at this alert.
+
+[[varlist-kickstart-user]]
+[command]`user` (optional)::
++
+Creates a new user on the system.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`user --name=pass:attributes[{blank}]_username_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+** [option]`--name=` - Provides the name of the user. This option is required.
++
+** [option]`--gecos=` - Provides the GECOS information for the user. This is a string of various system-specific fields separated by a comma. It is frequently used to specify the user's full name, office number, and so on. See the `passwd(5)` man page for more details.
++
+** [option]`--groups=` - In addition to the default group, a comma separated list of group names the user should belong to. The groups must exist before the user account is created. See the [command]`group` command.
++
+** [option]`--homedir=` - The home directory for the user. If not provided, this defaults to `/home/pass:attributes[{blank}]_username_pass:attributes[{blank}]`.
++
+** [option]`--lock` - If this option is present, this account is locked by default. This means that the user will not be able to log in from the console. This option will also disable the `Create User` screens in both the graphical and text-based manual installation.
++
+** [option]`--password=` - The new user's password. If not provided, the account will be locked by default.
++
+** [option]`--iscrypted` - If this option is present, the password argument is assumed to already be encrypted. This option is mutually exclusive with [option]`--plaintext`. To create an encrypted password, you can use [application]*python*:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`python -c 'import crypt,getpass;pw=getpass.getpass();print(crypt.crypt(pw) if (pw==getpass.getpass("Confirm: ")) else exit())'`
+....
++
+This generates a sha512 crypt-compatible hash of your password using a random salt.
++
+** [option]`--plaintext` - If this option is present, the password argument is assumed to be in plain text. This option is mutually exclusive with [option]`--iscrypted`
++
+** [option]`--shell=` - The user's login shell. If not provided, the system default is used.
++
+** [option]`--uid=` - The user's _UID_ (User ID). If not provided, this defaults to the next available non-system UID.
++
+** [option]`--gid=` - The _GID_ (Group ID) to be used for the user's group. If not provided, this defaults to the next available non-system group ID.
++
+[NOTE]
+====
+
+Consider using the [option]`--uid` and [option]`--gid` options to set IDs of regular users and their default groups at range starting at `5000` instead of `1000`. That is because the range reserved for system users and groups, `0`-`999`, might increase in the future and thus overlap with IDs of regular users.
+
+For changing the minimum UID and GID limits after the installation, which ensures that your chosen UID and GID ranges are applied automatically on user creation, see link:++https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/system_administrators_guide/ch-managing_users_and_groups#s1-users-groups-introduction++[the Users and Groups chapter of the System Administrator's Guide].
+
+====
++
+[NOTE]
+====
+
+Files and directories are created with various permissions, dictated by the application used to create the file or directory. For example, the [command]`mkdir` command creates directories with all permissions enabled. However, applications are prevented from granting certain permissions to newly created files, as specified by the `user file-creation mask` setting.
+
+The `user file-creation mask` can be controlled with the [command]`umask` command. The default setting of the `user file-creation mask` for new users is defined by the `UMASK` variable in the `/etc/login.defs` configuration file on the installed system. If unset, it defaults to `022`. This means that by default when an application creates a file, it is prevented from granting write permission to users other than the owner of the file. However, this can be overridden by other settings or scripts. More information can be found in the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
+
+====
+
+[command]`vnc` (optional)::
++
+Allows the graphical installation to be viewed remotely through VNC. This method is usually preferred over text mode, as there are some size and language limitations in text installations. With no additional options, this command starts a VNC server on the installation system with no password and displays the details required to connect to it.
++
+[literal,subs="+quotes,verbatim"]
+....
+vnc [--host=host_name] [--port=port] [--password=password]
+....
++
+** [option]`--host=` - Connect to the VNC viewer process listening on the given host name.
++
+** [option]`--port=` - Provide a port that the remote VNC viewer process is listening on. If not provided, [application]*Anaconda* uses the VNC default port of 5900.
++
+** [option]`--password=` - Set a password which must be provided to connect to the VNC session. This is optional, but recommended.
++
+For more information about VNC installations, including instructions on how to connect to the installation system, see xref:vnc-installations.adoc#chap-vnc-installations[Using VNC].
+
+[command]`volgroup` (optional)::
++
+Creates a Logical Volume Management (LVM) group.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`volgroup _name_ _partition_ [pass:attributes[{blank}]_options_pass:attributes[{blank}]]`
+....
++
+[IMPORTANT]
+====
+
+Do not use the dash (`-`) character in logical volume and volume group names when installing {PRODUCT} using Kickstart. If this character is used, the installation finishes normally, but the `/dev/mapper/` directory will list these volumes and volume groups with every dash doubled. For example, a volume group named `volgrp-01` containing a logical volume named `logvol-01` will be listed as `/dev/mapper/volgrp--01-logvol--01`.
+
+This limitation only applies to newly created logical volume and volume group names. If you are reusing existing ones using the [option]`--noformat` option, their names will not be changed.
+
+====
++
+For a detailed partitioning example including [command]`volgroup`, see xref:Kickstart2.adoc#sect-kickstart-partitioning-example[Advanced Partitioning Example].
++
+The options are as follows:
++
+** [option]`--noformat` - Use an existing volume group and do not format it.
++
+** [option]`--useexisting` - Use an existing volume group and reformat it. If you use this option, do not specify a _partition_. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`volgroup centos00 --useexisting --noformat`
+....
++
+** [option]`--pesize=` - Set the size of the volume group's physical extents in KiB. The default value is 4096 (4 MiB), and the minimum value is 1024 (1 MiB).
++
+** [option]`--reserved-space=` - Specify an amount of space to leave unused in a volume group in MiB. Applicable only to newly created volume groups.
++
+** [option]`--reserved-percent=` - Specify a percentage of total volume group space to leave unused. Applicable only to newly created volume groups.
++
+Create the partition first, then create the logical volume group, and then create the logical volume. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`part pv.01 --size 10000`
+[command]`volgroup volgrp pv.01`
+[command]`logvol / --vgname=volgrp --size=2000 --name=root`
+
+....
+
+[command]`xconfig` (optional)::
++
+Configures the [application]*X Window System*. If you install the [application]*X Window System* with a Kickstart file that does not include the [command]`xconfig` command, you must provide the [application]*X* configuration manually during installation.
++
+Do not use this command in a Kickstart file that does not install the [application]*X Window System*.
++
+** [option]`--defaultdesktop=` - Specify either `GNOME` or `KDE` to set the default desktop (assumes that the chosen environment, either the [application]*GNOME Desktop Environment* or the [application]*KDE Desktop Environment*, has been installed in the [command]`%packages` section).
++
+[IMPORTANT]
+====
+
+It is currently not possible to specify [application]*KDE* as your default desktop environment using this option. This is a known issue.
+
+====
++
+** [option]`--startxonboot` - Use a graphical login on the installed system.
+
+[[sect-kickstart-commands-zerombr,zerombr (optional)]]
+[command]`zerombr` (optional)::
++
+If [command]`zerombr` is specified, any invalid partition tables found on disks are initialized. This destroys all of the contents of disks with invalid partition tables. This command is required when performing an unattended installation on a system with previously initialized disks.
+
+[command]`zfcp` (optional)::
++
+Define a Fibre channel device. This option only applies on IBM System{nbsp}z. All of the options described below must be specified.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`zfcp --devnum=pass:attributes[{blank}]_devnum_ --wwpn=pass:attributes[{blank}]_wwpn_ --fcplun=pass:attributes[{blank}]_lun_pass:attributes[{blank}]`
+....
++
+** [option]`--devnum` - The device number (zFCP adapter device bus ID).
++
+** [option]`--wwpn` - The device's World Wide Port Name (WWPN). Takes the form of a 16-digit number, preceded by `0x`.
++
+** [option]`--fcplun` - The device's Logical Unit Number (LUN). Takes the form of a 16-digit number, preceded by `0x`.
++
+For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`zfcp --devnum=0.0.4000 --wwpn=0x5005076300C213e9 --fcplun=0x5022000000000000`
+....
+
+[command]`%include` (optional)::
++
+Use the [command]`%include _/path/to/file_pass:attributes[{blank}]` command to include the contents of another file in the Kickstart file as though the contents were at the location of the [command]`%include` command in the Kickstart file.
+
+[[sect-kickstart-packages]]
+=== Package Selection
+
+Use the [command]`%packages` command to begin a Kickstart section which describes the software packages to be installed.
+
+You can specify packages by _environment_, _group_, or by their package names. Several environments and groups that contain related packages are defined. See the `repodata/*-comps-_variant_._architecture_.xml` file on the {PRODUCT}{nbsp}7 Installation DVD for a list of environments and groups.
+
+The `*-comps-_variant_._architecture_.xml` file contains a structure describing available environments (marked by the `<environment>` tag) and groups (the `<group>` tag). Each entry has an ID, user visibility value, name, description, and package list. If the group is selected for installation, the packages marked `mandatory` in the package list are always installed, the packages marked `default` are installed if they are not specifically excluded elsewhere, and the packages marked `optional` must be specifically included elsewhere even when the group is selected.
+
+You can specify a package group or environment using either its ID (the `<id>` tag) or name (the `<name>` tag).
+
+[IMPORTANT]
+====
+
+If you are not sure what packages should be installed, select the `Minimal Install` environment. `Minimal install` provides only the packages which are essential for running {PRODUCT}{nbsp}7. This will substantially reduce the chance of the system being affected by a vulnerability. If necessary, additional packages can be added later after the installation. For more details on `Minimal install`, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Security_Guide/sec-Installing_the_Minimum_Amount_of_Packages_Required.html++[Installing the Minimum Amount of Packages Required] section of the Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Security Guide.
+
+====
+
+[IMPORTANT]
+====
+
+To install a 32-bit package on a 64-bit system, append the package name with the 32-bit architecture for which the package was built; for example, [package]*glibc.i686*. The [option]`--multilib` option also must be specified in the Kickstart file; see the available options below.
+
+====
+
+[IMPORTANT]
+====
+
+[application]*Initial Setup* does not run after a system is installed from a Kickstart file unless a desktop environment and the [application]*X Window System* were included in the installation and graphical login was enabled. This means that by default, no users except for `root` are created. You can either create a user with the [option]`user` option in the Kickstart file before installing additional systems from it (see xref:Kickstart2.adoc#sect-kickstart-commands[Kickstart Commands and Options] for details) or log into the installed system with a virtual console as `root` and add users with the [command]`useradd` command.
+
+====
+
+The [command]`%packages` section must end with the [command]`%end` command.
+
+Specifying an Environment::
++
+In addition to groups, you specify an entire environment to be installed:
++
+[literal,subs="+quotes,verbatim"]
+....
+
+%packages
+@^Infrastructure Server
+%end
+
+....
++
+This command installs all packages which are part of the `Infrastracture Server` environment. All available environments are described in the `repodata/*-comps-_variant_._architecture_.xml` file on the {PRODUCT}{nbsp}7 Installation DVD. Only a single environment can be specified in the Kickstart file.
+
+Specifying Groups::
++
+Specify groups, one entry to a line, starting with an `@` symbol, and then the full group name or group id as given in the `*-comps-_variant_._architecture_.xml` file. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`%packages`
+@X Window System
+@Desktop
+@Sound and Video
+[command]`%end`
+
+....
++
+The `Core` group is always selected - it is not necessary to specify it in the [command]`%packages` section.
++
+The `*-comps-_variant_._architecture_.xml` file also defines groups called `Conflicts (_variant_)` for each variant of {PRODUCT}. This group contains all packages which are known to cause file conflicts, and is intended to be excluded.
+
+Specifying Individual Packages::
++
+Specify individual packages by name, one entry to a line. You can use the asterisk character (`*`) as a _wildcard_ in package names. For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+
+%packages
+sqlite
+curl
+aspell
+docbook*
+%end
+
+....
++
+The `docbook*` entry includes the packages [package]*docbook-dtds*, [package]*docbook-simple*, [package]*docbook-slides* and others that match the pattern represented with the wildcard.
+
+Excluding Environments, Groups, or Packages::
++
+Use a leading dash (`-`) to specify packages or groups to exclude from the installation. For example:
++
+[literal,subs="+quotes,verbatim"]
+....
+
+%packages
+-@Graphical Internet
+-autofs
+-ipa*fonts
+%end
+
+....
+
+[IMPORTANT]
+====
+
+Installing all available packages using only `*` in a Kickstart file is not supported, even if you exclude the `@Conflicts (_variant_)` group.
+
+====
+
+You can change the default behavior of the [command]`%packages` section by using several options. Some options work for the entire package selection, others are used with only specific groups.
+
+.Common Package Selection Options
+
+The following options are available for the [command]`%packages`. To use an option, append it to the start of the package selection section. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`%packages --multilib --ignoremissing`
+....
+
+[option]`--default`::
++
+Install the default set of packages. This corresponds to the package set which would be installed if no other selections were made in the `Package Selection` screen during an interactive installation.
+
+[option]`--excludedocs`::
++
+Do not install any documentation contained within packages. In most cases, this excludes any files normally installed in the `/usr/share/doc` directory, but the specific files to be excluded depend on individual packages.
+
+[option]`--ignoremissing`::
++
+Ignore any packages, groups and environments missing in the installation source, instead of halting the installation to ask if the installation should be aborted or continued.
+
+[option]`--instLangs=`::
++
+Specify a list of languages to install. Note that this is different from package group level selections. This option does not describe which package groups should be installed; instead, it sets RPM macros controlling which translation files from individual packages should be installed.
+
+[option]`--multilib`::
++
+Configure the installed system for multilib packages (that is, to allow installing 32-bit packages on a 64-bit system) and install packages specified in this section as such.
++
+Normally, on an AMD64 and Intel 64 system, only packages for this architecture (marked as `x86_64`) and packages for all architectures (marked as `noarch`) would be installed. When you use this option, packages for 32-bit AMD and Intel systems (marked as `i686`) are automatically installed as well, if available.
++
+This only applies to packages explicitly specified in the [command]`%packages` section. Packages which are only being installed as dependencies without being specified in the Kickstart file are only installed in architecture versions in which they are needed, even if they are available for more architectures.
+
+[option]`--nocore`::
++
+Disables installation of the `@Core` package group which is otherwise always installed by default. Disabling the `@Core` package group should be only used for creating lightweight containers; installing a desktop or server system with [option]`--nocore` will result in an unusable system.
++
+[NOTE]
+====
+
+Using `-@Core` to exclude packages in the `@Core` package group does not work. The only way to exclude the `@Core` package group is with the [option]`--nocore` option.
+
+====
+
+[option]`--retries=`::
++
+Sets the number of times [application]*Yum* will attempt to download packages (retries). The default value is `10`. This option only applies during the installation, and will not affect [application]*Yum* configuration on the installed system.
+
+[option]`--timeout=`::
++
+Sets the [application]*Yum* timeout in seconds. The default value is `30`. This option only applies during the installation, and will not affect [application]*Yum* configuration on the installed system.
+
+.Options for Specific Package Groups
+
+The options in this list only apply to a single package group. Instead of using them at the [command]`%packages` command in the Kickstart file, append them to the group name. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`%packages`
+@Graphical Internet --optional
+[command]`%end`
+
+....
+
+[option]`--nodefaults`::
++
+Only install the group's mandatory packages, not the default selections.
+
+[option]`--optional`::
++
+Install packages marked as optional in the group definition in the `*-comps-_variant_._architecture_.xml` file, in addition to installing the default selections.
++
+Note that some package groups, such as `Scientific Support`, do not have any mandatory or default packages specified - only optional packages. In this case the [option]`--optional` option must always be used, otherwise no packages from this group will be installed.
+
+[[sect-kickstart-preinstall]]
+=== Pre-installation Script
+
+The [command]`%pre` script is run on the system immediately after the Kickstart file has been parsed, but before installation begins. This section must be placed towards the end of the Kickstart file, after the Kickstart commands described in xref:Kickstart2.adoc#sect-kickstart-commands[Kickstart Commands and Options], and must start with [command]`%pre` and end with [command]`%end`. If your Kickstart file also includes a [command]`%post` section, the order in which the [command]`%pre` and [command]`%post` sections are included does not matter.
+
+The [command]`%pre` script can be used for activation and configuration of networking and storage devices. It is also possible to run scripts, using interpreters available in the installation environment. Adding a [command]`%pre` script can be useful if you have networking and storage that needs special configuration before proceeding with the installation, or have a script that, for example, sets up additional logging parameters or environment variables. Debugging problems with [command]`%pre` scripts can be difficult, so it is recommended only to use a [command]`%pre` script when necessary.
+
+Commands related to networking, storage, and file systems are available to use in the [command]`%pre` script, in addition to most of the utilities in the installation environment's `/sbin` and `/bin` directories.
+
+You can access the network in the [command]`%pre` section. However, the _name service_ has not been configured at this point, so only IP addresses work, not URLs.
+
+The pre-installation script section of Kickstart _cannot_ manage multiple install trees or source media. This information must be included for each created Kickstart file, as the pre-installation script occurs during the second stage of the installation process.
+
+[NOTE]
+====
+
+Unlike the post-installation script, the pre-installation script is not run in the `chroot` environment.
+
+====
+
+The following options can be used to change the behavior of pre-installation scripts. To use an option, append it to the [command]`%pre` line at the beginning of the script. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`%pre --interpreter=/usr/bin/python`
+--- Python script omitted --
+[command]`%end`
+
+....
+
+[option]`--interpreter=`::
++
+Allows you to specify a different scripting language, such as Python. Any scripting language available on the system can be used; in most cases, these are `/usr/bin/sh`, `/usr/bin/bash`, and `/usr/bin/python`.
+
+[option]`--erroronfail`::
++
+Display an error and halt the installation if the script fails. The error message will direct you to where the cause of the failure is logged.
+
+[option]`--log=`::
++
+Logs the script's output into the specified log file. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`%pre --log=/mnt/sysimage/root/ks-pre.log`
+....
+
+The following is an example [command]`%pre` section:
+
+[[exam-kickstart-pre-script]]
+.Sample %pre Script
+====
+
+[literal,subs="verbatim"]
+....
+%pre
+#!/bin/sh
+hds=""
+mymedia=""
+for file in /proc/ide/h* do
+mymedia=`cat $file/media`
+if [ $mymedia == "disk" ] ; then
+hds="$hds `basename $file`"
+fi
+done
+set $hds
+numhd=`echo $#`
+drive1=`echo $hds | cut -d' ' -f1`
+drive2=`echo $hds | cut -d' ' -f2`
+
+#Write out partition scheme based on whether there are 1 or 2 hard drives
+if [ $numhd == "2" ] ; then
+#2 drives
+echo "#partitioning scheme generated in %pre for 2 drives" > /tmp/part-include
+echo "clearpart --all" >> /tmp/part-include
+echo "part /boot --fstype xfs --size 75 --ondisk hda" >> /tmp/part-include
+echo "part / --fstype xfs --size 1 --grow --ondisk hda" >> /tmp/part-include
+echo "part swap --recommended --ondisk $drive1" >> /tmp/part-include
+echo "part /home --fstype xfs --size 1 --grow --ondisk hdb" >> /tmp/part-include
+else
+#1 drive
+echo "#partitioning scheme generated in %pre for 1 drive" > /tmp/part-include
+echo "clearpart --all" >> /tmp/part-include
+echo "part /boot --fstype xfs --size 75" >> /tmp/part-include
+echo "part swap --recommended" >> /tmp/part-include
+echo "part / --fstype xfs --size 2048" >> /tmp/part-include
+echo "part /home --fstype xfs --size 2048 --grow" >> /tmp/part-include
+fi
+%end
+....
+
+This script determines the number of hard drives in the system and writes a text file with a different partitioning scheme depending on whether it has one or two drives. Instead of having a set of partitioning commands in the Kickstart file, include the following line:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`%include /tmp/part-include`
+....
+
+The partitioning commands selected in the script will be used.
+
+====
+
+[[sect-kickstart-anaconda-configuration]]
+=== Anaconda configuration
+
+Additional installation options can be configured in the [command]`%anaconda` section of your Kickstart file. This section controls the behavior of the user interface of the installation system.
+
+This section must be placed towards the end of the Kickstart file, after the Kickstart commands described in xref:Kickstart2.adoc#sect-kickstart-commands[Kickstart Commands and Options], and must start with [command]`%anaconda` and end with [command]`%end`.
+
+Currently, the only command that can be used in the [command]`%anaconda` section is [command]`pwpolicy`. See xref:Kickstart2.adoc#sect-kickstart-commands[Kickstart Commands and Options] for more details.
+
+The following is an example [command]`%anaconda` section:
+
+[[exam-kickstart-anaconda-script]]
+.Sample %anaconda Script
+====
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`%anaconda`
+pwpolicy root --minlen=10 --strict
+[command]`%end`
+
+....
+
+This example [command]`%anaconda` section sets a password policy which requires that the root password be at least 10 characters long, and strictly forbids passwords which do not match this requirement.
+
+====
+
+[[sect-kickstart-postinstall]]
+=== Post-installation Script
+
+You have the option of adding commands to run on the system once the installation is complete, but before the system is rebooted for the first time. This section must be placed towards the end of the Kickstart file, after the Kickstart commands described in xref:Kickstart2.adoc#sect-kickstart-commands[Kickstart Commands and Options], and must start with [command]`%post` and end with [command]`%end`. If your Kickstart file also includes a [command]`%pre` section, the order of the [command]`%pre` and [command]`%post` sections does not matter.
+
+This section is useful for functions such as installing additional software or configuring an additional name server. The post-install script is run in a chroot environment, therefore, performing tasks such as copying scripts or RPM packages from the installation media do not work by default. You can change this behavior using the [option]`--nochroot` option as described below.
+
+Because post-install script runs in a chroot environment, most [command]`systemctl` commands will refuse to perform any action. For more information, see the link:++https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/sect-Managing_Services_with_systemd-Services.html#sect-behavior_of_systemctl_in_a_chroot_environment++["Behavior of systemctl in a chroot Environment" section] of System Administrator's Guide for Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7.
+
+[IMPORTANT]
+====
+
+If you configured the network with static IP information, including a name server, you can access the network and resolve IP addresses in the [command]`%post` section. If you configured the network for `DHCP`, the `/etc/resolv.conf` file has not been completed when the installation executes the [command]`%post` section. You can access the network, but you cannot resolve IP addresses. Thus, if you are using `DHCP`, you must specify IP addresses in the [command]`%post` section.
+
+====
+
+The following options can be used to change the behavior of post-installation scripts. To use an option, append it to the [command]`%post` line at the beginning of the script. For example:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`%post --interpreter=/usr/bin/python`
+--- Python script omitted --
+[command]`%end`
+
+....
+
+[option]`--interpreter=`::
++
+Allows you to specify a different scripting language, such as Python. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`%post --interpreter=/usr/bin/python`
+....
++
+Any scripting language available on the system can be used; in most cases, these are `/usr/bin/sh`, `/usr/bin/bash`, and `/usr/bin/python`.
+
+[option]`--nochroot`::
++
+Allows you to specify commands that you would like to run outside of the chroot environment.
++
+The following example copies the file `/etc/resolv.conf` to the file system that was just installed.
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`%post --nochroot`
+cp /etc/resolv.conf /mnt/sysimage/etc/resolv.conf
+[command]`%end`
+
+....
+
+[option]`--erroronfail`::
++
+Display an error and halt the installation if the script fails. The error message will direct you to where the cause of the failure is logged.
+
+[option]`--log=`::
++
+Logs the script's output into the specified log file. Note that the path of the log file must take into account whether or not you use the [option]`--nochroot` option. For example, without [option]`--nochroot`:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`%post --log=/root/ks-post.log`
+....
++
+with [option]`--nochroot`:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`%post --nochroot --log=/mnt/sysimage/root/ks-post.log`
+....
+
+The following is an example [command]`%post` section:
+
+[[exam-kickstart-post-script]]
+.Sample %post Script
+====
+
+[literal,subs="+quotes,verbatim"]
+....
+
+# Start of the %post section with logging into /root/ks-post.log
+%post --log=/root/ks-post.log
+
+# Mount an NFS share
+mkdir /mnt/temp
+mount -o nolock 10.10.0.2:/usr/new-machines /mnt/temp
+openvt -s -w -- /mnt/temp/runme
+umount /mnt/temp
+
+# End of the %post section
+%end
+
+....
+
+The above example mounts an NFS share and executes a script named `runme` located at `/usr/new-machines/` on the share. Note that NFS file locking is _not_ supported while in Kickstart mode, therefore the [option]`-o nolock` option is required.
+
+====
+
+[[sect-kickstart-onerror]]
+=== Kickstart Error Handling
+
+Starting with {PRODUCT}{nbsp}7, Kickstart installations can contain custom scripts which are run when the installer encounters a fatal error - for example, an error in a package that has been requested for installation, failure to start VNC when specified, or an error when scanning storage devices. Installation cannot continue after such an error has occured. The installer will run all [command]`%onerror` scripts in the order they are provided in the Kickstart file. In addition, [command]`%onerror` scripts will be run in the event of a traceback.
+
+Each [command]`%onerror` script is required to end with [command]`%end`.
+
+[option]`--erroronfail`::
++
+Display an error and halt the installation if the script fails. The error message will direct you to where the cause of the failure is logged.
+
+[option]`--interpreter=`::
++
+Allows you to specify a different scripting language, such as Python. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+[command]`%post --interpreter=/usr/bin/python`
+....
++
+Any scripting language available on the system can be used; in most cases, these are `/usr/bin/sh`, `/usr/bin/bash`, and `/usr/bin/python`.
+
+[option]`--log=`::
++
+Logs the script's output into the specified log file.
+
+[[sect-kickstart-addon]]
+=== Kickstart Add-ons
+
+Starting with {PRODUCT}{nbsp}7, Kickstart installations support add-ons. These add-ons can expand the basic Kickstart (and Anaconda) functionality in many ways.
+
+To use an add-on in your Kickstart file, use the [command]`%addon _addon_name_ _options_pass:attributes[{blank}]` command, and finish the command with an [command]`%end` statement, similar to pre-installation and post-installation scripts described in previous sections. For example, if you want to use the [application]*Kdump* add-on, which is distributed with [application]*Anaconda* by default, use the following commands:
+
+[literal,subs="+quotes,verbatim"]
+....
+
+%addon com_redhat_kdump --enable --reserve-mb=auto
+%end
+
+....
+
+The [command]`%addon` command does not include any options of its own - all options are dependent on the actual add-on. For more information about add-ons, see the [citetitle]_link:++https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 Anaconda Customization Guide]_.
+
+[[sect-kickstart-examples]]
+== Sample Kickstart Configurations
+
+[[sect-kickstart-partitioning-example]]
+=== Advanced Partitioning Example
+
+The following is an integrated example showing the [command]`clearpart`, [command]`zerombr`, [command]`part`, [command]`raid`, [command]`volgroup`, and [command]`logvol` Kickstart options in action:
+
+.Advanced Partitioning Example
+====
+
+[literal,subs="+quotes,verbatim"]
+....
+
+clearpart  --drives=hda,hdc
+zerombr
+# Raid 1 IDE config
+part raid.11 --size 1000  --asprimary --ondrive=hda
+part raid.12 --size 1000  --asprimary --ondrive=hda
+part raid.13 --size 2000  --asprimary --ondrive=hda
+part raid.14 --size 8000              --ondrive=hda
+part raid.15 --size 16384 --grow      --ondrive=hda
+part raid.21 --size 1000  --asprimary --ondrive=hdc
+part raid.22 --size 1000  --asprimary --ondrive=hdc
+part raid.23 --size 2000  --asprimary --ondrive=hdc
+part raid.24 --size 8000              --ondrive=hdc
+part raid.25 --size 16384 --grow      --ondrive=hdc
+
+# You can add --spares=x
+raid /     --fstype xfs  --device root  --level=RAID1 raid.11 raid.21
+raid /safe --fstype xfs  --device safe  --level=RAID1 raid.12 raid.22
+raid swap  --fstype swap --device swap  --level=RAID1 raid.13 raid.23
+raid /usr  --fstype xfs  --device usr 	 --level=RAID1 raid.14 raid.24
+raid pv.01 --fstype xfs  --device pv.01 --level=RAID1 raid.15 raid.25
+
+# LVM configuration so that we can resize /var and /usr/local later
+volgroup sysvg pv.01
+logvol /var           --vgname=sysvg --size=8000     --name=var
+logvol /var/freespace --vgname=sysvg --size=8000     --name=freespacetouse
+logvol /usr/local     --vgname=sysvg --size=1 --grow --name=usrlocal
+
+....
+
+This advanced example implements LVM over RAID, as well as the ability to resize various directories for future growth.
+
+First, the [command]`clearpart` command is used on drives `hda` and `hdc` to wipe them. The [command]`zerombr` command initializes unused partition tables.
+
+Then, the two drives are partitioned to prepare them for RAID configuration. Each drive is divided into five partitions, and each drive is partitioned into an identical layout.
+
+The next part uses these pairs of physical partitions to create a software RAID device with RAID1 level (mirroring). The first four RAID devices are used for `/` (root), `/safe`, `swap` and `/usr`. The fifth, largest pair of partitions is named `pv.01` and will be used in the following part as a physical volume for LVM.
+
+Finally, the last set of commands first creates a volume group named `sysvg` on the `pv.01` physical volume. Then, three logical volumes (`/var`, `/var/freespace` and `/usr/local`) are created and added to the `sysvg` volume group. The `/var` and `/var/freespace` volumes have a set size of 8 GB, and the `/usr/local` volume uses the [option]`--grow` option to fill all remaining available space.
+
+====
+
+[[sect-kickstart-input-example]]
+=== User Input Example
+
+The following is an example showing how to prompt the user for input, and then read that input and save it as a variable, using bash:
+
+.User Input Example
+====
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`exec < /dev/tty6 > /dev/tty6 2> /dev/tty6`
+[command]`chvt 6`
+[command]`IFS=$'\n'`
+[command]`echo -n "Enter input: "`
+[command]`read USERINPUT`
+[command]`echo`
+[command]`echo -n "You entered:" "$USERINPUT"`
+[command]`echo`
+[command]`chvt 1`
+[command]`exec < /dev/tty1 > /dev/tty1 2> /dev/tty1`
+
+....
+
+Due to the way Kickstart operates, the script must switch to a new virtual terminal before reading input from the user. This is accomplished by the [command]`exec < /dev/tty6 > /dev/tty6 2> /dev/tty6` and [command]`chvt 6` commands. The [command]`read USERINPUT` reads input from the user until enter is pressed, and stores it in the variable `USERINPUT`. The [command]`echo -n "You entered:" "$USERINPUT"` command displays the text `You entered:` followed by the user's input. Finally, the [command]`chvt 1` and [command]`exec < /dev/tty1 > /dev/tty1 2> /dev/tty1` commands switch back to the original terminal and allow Kickstart to continue installation.
+
+====
+
+[[sect-kickstart-service-example]]
+=== Example Kickstart file for installing and starting the RNG daemon
+
+The following is an example Kickstart file which demonstrates how to install and enable a service, in this case the Random Number Generator (RNG) daemon, which supplies entropy to the system kernel:
+
+.Example Kickstart file for installing and starting the RNG daemon
+====
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+[command]`services --enabled=rngd`
+
+[command]`%packages`
+[command]`rng-tools`
+[command]`%end`
+
+....
+
+The [command]`services --enabled=rngd` command instructs the installed system to start the RNG daemon each time the system starts. The [package]*rng-tools* package, which contains the RNG daemon, is then designated for installation.
+
+====

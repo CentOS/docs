@@ -1,0 +1,52 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[appe-Publican-Revision_History]]
+== Revision History
+
+Note that revision numbers relate to the edition of this manual, not to version numbers of {PRODUCT}.
+
+`1.5-1`:: Fri Apr 6 2018, Petr Bokoč (pbokoc@redhat.com)
+
+* Preparing document for 7.5 GA publication.
+
+`1.5-0`:: Fri Dec 15 2017, Petr Bokoč (pbokoc@redhat.com)
+
+* Preparing document for 7.5 Beta publication.
+
+`1.4-2`:: Thu Nov 23 2017, Petr Bokoč (pbokoc@redhat.com)
+
+* Asynchronous update.
+
+`1.4-1`:: Fri Oct 13 2017, Petr Bokoč (pbokoc@redhat.com)
+
+* Asynchronous update.
+
+`1.4-0`:: Tue Aug 1 2017, Petr Bokoč (pbokoc@redhat.com)
+
+* Preparing document for 7.4 GA publication.
+
+`1.3-9`:: Mon May 15 2017, Petr Bokoč (pbokoc@redhat.com)
+
+* Preparing document for 7.4 Beta publication.
+
+`1.3-8`:: Tue Apr 4 2017, Petr Bokoč (pbokoc@redhat.com)
+
+* Asynchronous update.
+
+`1.3-7`:: Sun Nov 6 2016, Robert Kratky (rkratky@redhat.com)
+
+* Version for 7.3 GA publication.
+
+`1.3-4`:: Mon Nov 16 2015, Petr Bokoč (pbokoc@redhat.com)
+
+* Version for 7.2 GA publication.
+
+`1.2-2`:: Wed Feb 18 2015, Petr Bokoč (pbokoc@redhat.com)
+
+* Version for 7.1 GA publication.
+
+`1.0-0`:: Tue Jun 03 2014, Petr Bokoč (pbokoc@redhat.com)
+
+* Version for 7.0 GA publication.

@@ -1,0 +1,19 @@
+
+:experimental:
+include::{partialsdir}/entities.adoc[]
+
+[[sect-making-cd-dvd-media]]
+= Making an Installation CD or DVD
+
+You can make an installation CD or DVD using burning software on your computer and a CD/DVD burner. The exact series of steps that produces an optical disc from an ISO image file varies greatly from computer to computer, depending on the operating system and disc burning software installed. Consult your burning software's documentation for the exact steps needed to burn a CD or DVD from an ISO image file.
+
+[NOTE]
+====
+
+It is possible to use optical discs (CDs and DVDs) to create both minimal boot media and full installation media. However, it is important to note that due to the large size of the full installation ISO image (between 4 and 4.5{nbsp}GB), only a DVD can be used to create a full installation disc. Minimal boot ISO is roughly 300{nbsp}MB, allowing it to be burned to either a CD or a DVD.
+
+====
+
+Make sure that your disc burning software is capable of burning discs from image files. Although this is true of most disc burning software, exceptions exist. In particular, note that the disc burning feature built into Windows XP and Windows Vista cannot burn DVDs; and that earlier Windows operating systems did not have any disc burning capability installed by default at all. Therefore, if your computer has a Windows operating system prior to Windows{nbsp}7 installed on it, you need a separate piece of software for this task. Examples of popular disc burning software for Windows that you might already have on your computer include [application]*Nero Burning ROM* and [application]*Roxio Creator*. Most widely used disc burning software for Linux, such as [application]*Brasero* and [application]*K3b*, also has the built-in ability to burn discs from ISO image files.
+
+On some computers, the option to burn a disc from an ISO file is integrated into a context menu in the file browser. For example, when you right-click an ISO file on a computer with a Linux or UNIX operating system which runs the [application]*GNOME* desktop, the [application]*Nautilus* file browser presents you with the option to `Write to disk`.

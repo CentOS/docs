@@ -1,0 +1,291 @@
+
+:experimental:
+:toc:
+include::{partialsdir}/entities.adoc[]
+
+[[chap-troubleshooting-ppc]]
+= Troubleshooting Installation on IBM Power{nbsp}Systems
+
+This chapter discusses some common installation problems and their solutions.
+
+For debugging purposes, [application]*Anaconda* logs installation actions into files in the `/tmp` directory. These files are listed in the following table.
+
+[[tabl-installation-log-files-ppc]]
+.Log Files Generated During the Installation
+
+[options="header"]
+|===
+|Log file|Contents
+|`/tmp/anaconda.log`|general [application]*Anaconda* messages
+|`/tmp/program.log`|all external programs run during the installation
+|`/tmp/storage.log`|extensive storage module information
+|`/tmp/packaging.log`|[application]*yum* and [application]*rpm* package installation messages
+|`/tmp/syslog`|hardware-related system messages
+|===
+
+If the installation fails, the messages from these files are consolidated into `/tmp/anaconda-tb-_identifier_pass:attributes[{blank}]`, where _identifier_ is a random string.
+
+After successful installation, by default, these files will be copied to the installed system under the directory `/var/log/anaconda/`. However, if installation is unsuccessful, or if the [option]`inst.nosave=all` or [option]`inst.nosave=logs` options are used when booting the installation system, these logs will only exist in the installation program's RAM disk. This means they are not saved permanently and will be lost once the system is powered down. To store them permanently, copy those files to another system on the network by using [command]`scp` on the system running the installation program, or copy them to a mounted storage device (such as an USB flash drive). Details on how to transfer the log files over the network are below.
+
+[NOTE]
+====
+
+The following procedure requires the installation system to be able to access the network and the target system to be able to receive files over the `ssh` protocol.
+
+====
+
+.Transferring Log Files Over the Network
+. On the system you are installing, press kbd:[Ctrl + Alt + F2] to access a shell prompt. You will be logged into a root account and you will have access to the installation program's temporary file system.
+
+. Switch to the `/tmp` directory where the log files are located:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] cd /tmp
+....
+
+. Copy the log files onto another system on the network using the [command]`scp` command:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] scp *log user@address:path
+....
++
+Replace _user_ with a valid user name on the target system, _address_ with the target system's address or host name, and _path_ with the path to the directory you want to save the log files into. For example, if you want to log in as `john` to a system with an IP address of `192.168.0.122` and place the log files into the `/home/john/logs/` directory on that system, the command will have the following form:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] scp *log john@192.168.0.122:/home/john/logs/
+....
++
+When connecting to the target system for the first time, the SSH client asks you to confirm that the fingerprint of the remote system is correct and that you want to continue:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+
+`The authenticity of host '192.168.0.122 (192.168.0.122)' can't be established.`
+`ECDSA key fingerprint is a4:60:76:eb:b2:d0:aa:23:af:3d:59:5c:de:bb:c4:42.`
+`Are you sure you want to continue connecting (yes/no)?`
+
+....
++
+Type `yes` and press kbd:[Enter] to continue. Then, provide a valid password when prompted. The files will start transferring to the specified directory on the target system.
+
+The log files from the installation are now permanently saved on the target system and available for review.
+
+[[sect-trouble-beginning-installation-ppc]]
+== Trouble Beginning the Installation
+
+=== Problems with Booting into the Graphical Installation
+
+Systems with some video cards have trouble booting into the graphical installation program. If the installation program does not run using its default settings, it attempts to run in a lower resolution mode. If that still fails, the installation program attempts to run in text mode.
+
+There are several possible solutions to display issues, most of which involve specifying custom boot options. For more information, see xref:adminoptions.adoc#sect-boot-options-installer[Configuring the Installation System at the Boot Menu].
+
+Use the basic graphics mode::
++
+You can attempt to perform the installation using the basic graphics driver. To do this, edit the installation program's options at the `boot:` prompt and append [option]`inst.xdriver=vesa` at the end of the command line.
+
+Specify the display resolution manually::
++
+If the installation program fails to detect your screen resolution, you can override the automatic detection and specify it manually. To do this, append the [option]`inst.resolution=pass:attributes[{blank}]_x_pass:attributes[{blank}]` option at the boot menu, where _x_ is your display's resolution (for example, `1024x768`).
+
+=== Serial Console Not Detected
+
+In some cases, attempting to install in text mode using a serial console will result in no output on the console. This happens on systems which have a graphics card, but no monitor connected. If [application]*Anaconda* detects a graphics card, it will attempt to use it for a display, even if no display is connected.
+
+If you want to perform a text-based installation on a serial console, use the [option]`inst.text` and [option]`console=` boot options. See xref:adminoptions.adoc#chap-anaconda-boot-options[Boot Options] for more details.
+
+[[sect-trouble-during-installation-ppc]]
+== Trouble During the Installation
+
+[[sect-trouble-during-no-target-ppc]]
+=== No Disks Detected
+
+In the `Installation Destination` screen, the following error message can appear at the bottom: `No disks detected. Please shut down the computer, connect at least one disk, and restart to complete installation`.
+
+The message indicates that [application]*Anaconda* did not find any writable storage devices to install to. In that case, first make sure that your system does have at least one storage device attached.
+
+If your system uses a hardware RAID controller, verify that the controller is properly configured and working. See your controller's documentation for instructions.
+
+If you are installing into one or more iSCSI devices and there is no local storage present on the system, make sure that all required LUNs (_Logical Unit Numbers_) are being presented to the appropriate HBA (_Host Bus Adapter_). For additional information about iSCSI, see xref:iSCSI.adoc#appe-iscsi-disks[iSCSI Disks].
+
+If you made sure you have a connected and properly configured storage device and the message still appears after you reboot the system and start the installation again, it means that the installation program failed to detect the storage. In most cases this message appears when you attempt to install on an SCSI device which has not been recognized by the installation program.
+
+In that case, you will have to perform a driver update before starting the installation. Check your hardware vendor's website to determine if a driver update is available that fixes your problem. For more general information on driver updates, see xref:DU-Updating_drivers_during_installation_ppc.adoc#chap-driver-updates-ppc[Updating Drivers During Installation on IBM{nbsp}Power Systems].
+
+You can also consult the [citetitle]_Red{nbsp}Hat Hardware Compatibility List_, available online at link:++https://hardware.redhat.com++[].
+
+[[creating_pre-installation-logs-ppc]]
+=== Creating Pre-installation Log Files
+
+To debug installation problems you can set the [option]`inst.debug` option to create log files from the environment before the installation starts. These log files contain, for example, the current storage configuration.
+
+To set the option in the {PRODUCT} installation boot menu:
+
+. Select the `Install {PRODUCT} 7.3` entry.
+
+. Press the kbd:[Tab] key to edit the boot options.
+
+. Append [option]`inst.debug` to the options. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+> vmlinuz ... `inst.debug`
+....
++
+For further details, see xref:adminoptions.adoc#chap-anaconda-boot-options[Boot Options].
+
+. Press kbd:[Enter] to start the setup.
+
+The system stores the pre-installation log files in the `/tmp/pre-anaconda-logs/` directory before Anaconda starts. To access the log files:
+
+. Switch to the console. See xref:Consoles_Logs_During_Install_x86.adoc#sect-installation-consoles-x86[Accessing Consoles (x86)].
+
+. Change into the `/tmp/pre-anaconda-logs/` directory:
++
+[literal,subs="+quotes,verbatim"]
+....
+# cd /tmp/pre-anaconda-logs/
+....
+
+[[sect-trouble-during-partitions-dialog-ppc]]
+=== Other Partitioning Problems for IBM Power{nbsp}Systems Users
+
+If you create partitions manually, but cannot move to the next screen, you probably have not created all the partitions necessary for installation to proceed.
+
+You must have the following partitions as a bare minimum:
+
+* A `/` (root) partition
+
+* A `PReP Boot` partition
+
+* A `/boot` partition (only if the root partition is a LVM logical volume or Btrfs subvolume)
+
+See xref:CustomSpoke-ppc64.adoc#sect-recommended-partitioning-scheme-ppc[Recommended Partitioning Scheme (ppc)] for more information.
+
+[[sect-trouble-after-ppc]]
+== Problems After Installation
+
+[[sect-trouble-after-graphical-boot-ppc]]
+=== Trouble With the Graphical Boot Sequence
+
+After you finish the installation and reboot your system for the first time, it is possible that the system stops responding during the graphical boot sequence, requiring a reset. In this case, the boot loader is displayed successfully, but selecting any entry and attempting to boot the system results in a halt. This usually means a problem with the graphical boot sequence; to solve this issue, you must disable graphical boot. To do this, temporarily alter the setting at boot time before changing it permanently.
+
+.Disabling Graphical Boot Temporarily
+. Start your computer and wait until the boot loader menu appears. If you set your boot loader timeout period to 0, hold down the kbd:[Esc] key to access it.
+
+. When the boot loader menu appears, use your cursor keys to highlight the entry you want to boot and press the kbd:[e] key to edit this entry's options.
+
+. In the list of options, find the kernel line - that is, the line beginning with the keyword `linux`. On this line, locate the `rhgb` option and delete it. The option might not be immediately visible; use the cursor keys to scroll up and down.
+
+. Press kbd:[F10] or kbd:[Ctrl + X] to boot your system with the edited options.
+
+If the system started successfully, you can log in normally. Then you will need to disable the graphical boot permanently - otherwise you will have to perform the previous procedure every time the system boots. To permanently change boot options, do the following.
+
+.Disabling Graphical Boot Permanently
+. Log in to the `root` account using the [command]`su -` command:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`su -`
+....
+
+. Use the [application]*grubby* tool to find the default [application]*GRUB2* kernel:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] grubby --default-kernel
+/boot/vmlinuz-3.10.0-229.4.2.el7.ppc64
+....
+
+. Use the [application]*grubby* tool to remove the `rhgb` boot option from the default kernel, identified in the last step, in your [application]*GRUB2* configuration. For example:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] grubby --remove-args="rhgb" --update-kernel pass:quotes[_/boot/vmlinuz-3.10.0-229.4.2.el7.ppc64_]
+....
+
+After you finish this procedure, you can reboot your computer. {PRODUCT} will not use the graphical boot sequence any more. If you want to enable graphical boot in the future, follow the same procedure, replacing the `--remove-args="rhgb"` parameter with the `--args="rhgb"` paramter. This will restore the `rhgb` boot option to the default kernel in your [application]*GRUB2* configuration.
+
+See the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide] for more information about working with the [application]*GRUB2* boot loader.
+
+[[sect-trouble-after-graphical-login-ppc]]
+=== Booting into a Graphical Environment
+
+If you have installed the [application]*X Window System* but are not seeing a graphical desktop environment once you log into your system, you can start it manually using the [command]`startx` command. Note, however, that this is just a one-time fix and does not change the log in process for future log ins.
+
+To set up your system so that you can log in at a graphical login screen, you must change the default [application]*systemd* target to `graphical.target`. When you are finished, reboot the computer. You will presented with a graphical login prompt after the system restarts.
+
+.Setting Graphical Login as Default
+. Open a shell prompt. If you are in your user account, become root by typing the [command]`su -` command.
+
+. Change the default target to `graphical.target`. To do this, execute the following command:
++
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] systemctl set-default graphical.target
+....
+
+Graphical login is now enabled by default - you will be presented with a graphical login prompt after the next reboot. If you want to reverse this change and keep using the text-based login prompt, execute the following command as `root`:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+pass:quotes[`#`] systemctl set-default multi-user.target
+....
+
+For more information about targets in [application]*systemd*, see the link:++https://access.redhat.com/site/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/System_Administrators_Guide/index.html++[Red{nbsp}Hat Enterprise{nbsp}Linux{nbsp}7 System Administrator's Guide].
+
+=== No Graphical User Interface Present
+
+If you are having trouble getting [application]*X* (the [application]*X Window System*) to start, it is possible that it has not been installed. Some of the preset base environments you can select during the installation, such as `Minimal install` or `Web Server`, do not include a graphical interface - it has to be installed manually.
+
+If you want [application]*X*, you can install the necessary packages afterwards. See the Knowledgebase article at link:++https://access.redhat.com/site/solutions/5238++[] for information on installing a graphical desktop environment.
+
+=== X Server Crashing After User Logs In
+
+If you are having trouble with the [application]*X* server crashing when a user logs in, one or more of your file systems can be full or nearly full. To verify that this is the problem you are experiencing, execute the following command:
+
+[literal,subs="+quotes,verbatim,macros"]
+....
+`$` [command]`df -h`
+....
+
+The output will help you diagnose which partition is full - in most cases, the problem will be on the `/home` partition. The following is a sample output of the [command]`df` command:
+
+[literal,subs="+quotes,attributes,verbatim"]
+....
+
+Filesystem                                  Size  Used Avail Use% Mounted on
+/dev/mapper/vg_centos-root                     20G  6.0G   13G  32% /
+devtmpfs                                    1.8G     0  1.8G   0% /dev
+tmpfs                                       1.8G  2.7M  1.8G   1% /dev/shm
+tmpfs                                       1.8G 1012K  1.8G   1% /run
+tmpfs                                       1.8G     0  1.8G   0% /sys/fs/cgroup
+tmpfs                                       1.8G  2.6M  1.8G   1% /tmp
+/dev/sda1                                   976M  150M  760M  17% /boot
+/dev/dm-4                                    90G   90G     0 100% /home
+
+....
+
+In the above example, you can see that the `/home` partition is full, which causes the crash. You can make some room on the partition by removing unneeded files. After you free up some disk space, start [application]*X* using the [command]`startx` command.
+
+For additional information about [command]`df` and an explanation of the options available (such as the [option]`-h` option used in this example), see the `df(1)` man page.
+
+=== Is Your System Displaying Signal 11 Errors?
+
+A signal 11 error, commonly known as a _segmentation fault_, means that a program accessed a memory location that was not assigned to it. A signal 11 error can occur due to a bug in one of the software programs that is installed, or faulty hardware.
+
+If you receive a fatal signal 11 error during the installation, first make sure you are using the most recent installation images, and let [application]*Anaconda* verify them to make sure they are not corrupted. Bad installation media (such as an improperly burned or scratched optical disk) are a common cause of signal 11 errors. Verifying the integrity of the installation media is recommended before every installation.
+
+For information about obtaining the most recent installation media, see xref:downloading.adoc#chap-download[Downloading {PRODUCT}]. To perform a media check before the installation starts, append the [option]`rd.live.check` boot option at the boot menu. See xref:adminoptions.adoc#sect-boot-options-mediacheck[Verifying Boot Media] for details.
+
+Other possible causes are beyond this document's scope. Consult your hardware manufacturer's documentation for more information.
+
+=== Unable to IPL from Network Storage Space (*NWSSTG)
+
+If you are experiencing difficulties when trying to IPL from Network Storage Space (*NWSSTG), in most cases the reason is a missing `PReP` partition. In this case, you must reinstall the system and make sure to create this partition during the partitioning phase or in the Kickstart file.
+
+=== The GRUB2 `next_entry` variable can behave unexpectedly in a virtualized environment
+
+IBM Power System users booting their virtual environment with SLOF firmware must manually unset the `next_entry` grub environment variable after a system reboot. The SLOF firmware does not support block writes at boot time by design thus the bootloader is unable to clear this variable at boot time.
