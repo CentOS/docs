@@ -1,8 +1,0 @@
-
-:experimental:
-include::{partialsdir}/entities.adoc[]
-
-[[part-installation-intel-amd]]
-= AMD64, Intel 64, and ARM 64 - Installation and Bootin
-
-This part of the {PRODUCT} Installation Guide discusses the installation of {PRODUCT} {PRODVER} on 64-bit AMD, Intel, and ARM systems as well as some basic troubleshooting. For advanced installation options, see xref:Part_Install_Advanced.adoc#part-advanced-installation-options[Advanced Installation Options].

@@ -1,8 +1,0 @@
-:experimental:
-include::{partialsdir}/entities.adoc[]
-
-This document is adapted and modified from the Red Hat Enterprise Linux 7 Installation Guide, available at https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/.
-
-The text of and illustrations in this document are licensed by Red Hat under a Creative Commons Attribution–Share Alike 3.0 Unported license ("CC-BY-SA"). An explanation of CC-BY-SA is available at http://creativecommons.org/licenses/by-sa/3.0/. In accordance with CC-BY-SA, if you distribute this document or an adaptation of it, you must provide the URL for the original version.
-
-Red Hat, as the licensor of this document, waives the right to enforce, and agrees not to assert, Section 4d of CC-BY-SA to the fullest extent permitted by applicable law.

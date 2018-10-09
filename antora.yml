@@ -1,7 +1,0 @@
----
-name: centos
-title: Installation Guide
-version: master
-start_page: install-guide:index
-nav:
-  - modules/install-guide/nav.adoc

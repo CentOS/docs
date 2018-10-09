@@ -1,8 +1,0 @@
-
-:experimental:
-include::{partialsdir}/entities.adoc[]
-
-[[part-technical-appendixes]]
-= Technical Appendixes
-
-The appendixes in this section do not contain instructions on installing {PRODUCT}. Instead, they provide technical background that you might find helpful to understand the options that {PRODUCT} offers you at various points in the installation process. 

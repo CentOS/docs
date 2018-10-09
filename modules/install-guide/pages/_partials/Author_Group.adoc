@@ -1,4 +1,0 @@
-:experimental:
-include::{partialsdir}/entities.adoc[]
-
-.CentOS Project
