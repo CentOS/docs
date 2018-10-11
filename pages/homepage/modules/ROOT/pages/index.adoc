@@ -1,0 +1,20 @@
+= CentOS Documentation Home
+:page-layout: homepage
+
+++++
+<div class="homepage-page">
+    <div class="homepage-section homepage-section-user-docs">
+        <h2>CentOS 7.5 User Documentation</h2>
+        <div class="homepage-section-container">
+            <a href="../centos/install-guide/" class="homepage-link homepage-link-primary">
+                <h3>Installation Guide</h3>
+                <p>Instructions for installing CentOS&nbsp;7.5</p>
+            </a>
+            <a href="https://wiki.centos.org/Manuals/ReleaseNotes" class="homepage-link homepage-link-primary">
+                <h3>🔗 Release Notes</h3>
+                <p>Release Notes for CentOS&nbsp;7.0 to 7.5</p>
+            </a>
+        </div>
+    </div>
+</div>
+++++

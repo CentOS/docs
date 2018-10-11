@@ -1,0 +1,28 @@
+site:
+  title: CentOS Docs Site
+  url: https://docs.centos.org
+  start_page: docs::index.adoc
+content:
+  branches: master
+  sources:
+  - url: .
+    start_path: pages/homepage
+  - url: https://github.com/CentOS/docs-installation-guide.git
+    branches:
+    - "7.5"
+ui:
+  bundle:
+    url: https://docs.centos.org/_bundle/ui-bundle.zip
+    snapshot: true
+  default_layout: default
+output:
+  clean: true
+  dir: ./public/en-US
+  destinations:
+  - provider: archive
+runtime:
+  pull: true
+  cache_dir: ./cache
+asciidoc:
+  extensions:
+  - ./lib/extensions/package-inline-macro.js

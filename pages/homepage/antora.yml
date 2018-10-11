@@ -1,0 +1,6 @@
+name: docs
+title: CentOS Documentation
+version: master
+start-page: ROOT::index.adoc
+nav:
+  - modules/ROOT/nav.adoc
