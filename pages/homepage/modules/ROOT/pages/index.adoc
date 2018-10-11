@@ -8,9 +8,11 @@
         <div class="homepage-section-container">
             <a href="../centos/install-guide/" class="homepage-link homepage-link-primary">
                 <h3>Installation Guide</h3>
+                <p>Instructions for installing CentOS 7.5.1084 on various architectures</p>
             </a>
             <a href="https://wiki.centos.org/Manuals/ReleaseNotes/CentOS7.1804" class="homepage-link homepage-link-primary">
                 <h3>🔗 Release Notes</h3>
+                <p>Release Notes for every version of CentOS 7.x, up to and including 7.5.1084</p>
             </a>
         </div>
     </div>
