@@ -9,7 +9,7 @@ content:
     start_path: pages/homepage
   - url: https://github.com/CentOS/docs-installation-guide.git
     branches:
-    - "7.5"
+    - "7.6"
 ui:
   bundle:
     url: https://docs.centos.org/_bundle/ui-bundle.zip
