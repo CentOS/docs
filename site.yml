@@ -10,9 +10,12 @@ content:
   - url: https://github.com/CentOS/docs-installation-guide.git
     branches:
     - "7.6"
+  - url: https://github.com/CentOS/8docs.git
+    branches:
+    - "8.0"
 ui:
   bundle:
-    url: https://docs.centos.org/_bundle/ui-bundle.zip
+    url: http://file.brq.redhat.com/~pbokoc/ui-bundle.zip
     snapshot: true
   default_layout: default
 output:
