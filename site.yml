@@ -9,7 +9,7 @@ content:
     start_path: pages/homepage
   - url: https://github.com/CentOS/docs-installation-guide.git
     branches:
-    - "7.6"
+    - "7.7"
   - url: https://github.com/CentOS/8docs.git
     branches:
     - "8.0"

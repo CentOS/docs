@@ -20,11 +20,11 @@
 
 <div class="homepage-page">
     <div class="homepage-section homepage-section-user-docs">
-        <h2>CentOS 7.6.1810 User Documentation</h2>
+        <h2>CentOS 7.7.1908 User Documentation</h2>
         <div class="homepage-section-container">
             <a href="../centos/install-guide/" class="homepage-link homepage-link-primary">
                 <h3>Installation Guide</h3>
-                <p>Instructions for installing CentOS 7.6.1810 on various architectures</p>
+                <p>Instructions for installing CentOS 7.7.1908 on various architectures</p>
             </a>
             <a href="https://wiki.centos.org/Manuals/ReleaseNotes" class="homepage-link homepage-link-primary">
                 <h3>🔗 Release Notes</h3>
