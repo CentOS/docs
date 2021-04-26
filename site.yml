@@ -13,7 +13,7 @@ content:
   - url: https://github.com/CentOS/8docs.git
     branches:
     - "8.0"
-  - url: https://github.com/pbokoc/docs-contributors-guide.git
+  - url: https://github.com/CentOS/docs-contributors-guide.git
     branches: master
 ui:
   bundle:
