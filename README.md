@@ -2,7 +2,7 @@
 
 This repository hosts the site builder for https://docs.centos.org/. It pulls content from other repositories defined in the `site.yml` Antora playbook, builds them together using a structure defined in this repository, and applies a UI bundle to them, creating the whole site. Submit PRs and issues to this repository for **publishing fixes**. The other repositories are:
 
-* * [CentOS_Docs_Web_UI](https://github.com/CentOS/docs-web-ui) for the site's user interface (e.g. CSS styling) sources
+* [CentOS_Docs_Web_UI](https://github.com/CentOS/docs-web-ui) for the site's user interface (e.g. CSS styling) sources
 * [CentOS_Installation_Guide](https://github.com/CentOS/docs-installation-guide) - the content repository for the Installation Guide
 * [CentOS_Docs_Web](https://github.com/CentOS/docs-web) - the repository that holds the built site. Do not use that repository for anything but publishing updates.
 
