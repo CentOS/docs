@@ -26,7 +26,7 @@ output:
   destinations:
   - provider: archive
 runtime:
-  pull: true
+  fetch: true
   cache_dir: ./cache
 asciidoc:
   extensions:
