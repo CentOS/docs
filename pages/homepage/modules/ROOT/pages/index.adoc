@@ -13,35 +13,4 @@
         </div>
     </div>
 </div>
-<div class="homepage-page">
-    <div class="homepage-section homepage-section-user-docs">
-        <h2>CentOS 8 User Documentation</h2>
-        <div class="homepage-section-container">
-            <a href="../8-docs/" class="homepage-link homepage-link-primary">
-                <h3>Installation and Admin Documentation</h3>
-                <p>Standard and advanced install instructions and AppStream documentation for CentOS 8.</p>
-            </a>
-            <a href="https://wiki.centos.org/Manuals/ReleaseNotes/CentOSLinux8" class="homepage-link homepage-link-primary">
-                <h3>🔗 Release Notes</h3>
-                <p>Release Notes for every version of CentOS 8.</p>
-            </a>
-        </div>
-    </div>
-</div>
-
-<div class="homepage-page">
-    <div class="homepage-section homepage-section-user-docs">
-        <h2>CentOS 7 User Documentation</h2>
-        <div class="homepage-section-container">
-            <a href="../centos/install-guide/" class="homepage-link homepage-link-primary">
-                <h3>Installation Guide</h3>
-                <p>Instructions for installing CentOS 7 on various architectures.</p>
-            </a>
-            <a href="https://wiki.centos.org/Manuals/ReleaseNotes/CentOS7" class="homepage-link homepage-link-primary">
-                <h3>🔗 Release Notes</h3>
-                <p>Release Notes for every version of CentOS 7.</p>
-            </a>
-        </div>
-    </div>
-</div>
 ++++
